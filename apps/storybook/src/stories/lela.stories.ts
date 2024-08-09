@@ -1,9 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Lela from "@repo/ui/Lela"
-import { Button } from './Button';
+import Lela from '@repo/ui/Lela';
 
 const meta = {
-  title: 'Widget/Lela',
+  title: 'Example/Lela',
   component: Lela,
   parameters: {
     layout: 'centered',
@@ -12,15 +11,14 @@ const meta = {
   argTypes: {
     backgroundColor: { control: 'color' },
   },
-} satisfies Meta<typeof Button>;
+} satisfies Meta<typeof Lela>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const LelaComponent: Story = {
+export const This: Story = {
   args: {
-    primary: true,
-    label: 'Button',
+    
   },
 };
 
