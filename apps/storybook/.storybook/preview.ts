@@ -1,4 +1,7 @@
-import type { Preview } from "@storybook/react";
+import type { Preview,ReactRenderer } from "@storybook/react";
+// +import { Preview, ReactRenderer } from '@storybook/your-ReactRenderer';
+import { withThemeByClassName } from '@storybook/addon-themes';
+
 import "@repo/ui/index.css"
 const preview: Preview = {
   parameters: {
@@ -9,14 +12,14 @@ const preview: Preview = {
       },
     },
   },
-  globalTypes: {
-    darkMode: {
-      defaultValue: true, // Enable dark mode by default on all stories
-    },
-    // Optional (Default: 'dark')
-    className: {
-      defaultValue: 'custom-classname', // Set your custom dark mode class name
-    },
-  },
-};
+  decorators: [
+    withThemeByClassName<ReactRenderer>({
+      themes: {
+        light: '',
+        dark: 'dark',
+      },
+      defaultTheme: 'light',
+      }),
+     ]
+  }
 export default preview;

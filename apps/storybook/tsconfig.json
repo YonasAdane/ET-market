@@ -14,8 +14,8 @@
     "incremental": true,
     "baseUrl":".",
     "paths": {
-      "@/*": ["node_modules/@repo/ui/src/*"]
-    }
+      "@/*": ["../../packages/ui/src/*"]
+    }    
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

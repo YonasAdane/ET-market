@@ -18,6 +18,10 @@ type Story = StoryObj<typeof meta>;
 export const This: Story = {
   args: {
     image:"https://st2.depositphotos.com/2071605/8913/i/380/depositphotos_89139132-stock-photo-brown-jacket-for-man.jpg",
+    name:"Autumn Jacket",
+    description:"Jacket",
+    price:85,
+    prevPrice:124,
   },
 };
 
