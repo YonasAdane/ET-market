@@ -5,7 +5,7 @@ import { Heart, Menu, Search, ShoppingBag, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 
 
-export function Navigation() {
+export function Navigation({children}:{children: React.ReactNode}) {
   return (
     <header className='flex border-b py-4 sm:px-8 px-6 font-[sans-serif] min-h-[80px] tracking-wide relative z-50'>
     <div className='flex flex-wrap items-center lg:gap-y-2 gap-4 w-full'>
@@ -33,6 +33,9 @@ export function Navigation() {
           <Search />
         </div>
         <div className='flex items-center space-x-8'>
+          <span>
+            {children}
+          </span>
           <span className="relative">
             <Heart />
             <span className="absolute left-auto -ml-1 top-0 rounded-full bg-red-500 px-1 py-0 text-xs text-white">0</span>

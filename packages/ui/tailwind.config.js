@@ -6,9 +6,6 @@ module.exports = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-    "./src/**/*.{js,jsx,ts,tsx}", // Adjust paths as necessary
-    "./.storybook/**/*.{js,jsx,ts,tsx}",
-    "./node_modules/@repo/ui/**/*.{js,jsx,ts,tsx}"
   ],
   prefix: "",
   theme: {

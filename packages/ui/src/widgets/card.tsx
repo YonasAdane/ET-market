@@ -18,7 +18,7 @@ export default function PorductCard({image,name,price,prevPrice,description}: Pr
         <div className="absolute top-4 right-4 z-20 rounded-full p-2 duration-200 hover:bg-slate-600/10">
           <Heart fill="#111" size={20}/>
         </div>
-        <Image
+        <img
           className="relative h-full w-full rounded-lg object-contain transition duration-300 ease-in-out group-hover:scale-105" 
           width={276} height={500} src={image} alt="product-picture"
         />
