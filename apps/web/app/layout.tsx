@@ -6,6 +6,8 @@ import { ThemeProvider } from "./components/theme-provider";
 import {Navigation} from "@repo/ui/widgets/Navigation.tsx"
 // import { ModeToggle } from "@repo/ui/widgets/modeToggle.tsx";
 import { ModeToggle } from "./components/modeTheme";
+import {ReduxProvider} from "@repo/redux-utils/libs/provider";
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -28,17 +30,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ThemeProvider
-              attribute="class"
-              defaultTheme="light"
-              enableSystem
-              disableTransitionOnChange
-            >
-            <Navigation>
-              <ModeToggle/>
-            </Navigation>
-              {children}
-        </ThemeProvider>      
+        <ReduxProvider>
+          <ThemeProvider
+                attribute="class"
+                defaultTheme="light"
+                enableSystem
+                disableTransitionOnChange
+              >
+              <Navigation>
+                <ModeToggle/>
+              </Navigation>
+                {children}
+          </ThemeProvider> 
+        </ReduxProvider>
       </body>
     </html>
   );

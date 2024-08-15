@@ -1,8 +1,10 @@
 // import { ModeToggle } from "./components/modeTheme";
-
-// import { ModeToggle } from "@repo/ui/widgets/modeToggle.tsx";
+import { decrement, increment } from "@repo/redux-utils/libs/redux/features/counter-slice"
 import HeroSection from "@/widgets/herosection";
 import PorductCard from "@repo/ui/widgets/card.tsx"
+import { useAppSelector } from "@repo/redux-utils/libs/redux/store";
+import Display from "./components/display";
+import Controls from "./components/controls";
 export default function Home() {
   const data = [
     {
@@ -231,7 +233,8 @@ export default function Home() {
         "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
     },
   ];
-  
+  // const username=useAppSelector((state)=>state.authReducer.username);
+  // const number=useAppSelector(state=>state.counterReducer.value)
   return (
     <main className="w-full mx-auto">
       <div className="w-full flex flex-col gap-24 ">
@@ -240,6 +243,9 @@ export default function Home() {
         hello world!
         <div className="font-medium">
           <div className="p-4 mx-auto w-full lg:max-w-[1400px] ">
+            {/* <h1>UserName:{  username}</h1> */}
+            <Display/>
+            <Controls/>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {data.map((product) => (
                 <PorductCard {...product} />
