@@ -1,8 +1,8 @@
-import type { Preview,ReactRenderer } from "@storybook/react";
-// +import { Preview, ReactRenderer } from '@storybook/your-ReactRenderer';
+import type { Preview, ReactRenderer } from "@storybook/react";
 import { withThemeByClassName } from '@storybook/addon-themes';
+import { ReduxProvider } from "@repo/redux-utils/libs/provider";
+import "@repo/ui/index.css";
 
-import "@repo/ui/index.css"
 const preview: Preview = {
   parameters: {
     controls: {
@@ -13,13 +13,19 @@ const preview: Preview = {
     },
   },
   decorators: [
+    // (Story) => (
+    //   <ReduxProvider>
+    //     <Story />
+    //   </ReduxProvider>
+    // ),
     withThemeByClassName<ReactRenderer>({
       themes: {
         light: '',
         dark: 'dark',
       },
       defaultTheme: 'light',
-      }),
-     ]
-  }
+    }),
+  ],
+};
+
 export default preview;
