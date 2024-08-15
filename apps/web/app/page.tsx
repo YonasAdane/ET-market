@@ -1,6 +1,7 @@
 // import { ModeToggle } from "./components/modeTheme";
 
 // import { ModeToggle } from "@repo/ui/widgets/modeToggle.tsx";
+import HeroSection from "@/widgets/herosection";
 import PorductCard from "@repo/ui/widgets/card.tsx"
 export default function Home() {
   const data = [
@@ -235,7 +236,7 @@ export default function Home() {
     <main className="w-full mx-auto">
       <div className="w-full flex flex-col gap-24 ">
         <div className="bg-green-400">
-
+        <HeroSection className="w-4/6 mt-4 mx-auto" bgImg="https://images.pexels.com/photos/9255747/pexels-photo-9255747.jpeg" btnLink="google.com" heading="Level Up your style with our summer collections" btnText="shop now "  key={1} />
         hello world!
         <div className="font-medium">
           <div className="p-4 mx-auto w-full lg:max-w-[1400px] ">
