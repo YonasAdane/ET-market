@@ -1,10 +1,8 @@
 import type { Preview, ReactRenderer } from "@storybook/react";
 import { withThemeByClassName } from '@storybook/addon-themes';
 import { ReduxProvider } from "@repo/redux-utils/libs/provider";
-import { Provider} from "react-redux";
 import React from "react";
 import "@repo/ui/index.css";
-import { store } from "@repo/redux-utils/libs/redux/store";
 const preview: Preview = {
   parameters: {
     controls: {

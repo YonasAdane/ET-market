@@ -1,10 +1,8 @@
 // import { ModeToggle } from "./components/modeTheme";
-import { decrement, increment } from "@repo/redux-utils/libs/redux/features/counter-slice"
 import HeroSection from "@/widgets/herosection";
 import PorductCard from "@repo/ui/widgets/card.tsx"
-import { useAppSelector } from "@repo/redux-utils/libs/redux/store";
-import Display from "./components/display";
-import Controls from "./components/controls";
+import Display from "@repo/ui/widgets/display.tsx";
+import Controls from "@repo/ui/widgets/controls.tsx";
 export default function Home() {
   const data = [
     {
@@ -27,7 +25,7 @@ export default function Home() {
     },
     {
       id: 3,
-      name: "Sony Noise Cancelling Headphones",
+      name: "Sony Headphones",
       prevPrice:1200,
       description:"Mobile phone",
       price: 349.99,
@@ -63,7 +61,7 @@ export default function Home() {
     },
     {
       id: 7,
-      name: "Seagate External Hard Drive",
+      name: "Seagate Hard Drive",
       prevPrice:1200,
       description:"Mobile phone",
       price: 79.99,
@@ -79,177 +77,24 @@ export default function Home() {
       image:
         "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
     },
-    {
-      id: 9,
-      name: "Fitbit Charge 5",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 179.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 10,
-      name: "Canon EOS R5 Camera",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 3799.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 11,
-      name: "Bose Bluetooth Speaker",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 299.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 12,
-      name: "HP OfficeJet Pro Printer",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 229.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 13,
-      name: "Dell 4K Monitor",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 629.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 14,
-      name: "Logitech Wireless Keyboard",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 99.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 15,
-      name: "Razer Gaming Mouse",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 69.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 16,
-      name: "Philips Smart Bulb Kit",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 199.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 17,
-      name: "North Face Recon Backpack",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 99.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 18,
-      name: "Anker Portable Charger",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 49.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 19,
-      name: "AmazonBasics Lightning Cable",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 12.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 20,
-      name: "Logitech HD Webcam",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 69.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 21,
-      name: "Linksys Wi-Fi Router",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 149.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 22,
-      name: "SanDisk SDXC Memory Card",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 34.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 23,
-      name: "Samsung USB Flash Drive",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 24.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 24,
-      name: "Logitech Gaming Mouse",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 79.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
-    {
-      id: 25,
-      name: "AmazonBasics HDMI Cable",
-      prevPrice:1200,
-      description:"Mobile phone",
-      price: 8.99,
-      image:
-        "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
-    },
   ];
-  // const username=useAppSelector((state)=>state.authReducer.username);
-  // const number=useAppSelector(state=>state.counterReducer.value)
   return (
     <main className="w-full mx-auto">
       <div className="w-full flex flex-col gap-24 ">
-        <div className="bg-green-400">
-        <HeroSection className="w-4/6 mt-4 mx-auto" bgImg="https://images.pexels.com/photos/9255747/pexels-photo-9255747.jpeg" btnLink="google.com" heading="Level Up your style with our summer collections" btnText="shop now "  key={1} />
-        hello world!
+        <div className="">
+        <HeroSection className="w-4/6 mt-4 h-96 mx-auto" bgImg="https://images.pexels.com/photos/9255747/pexels-photo-9255747.jpeg" btnLink="google.com" heading="Level Up your style with our summer collections" btnText="shop now "  key={1} />
         <div className="font-medium">
           <div className="p-4 mx-auto w-full lg:max-w-[1400px] ">
-            {/* <h1>UserName:{  username}</h1> */}
-            <Display/>
-            <Controls/>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {data.map((product) => (
-                <PorductCard {...product} />
-              ))}
+            <div className="w-full flex flex-col items-center justify-start p-6">
+              <Display/>
+              <Controls/>
+            </div>
+            <div className="w-4/5 mx-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {data.map((product) => (
+                  <PorductCard key={product.id} {...product} />
+                ))}
+              </div>
             </div>
           </div>
         </div>
