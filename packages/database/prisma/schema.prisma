@@ -12,9 +12,183 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
+  id          Int       @id @default(autoincrement())
+  username    String    @unique
+  email       String    @unique
+  password    String
+  role        Role      @default(CUSTOMER)
+  firstName   String?
+  lastName    String?
+  phoneNumber String?
+  address     String?
+  createdAt   DateTime  @default(now())
+  orders      Order[]   @relation("UserOrders")
+  reviews     Review[]  @relation("UserReviews")
+  wishlist    Wishlist[]
+  cartItems   ShoppingCart[]
+
+  @@map("users")
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  products    Product[] @relation("CategoryProducts")
+
+  @@map("categories")
+}
+
+model Brand {
+  id          Int       @id @default(autoincrement())
+  name        String
+  logoUrl     String?
+  products    Product[] @relation("BrandProducts")
+
+  @@map("brands")
+}
+
+model Product {
+  id          Int         @id @default(autoincrement())
+  categoryId  Int?
+  brandId     Int?
+  name        String
+  description String?
+  price       Float
+  stock       Int
+  imageUrl    String?
+  createdAt   DateTime    @default(now())
+  category    Category?   @relation("CategoryProducts", fields: [categoryId], references: [id])
+  brand       Brand?      @relation("BrandProducts", fields: [brandId], references: [id])
+  orderItems  OrderItem[] @relation("ProductOrderItems")
+  reviews     Review[]    @relation("ProductReviews")
+  wishlist    Wishlist[]
+  cartItems   ShoppingCart[]
+
+  @@map("products")
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  userId      Int
+  paymentId   Int
+  totalAmount Float
+  status      OrderStatus @default(PENDING)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  user        User        @relation("UserOrders", fields: [userId], references: [id])
+  items       OrderItem[] @relation("OrderItems")
+  payment     Payment?    @relation()
+  shipping    Shipping?   @relation("OrderShipping")
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Float
   createdAt DateTime @default(now())
+  order     Order    @relation("OrderItems", fields: [orderId], references: [id])
+  product   Product  @relation("ProductOrderItems", fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+model Payment {
+  id           Int          @id @default(autoincrement())
+  orderId      Int @unique
+  amount       Float
+  method       PaymentMethod
+  status       PaymentStatus @default(PENDING)
+  paymentDate  DateTime      @default(now())
+  order        Order         @relation( fields: [orderId], references: [id])
+
+  @@map("payments")
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  productId Int
+  userId    Int
+  rating    Int      
+  comment   String?
+  createdAt DateTime @default(now())
+  product   Product  @relation("ProductReviews", fields: [productId], references: [id])
+  user      User     @relation("UserReviews", fields: [userId], references: [id])
+
+  @@map("reviews")
+}
+
+model Wishlist {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("wishlist")
+}
+
+model ShoppingCart {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  productId Int
+  quantity  Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@map("shopping_cart")
+}
+
+model Shipping {
+  id           Int         @id @default(autoincrement())
+  orderId      Int @unique
+  address      String
+  city         String
+  state        String
+  postalCode   String
+  country      String
+  status       ShippingStatus @default(PENDING)
+  shippingDate DateTime?
+  createdAt    DateTime    @default(now())
+  order        Order       @relation("OrderShipping", fields: [orderId], references: [id])
+
+  @@map("shipping")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  PAYPAL
+  BANK_TRANSFER
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum ShippingStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
 }
