@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { createCategoryType } from "./categories.schema";
-import { CreateCategory } from "./categories.service";
+import { CreateCategory, FindAllCategories, FindSingleCategory, UpdateCategory } from "./categories.service";
   /**
      * @POST /categories: Create a new category.
 
@@ -18,8 +18,9 @@ export async function postCategoriesHandler(req:Request<{},{},createCategoryType
 
     Usage: To display all product categories.
      */
-export function getCategoriesHandler(req:Request,res:Response){
-    return res.json({message:"getManyCategory"})
+export async function getCategoriesHandler(req:Request,res:Response){
+    const allCategory=await FindAllCategories();
+    return res.json(allCategory);
 
 };
 /**
@@ -28,8 +29,10 @@ export function getCategoriesHandler(req:Request,res:Response){
 Usage: To view a specific category's details.
 Parameter: id (Category ID)
     */
-export function getSingleCategoryHandler(req:Request,res:Response){
-    return res.json({message:"getSingleCategoryHandler"})
+export async function getSingleCategoryHandler(req:Request,res:Response){
+    const cid=parseInt(req.params.id);
+    const category=await FindSingleCategory(cid);
+    return res.json(category);
 
 };
  /**
@@ -39,8 +42,11 @@ export function getSingleCategoryHandler(req:Request,res:Response){
     Parameter: id (Category ID)
     Payload: { name, description }
      */
-export function putCategoryHandler(req:Request,res:Response){
-    return res.json({message:"putCategoryHandler"})
+export async function putCategoryHandler(req:Request<{id:string},{},createCategoryType>,res:Response){
+    let id=parseInt(req.params.id);
+    let data=req.body;
+    const category=await UpdateCategory(id,data);
+    return res.json(category);
 
 };
   /**
