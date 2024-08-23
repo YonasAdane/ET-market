@@ -3,6 +3,7 @@ import { deleteProductHandler, getProductsHandler, getSingleProductsHandler, pos
 import { deleteBrandHandler, getBrandHandler, getSingleBrandHandler, postBrandHandler, putBrandHandler } from "./routes/brands/brands.controller";
 import { postReviewsHandler,putReviewHandler,deleteReviewHandler,getReviewsProductHandler,getReviewsUserHandler} from "./routes/reviews/reviews.controller";
 import { deleteCartHandler, getCartHandler, getSingleCartHandler, postCartHandler, putCartHandler } from "./routes/cart/cart.controller";
+import { deleteCategoryHandler, getCategoriesHandler, getSingleCategoryHandler, postCategoriesHandler, putCategoryHandler } from "./routes/categories/categories.controller";
 
 function routes(app:Express){
     /**@Products */
@@ -106,48 +107,15 @@ function routes(app:Express){
     /**
      * @CATEGORY ROUTE
      */
+    app.post("/categories",postCategoriesHandler)
 
-    /**
-     * @POST /categories: Create a new category.
+    app.get("/categories",getCategoriesHandler)
 
-    Usage: To add a new category for products.
-    Payload: { name, description }
-     */
-    // app.post("/categories",postCategouriesHandler)
+    app.get("/categories/:id",getSingleCategoryHandler)
 
-    /**
-     * @GET /categories: Retrieve a list of all categories.
+    app.put("/categories/:id",putCategoryHandler)
 
-    Usage: To display all product categories.
-     */
-    // app.get("/categories",getCategoriesHandler)
-
-
-    /**
-     * @GET /categories/:id: Get category details by ID.
-
-    Usage: To view a specific category's details.
-    Parameter: id (Category ID)
-     */
-    // app.get("/categories/:id",getSingleCategoriesHandler)
-
-
-    /**
-     * @PUT /categories/:id: Update category details.
-
-    Usage: To modify details of an existing category.
-    Parameter: id (Category ID)
-    Payload: { name, description }
-     */
-    // app.put("",putSingleCategoriesHandler)
-
-    /**
-     * @DELETE /categories/:id: Delete a category.
-
-    Usage: To remove a category.
-    Parameter: id (Category ID)
-     */
-    // app.delete("/categories/:id",deleteCategoriesHandler)
+    app.delete("/categories/:id",deleteCategoryHandler)
 
 
     /**
