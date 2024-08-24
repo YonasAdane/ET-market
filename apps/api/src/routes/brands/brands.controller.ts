@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+import { createBrand, DeleteBrand, FindAllBrand, FindSingleBrand, UpdateBrand } from "./brands.service";
+import { createBrandType } from "./brands.schema";
 
 /**
      * @POST /brands: Create a new brand.
@@ -6,8 +8,10 @@ import { Request, Response } from "express";
     Usage: To add a new brand for products.
     Payload: { name, logoUrl }
 */
-export function postBrandHandler(req:Request,res:Response){
-    return res.json({message:"postBrandHandler"})
+export async function postBrandHandler(req:Request<{},{},createBrandType>,res:Response){
+    const data=req.body;
+    const brand=await createBrand(data);
+    return res.json(brand);
 
 };
  /**
@@ -15,13 +19,15 @@ export function postBrandHandler(req:Request,res:Response){
 
 Usage: To display all brands.
     */
-export function getBrandHandler(req:Request,res:Response){
-    return res.json({message:"getManyBrand"})
-
+export async function getBrandHandler(req:Request,res:Response){
+    const brands=await FindAllBrand();
+    return res.json(brands);
 };
 
-export function getSingleBrandHandler(req:Request,res:Response){
-    return res.json({message:"getSingleBrandHandler"})
+export async function getSingleBrandHandler(req:Request<{id:string}>,res:Response){
+    const id=parseInt(req.params.id);
+    const brand=await FindSingleBrand(id);
+    return res.json(brand)
 
 };
 /**
@@ -31,8 +37,11 @@ Usage: To modify details of an existing brand.
 Parameter: id (Brand ID)
 Payload: { name, logoUrl }
 */
-export function putBrandHandler(req:Request,res:Response){
-    return res.json({message:"putBrandHandler"})
+export async function putBrandHandler(req:Request<{id:string},{},createBrandType>,res:Response){
+    const id=parseInt(req.params.id);
+    const data=req.body;
+    const brand=await UpdateBrand(id,data);
+    return res.json(brand)
 
 };
 /**
@@ -41,7 +50,8 @@ export function putBrandHandler(req:Request,res:Response){
 Usage: To remove a brand.
 Parameter: id (Brand ID)
 */
-export function deleteBrandHandler(req:Request,res:Response){
-    return res.json({message:"deleteProductHandler"})
-
+export async function deleteBrandHandler(req:Request<{id:string}>,res:Response){
+    const id=parseInt(req.params.id);
+    const brand=await DeleteBrand(id);
+    return res.json(brand)
 };

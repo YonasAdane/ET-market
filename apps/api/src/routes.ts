@@ -24,9 +24,9 @@ function routes(app:Express){
 
     app.post("/brands",postBrandHandler)
 
-    app.put("/brands",putBrandHandler)
+    app.put("/brands/:id",putBrandHandler)
 
-    app.delete("/brands",deleteBrandHandler)
+    app.delete("/brands/:id",deleteBrandHandler)
 
     app.get("/brands/:id",getSingleBrandHandler)
     
