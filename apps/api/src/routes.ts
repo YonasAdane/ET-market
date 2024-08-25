@@ -1,19 +1,26 @@
-import { Express,Request, Response } from "express";
+import { Express,Request, Response, Router } from "express";
 import { deleteProductHandler, getProductsHandler, getSingleProductsHandler, postProductsHandler, putProductsHandler } from "./routes/products/products.controller";
 import { deleteBrandHandler, getBrandHandler, getSingleBrandHandler, postBrandHandler, putBrandHandler } from "./routes/brands/brands.controller";
 import { postReviewsHandler,putReviewHandler,deleteReviewHandler,getReviewsProductHandler,getReviewsUserHandler} from "./routes/reviews/reviews.controller";
 import { deleteCartHandler, getCartHandler, getSingleCartHandler, postCartHandler, putCartHandler } from "./routes/cart/cart.controller";
 import { deleteCategoryHandler, getCategoriesHandler, getSingleCategoryHandler, postCategoriesHandler, putCategoryHandler } from "./routes/categories/categories.controller";
+import { postLoginHandler, postRegisterHandler,postLogoutHandler } from "./routes/auth/auth.controller";
+import { errorHandler } from "./middlewares/errorHandler.middleware";
+import { createProductSchema } from "./routes/products/products.schema";
+import { validateRequest } from "./utils/validation";
+import { createBrandSchema } from "./routes/brands/brands.schema";
+import { createCategorySchema } from "./routes/categories/categories.schema";
 
-function routes(app:Express){
+// function routes(app:Express){
+const app=Router();
     /**@Products */
-    app.post("/products",postProductsHandler)
+    app.post("/products",validateRequest(createProductSchema),postProductsHandler)
     
     app.get("/products",getProductsHandler);
 
     app.get("/products/:id",getSingleProductsHandler)
     
-    app.put("/products/:id",putProductsHandler)
+    app.put("/products/:id",validateRequest(createProductSchema),putProductsHandler)
     
     app.delete("/products/:id",deleteProductHandler)
 
@@ -22,9 +29,9 @@ function routes(app:Express){
      */
     app.get("/brands",getBrandHandler)
 
-    app.post("/brands",postBrandHandler)
+    app.post("/brands",validateRequest(createBrandSchema),postBrandHandler)
 
-    app.put("/brands/:id",putBrandHandler)
+    app.put("/brands/:id",validateRequest(createBrandSchema),putBrandHandler)
 
     app.delete("/brands/:id",deleteBrandHandler)
 
@@ -59,9 +66,14 @@ function routes(app:Express){
     app.get("/cart/:id",getSingleCartHandler)
     
     
-    
-    
-    
+    /**
+     * @Auth
+     */
+    // app.post("/auth/register",postRegisterHandler)
+
+    // app.post("/auth/login",postLoginHandler)
+
+    // app.post("/auth/logout",postLogoutHandler)
     
     /**
      * @POST /users/register: Register a new user.
@@ -107,13 +119,13 @@ function routes(app:Express){
     /**
      * @CATEGORY ROUTE
      */
-    app.post("/categories",postCategoriesHandler)
+    app.post("/categories",validateRequest(createCategorySchema),postCategoriesHandler)
 
     app.get("/categories",getCategoriesHandler)
 
     app.get("/categories/:id",getSingleCategoryHandler)
 
-    app.put("/categories/:id",putCategoryHandler)
+    app.put("/categories/:id",validateRequest(createCategorySchema),putCategoryHandler)
 
     app.delete("/categories/:id",deleteCategoryHandler)
 
@@ -250,5 +262,6 @@ function routes(app:Express){
     app.all('*', (req:Request, res:Response) => {
         res.status(404).json({message:"page not found"})
     });
-}
-export default routes;
+    // app.use(errorHandler);
+// }
+export {app as routes};
