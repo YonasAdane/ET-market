@@ -1,12 +1,18 @@
 import express, {Request, Response} from "express";
+import helmet from "helmet";
+import 'dotenv/config'
 import {routes} from "./routes";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 import { wrapAsyncRoutes } from "./middlewares/wrapAsyncRoutes";
 const app=express();
-const PORT=4000;
+const PORT=process.env.PORT;
 app.use(express.json())
 // app.use(cors())
-app.use("/", wrapAsyncRoutes(routes)); // Automatically wraps all routes with asyncHandler
+app.use(helmet())
+app.use("/api/v1", wrapAsyncRoutes(routes));
+app.all('*', (req:Request, res:Response) => {
+    res.status(404).json({message:"page not found"})
+});
 // routes(app);
 app.use(errorHandler);
 app.listen(PORT,()=>{

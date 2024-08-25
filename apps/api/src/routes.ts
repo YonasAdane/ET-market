@@ -259,9 +259,9 @@ const app=Router();
      */
 
     
-    app.all('*', (req:Request, res:Response) => {
-        res.status(404).json({message:"page not found"})
-    });
+    // app.all('*', (req:Request, res:Response) => {
+    //     res.status(404).json({message:"page not found"})
+    // });
     // app.use(errorHandler);
 // }
 export {app as routes};
