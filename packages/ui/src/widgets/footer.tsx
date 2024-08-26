@@ -1,11 +1,14 @@
 import { Card } from "@/components/ui/card"
+import { cn } from "@/lib/utils"
 import Link from "next/link"
 
-type Props = {}
+type Props = {
+    className?:string
+}
 
-export default function Footer({}: Props) {
+export default function Footer({className}: Props) {
   return (
-    <Card className="w-screen">
+    <Card className={cn("w-screen",className)}>
         <div className="w-4/5 border-b flex justify-between p-6 mx-auto gap-6">
             <div>
                 <Link href="/">

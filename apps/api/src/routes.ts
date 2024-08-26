@@ -1,29 +1,32 @@
 import { Express,Request, Response, Router } from "express";
-import { deleteProductHandler, getProductsHandler, getSingleProductsHandler, postProductsHandler, putProductsHandler } from "./routes/products/products.controller";
+import { deleteProduct, getAllProducts, postProduct, putProduct } from "./routes/products/products.controller";
 import { deleteBrandHandler, getBrandHandler, getSingleBrandHandler, postBrandHandler, putBrandHandler } from "./routes/brands/brands.controller";
 import { postReviewsHandler,putReviewHandler,deleteReviewHandler,getReviewsProductHandler,getReviewsUserHandler} from "./routes/reviews/reviews.controller";
 import { deleteCartHandler, getCartHandler, getSingleCartHandler, postCartHandler, putCartHandler } from "./routes/cart/cart.controller";
 import { deleteCategoryHandler, getCategoriesHandler, getSingleCategoryHandler, postCategoriesHandler, putCategoryHandler } from "./routes/categories/categories.controller";
 import { postLoginHandler, postRegisterHandler,postLogoutHandler } from "./routes/auth/auth.controller";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
-import { createProductSchema } from "./routes/products/products.schema";
+import { createProductSchema, productSchema } from "./routes/products/products.schema";
 import { validateRequest } from "./utils/validation";
 import { createBrandSchema } from "./routes/brands/brands.schema";
 import { createCategorySchema } from "./routes/categories/categories.schema";
-
+import {ProductType} from "./routes/products/products.schema"
 // function routes(app:Express){
 const app=Router();
     /**@Products */
-    app.post("/products",validateRequest(createProductSchema),postProductsHandler)
+    // app.post("/products",validateRequest(createProductSchema),postProductsHandler)
     
-    app.get("/products",getProductsHandler);
+    // app.get("/products",getProductsHandler);
 
-    app.get("/products/:id",getSingleProductsHandler)
+    // app.get("/products/:id",getSingleProductsHandler)
     
-    app.put("/products/:id",validateRequest(createProductSchema),putProductsHandler)
+    // app.put("/products/:id",validateRequest(createProductSchema),putProductsHandler)
     
-    app.delete("/products/:id",deleteProductHandler)
-
+    // app.delete("/products/:id",deleteProductHandler)
+        app.post('/products/:category',validateRequest(productSchema), postProduct)
+        app.get('/products/:category',getAllProducts )
+        app.put('/products/:category/:id',putProduct)
+        app.delete('/products/:category/:id',deleteProduct)
         /**
      * @BRAND ROUTE
      */

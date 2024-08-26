@@ -7,6 +7,7 @@ import {Navigation} from "@repo/ui/widgets/Navigation.tsx"
 // import { ModeToggle } from "@repo/ui/widgets/modeToggle.tsx";
 import { ModeToggle } from "./components/modeTheme";
 import {ReduxProvider} from "@repo/redux-utils/libs/provider";
+import Footer from "@repo/ui/widgets/footer.tsx";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -41,6 +42,7 @@ export default function RootLayout({
                 <ModeToggle/>
               </Navigation>
                 {children}
+              <Footer className="mt-4 rounded-none"/>
           </ThemeProvider> 
         </ReduxProvider>
       </body>
