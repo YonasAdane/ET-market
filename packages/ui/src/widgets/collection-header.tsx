@@ -11,15 +11,15 @@ export function CollectionHeader() {
             <div>Show Filters</div>
             <SlidersHorizontal className="mx-2  " size={18}/>
         </Button>
-        <h2 className="text-xl">Men's Runners</h2>
+        <h2 className="text-xl">Watches</h2>
         <div className="w-1/2 h-full flex justify-end">
         <Select >
             <SelectTrigger className="w-65 text-xl rounded-full border-2 focus:outline-none outline-none active:outline-none" >
-                <SelectValue placeholder="Select a fruit" className="" />
+                <SelectValue placeholder="Filter" className="" />
             </SelectTrigger>
             <SelectContent>
                 <SelectGroup>
-                <SelectLabel>Fruits</SelectLabel>
+                <SelectLabel>Filter</SelectLabel>
                 <SelectItem value="apple">Best Match</SelectItem>
                 <SelectItem value="banana">Price: Low to High</SelectItem>
                 <SelectItem value="blueberry">Price: High to Low</SelectItem>

@@ -1,3 +1,4 @@
+import FilterSidebar from '@/widgets/filter-sidebar';
 import PorductCard from '@repo/ui/widgets/card.tsx';
 import { CollectionHeader } from '@repo/ui/widgets/collection-header.tsx'
 type Props = {}
@@ -77,18 +78,19 @@ const data = [
 ];
 export default function  Collections({}: Props) {
   return (
-    <div className='w-11/12 mx-auto my-5'> 
+    <div >
+      <div className='w-11/12 mx-auto my-5'>
         <CollectionHeader/>
-        <div className='flex justify-between gap-5 my-5'>
-            <div className='w-1/4 flex-grow border bg-blue-400'>
-            </div>
+        <div className='flex justify-between gap-5 my-5 '>
+            <FilterSidebar type="WATCH" />
             <div className='w-full  grid grid-cols-3 gap-6 '>
               {data.map((product) => (
                   <PorductCard  key={product.id} {...product} />
                 ))}
 
             </div>
-        </div>
+         </div>
+      </div> 
     </div>
   )
 }
