@@ -5,7 +5,7 @@ import { Heart, Menu, Search, ShoppingBag, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 
 
-export function Navigation({children}:{children: React.ReactNode}) {
+export function Navigation({children,categoryArray}:{children: React.ReactNode,categoryArray?:string[]}) {
   return (
     <header className='flex border-b py-4 sm:px-8 px-6 font-[sans-serif] min-h-[80px] tracking-wide relative z-50'>
     <div className='flex flex-wrap items-center lg:gap-y-2 gap-4 w-full'>
@@ -15,14 +15,12 @@ export function Navigation({children}:{children: React.ReactNode}) {
       <div className=' lg:ml-10 max-lg:hidden lg:!block max-lg:before:fixed max-lg:before:bg-black max-lg:before:opacity-50 max-lg:before:inset-0 max-lg:before:z-50'>
         <div
           className='lg:flex lg:gap-x-3 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-6 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50'>
-          <Button variant="link" className='max-lg:border-b max-lg:py-3 px-3'><Link href='javascript:void(0)'
-              className=' block font-semibold'>New</Link></Button>
-          <Button variant="link" className='max-lg:border-b max-lg:py-3 px-3'><Link href='javascript:void(0)'
-              className=' block font-semibold'>Men</Link></Button>
-          <Button variant="link" className='max-lg:border-b max-lg:py-3 px-3'><Link href='javascript:void(0)'
-              className=' block font-semibold'>Women</Link></Button>
-          <Button variant="link" className='max-lg:border-b max-lg:py-3 px-3'><Link href='javascript:void(0)'
-              className=' block font-semibold'>Kids</Link></Button>
+            <Button variant="link" className='max-lg:border-b max-lg:py-3 px-3'><Link href='javascript:void(0)'
+                className=' block font-medium'>New</Link></Button>
+            {categoryArray&& categoryArray.map(cat=>(
+              <Button key={cat} variant="link" className='max-lg:border-b max-lg:py-3 px-2 capitalize'><Link href='javascript:void(0)'
+              className=' block font-medium'>{cat.toLowerCase()}</Link></Button>
+            ))}
         </div>
       </div>
   
@@ -36,10 +34,10 @@ export function Navigation({children}:{children: React.ReactNode}) {
           <span>
             {children}
           </span>
-          <span className="relative">
+          {/* <span className="relative">
             <Heart />
             <span className="absolute left-auto -ml-1 top-0 rounded-full bg-red-500 px-1 py-0 text-xs text-white">0</span>
-          </span>
+          </span> */}
           <span className="relative">
           <ShoppingCart />
             <span className="absolute left-auto -ml-1 top-0 rounded-full bg-red-500 px-1 py-0 text-xs text-white">0</span>

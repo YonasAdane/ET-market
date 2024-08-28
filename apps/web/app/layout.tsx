@@ -8,6 +8,7 @@ import {Navigation} from "@repo/ui/widgets/Navigation.tsx"
 import { ModeToggle } from "./components/modeTheme";
 import {ReduxProvider} from "@repo/redux-utils/libs/provider";
 import Footer from "@repo/ui/widgets/footer.tsx";
+import { CategoryArray } from "./lib/consts";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -38,7 +39,7 @@ export default function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
-              <Navigation>
+              <Navigation categoryArray={CategoryArray}>
                 <ModeToggle/>
               </Navigation>
                 {children}

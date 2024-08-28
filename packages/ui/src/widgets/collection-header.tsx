@@ -6,7 +6,7 @@ import { ChevronDownIcon, SlidersHorizontal, User } from "lucide-react";
 
 export function CollectionHeader() {
   return (
-    <Card className="rounded-none border-none max-w-screen-md min-w-[80vw] flex justify-between">
+    <Card className="rounded-none border-none max-w-screen min-w-[80vw] w-full flex justify-between">
         <Button variant="outline" className="rounded-full text-xl border-2  inline-flex">
             <div>Show Filters</div>
             <SlidersHorizontal className="mx-2  " size={18}/>
