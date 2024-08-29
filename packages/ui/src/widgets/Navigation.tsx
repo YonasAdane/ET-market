@@ -18,8 +18,11 @@ export function Navigation({children,categoryArray}:{children: React.ReactNode,c
             <Button variant="link" className='max-lg:border-b max-lg:py-3 px-3'><Link href='javascript:void(0)'
                 className=' block font-medium'>New</Link></Button>
             {categoryArray&& categoryArray.map(cat=>(
-              <Button key={cat} variant="link" className='max-lg:border-b max-lg:py-3 px-2 capitalize'><Link href='javascript:void(0)'
-              className=' block font-medium'>{cat.toLowerCase()}</Link></Button>
+              <Button key={cat} variant="link" className='max-lg:border-b max-lg:py-3 px-2 capitalize'>
+                <Link href={`/collections/${cat.toLowerCase()}`} className=' block font-medium'>
+                  {cat.toLowerCase()}
+                </Link>
+              </Button>
             ))}
         </div>
       </div>

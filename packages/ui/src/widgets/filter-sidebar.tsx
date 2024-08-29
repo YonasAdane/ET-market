@@ -165,131 +165,65 @@ function ClothingFilter(props:Props) {
         <AccordionItem  value="item-6">
           <AccordionTrigger className="font-semibold text-xl hover:no-underline">SIZE</AccordionTrigger>
           <AccordionContent className="flex flex-col gap-1">
+            {[
+              "2XS",
+              "XS",
+              "S",
+              "M",
+              "L",
+              "XL",
+              "2XL",
+              "3XL",
+            ].map(item=>(
             <div className=" flex items-center gap-2">
               <Checkbox id="terms" className="" />
               <label
                 htmlFor="terms"
                 className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                2XS
+                {item}
               </label>
             </div>
-            <div className=" flex items-center gap-2">
-              <Checkbox id="terms" className="" />
-              <label
-                htmlFor="terms"
-                className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                XS
-              </label>
-            </div>
-            <div className=" flex items-center gap-2">
-              <Checkbox id="terms" className="" />
-              <label
-                htmlFor="terms"
-                className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                S
-              </label>
-            </div>
-            <div className=" flex items-center gap-2">
-              <Checkbox id="terms" className="" />
-              <label
-                htmlFor="terms"
-                className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                M
-              </label>
-            </div>
-            <div className=" flex items-center gap-2">
-              <Checkbox id="terms" className="" />
-              <label
-                htmlFor="terms"
-                className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                L
-              </label>
-            </div>
-            <div className=" flex items-center gap-2">
-              <Checkbox id="terms" className="" />
-              <label
-                htmlFor="terms"
-                className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                XL
-              </label>
-            </div>
-            <div className=" flex items-center gap-2">
-              <Checkbox id="terms" className="" />
-              <label
-                htmlFor="terms"
-                className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                2XL
-              </label>
-            </div>
-            <div className=" flex items-center gap-2">
-              <Checkbox id="terms" className="" />
-              <label
-                htmlFor="terms"
-                className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                3XL
-              </label>
-            </div>
+            ))}
           </AccordionContent>
         </AccordionItem>
         <AccordionItem  value="item-5">
-          <AccordionTrigger className="font-semibold text-xl hover:no-underline">Strap Material</AccordionTrigger>
+          <AccordionTrigger className="font-semibold text-xl hover:no-underline">Fabric</AccordionTrigger>
           <AccordionContent className="flex flex-col gap-1">
+              {['Cotton Blend',
+              'Pure Cotton',
+              'Polycotton',
+              'Lycra Blend',
+              'Cotton Lycra',
+              'Polyester',
+              'Viscose Rayon',
+              'Cotton Linen',
+              'Cotton Silk',
+              'Satin',
+              'Denim',
+              'Poly Viscose',
+              'Corduroy',
+              'Linen Blend',
+              'Silk Blend',
+              'Pure Linen',
+              'Poly Silk',
+              'Crepe',
+              'Chiffon',
+              'Lyocell',
+              'Wool Blend',
+              'Nylon',
+              'Modal'].map(item=>(
             <div className=" flex items-center gap-2">
               <Checkbox id="terms" className="" />
               <label
                 htmlFor="terms"
                 className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                Genuine Leather
+                {item}
               </label>
             </div>
-            <div className=" flex items-center gap-2">
-              <Checkbox id="terms" className="" />
-              <label
-                htmlFor="terms"
-                className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Metal
 
-              </label>
-            </div>
-            <div className=" flex items-center gap-2">
-              <Checkbox id="terms" className="" />
-              <label
-                htmlFor="terms"
-                className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Plastic
-
-              </label>
-            </div>
-            <div className=" flex items-center gap-2">
-              <Checkbox id="terms" className="" />
-              <label
-                htmlFor="terms"
-                className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Silicone
-                
-              </label>
-            </div>
-            <div className=" flex items-center gap-2">
-              <Checkbox id="terms" className="" />
-              <label
-                htmlFor="terms"
-                className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Stainless Steel
-              </label>
-            </div>
+))}
           </AccordionContent>
         </AccordionItem>
         <AccordionItem  value="item-3">

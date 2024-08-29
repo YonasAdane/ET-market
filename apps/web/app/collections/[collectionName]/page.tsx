@@ -1,7 +1,7 @@
 import FilterSidebar from '@/widgets/filter-sidebar';
 import PorductCard from '@repo/ui/widgets/card.tsx';
 import { CollectionHeader } from '@repo/ui/widgets/collection-header.tsx'
-type Props = {}
+import {CategoryType} from "../../lib/types"
 const data = [
   {
     id: 1,
@@ -76,13 +76,14 @@ const data = [
       "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
   },
 ];
-export default function  Collections({}: Props) {
+export default function  Collections({ params }: { params: { collectionName: string } }) {
+  const { collectionName } = params;
   return (
     <div >
       <div className='w-11/12 mx-auto my-5'>
-        <CollectionHeader/>
+        <CollectionHeader name={collectionName}/>
         <div className='flex justify-between gap-5 my-5 '>
-            <FilterSidebar type="WATCH" />
+            <FilterSidebar type={collectionName.toUpperCase() as CategoryType ||"CLOTHING"} />
             <div className='w-full  grid grid-cols-3 gap-6 '>
               {data.map((product) => (
                   <PorductCard  key={product.id} {...product} />
