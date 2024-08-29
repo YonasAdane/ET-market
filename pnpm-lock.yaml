@@ -443,6 +443,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.19
         version: 18.2.19
+      '@types/react-redux':
+        specifier: ^7.1.33
+        version: 7.1.33
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.40)

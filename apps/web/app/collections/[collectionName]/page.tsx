@@ -76,19 +76,112 @@ const data = [
       "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
   },
 ];
+const watches=[
+  {
+    id: 1,
+    name: "MacBook Pro 13",
+    prevPrice:1200,
+    description:"TIMEX",
+    price: 999.99,
+    image:
+      "https://cdn.shopify.com/s/files/1/0046/3454/2129/files/TW2V44700U9_1.jpg?v=1708690089&width=267",
+  },
+  
+  {
+    id: 2,
+    name: "Timex Men Black Round Dial Analog Watch",
+    prevPrice:1200,
+    description:"TIMEX",
+    price:12995 ,
+    image:
+      "https://www.justwatches.com/cdn/shop/files/TWEG20208.jpg?v=1718772043&width=300",
+  },
+  {
+    id: 3,
+    name: "Gc Tiara Women Round Dial Quartz Analog Watch",
+    prevPrice:1200,
+    description:"GC",
+    price:38995 ,
+    image:
+      "https://www.justwatches.com/cdn/shop/files/Z41002L1MF_7.jpg?v=1709643466&width=348",
+  },
+  {
+    id: 4,
+    name: "Gc Prodigy Men Round Dial Quartz Analog Watch",
+    prevPrice:1200,
+    description:"GC",
+    price:38995 ,
+    image:
+      "//www.justwatches.com/cdn/shop/files/Z39005G3MF_7.jpg?v=1709643209&width=300",
+  },
+  {
+    id: 5,
+    name: "Guess Lotus Women Round Dial Quartz Analog Watch",
+    prevPrice:1200,
+    description:"GUESS",
+    price:11897 ,
+    image:
+      "https://www.justwatches.com/cdn/shop/files/GW0667L1_1.jpg?v=1709641243&width=300",
+  },
+  {
+    id: 6,
+    name: "Nautica Clearwater Beach Black Dial Round Case Quartz Analog Men Watch",
+    prevPrice:1200,
+    description:"Nautica",
+    price:13995 ,
+    image:
+      "https://www.justwatches.com/cdn/shop/files/NAPCWS303.jpg?v=1693570172&width=300",
+  },
+  {
+    id: 7,
+    name: "Nautica KOH May Bay Black Dial Round Case Quartz Analog Men Watch",
+    prevPrice:1200,
+    description:"NAUTICA",
+    price:15995 ,
+    image:
+      "https://www.justwatches.com/cdn/shop/files/NAPKMS301_11.jpg?v=1724757856&width=300",
+  },
+  {
+    id: 8,
+    name: "United Colors of Benetton Social Black Dial Round Case Quartz Analog Men Watch",
+    prevPrice:4797,
+    description:"UNITED COLORS OF BENETTON",
+    price:4797 ,
+    image:
+      "https://www.justwatches.com/cdn/shop/products/UWUCG0101_1.jpg?v=1639658902&width=300",
+  },
+  {
+    id: 9,
+    name: "Ladies Baby-G Blue Watch BG-169PB-2ER",
+    prevPrice:1200,
+    description:"CASIO",
+    price:38995 ,
+    image:
+      "https://www.houseofwatches.co.uk/media/catalog/product/cache/34b4a13777517e40e5b794fdc3ecddeb/2/1/21-52-233_01_dropshadow.jpg",
+  },
+  {
+    id: 10,
+    name: "Baby-G Transparent Blue Digital Watch BGD-565SJ-2ER",
+    prevPrice:1200,
+    description:"CASIO",
+    price:66.95 ,
+    image:
+      "https://www.houseofwatches.co.uk/media/catalog/product/2/1/21-52-25121847_casio_05.jpg",
+  },
+  
+]
 export default function  Collections({ params }: { params: { collectionName: string } }) {
   const { collectionName } = params;
   return (
-    <div >
+    <div > 
       <div className='w-11/12 mx-auto my-5'>
         <CollectionHeader name={collectionName}/>
         <div className='flex justify-between gap-5 my-5 '>
             <FilterSidebar type={collectionName.toUpperCase() as CategoryType ||"CLOTHING"} />
-            <div className='w-full  grid grid-cols-3 gap-6 '>
-              {data.map((product) => (
-                  <PorductCard  key={product.id} {...product} />
+            <div className='w-full  grid grid-cols-3 gap-6 items-start'>
+              {watches.map((product) => (
+                  <PorductCard  key={product.id} {...product} type={collectionName.toUpperCase() as CategoryType ||"CLOTHING"} />
                 ))}
-
             </div>
          </div>
       </div> 

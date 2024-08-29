@@ -9,45 +9,45 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
+import { CategoryType } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import {useAppSelector } from "@repo/redux-utils/libs/redux/store";
 import { Star, StarHalf } from "lucide-react";
 import { useState } from "react";
  
-export type CategoryType =
-    "CLOTHING"|        // For apparel such as shirts, trousers, dresses, etc.
-    "FOOTWEAR"|        // For shoes, sandals, sneakers, etc.
-    "ACCESSORY"|       // For belts, hats, scarves, etc.
-    "BAG"|             // For handbags, backpacks, luggage, etc.
-    "WATCH"|           // For watches and timepieces
-    "UNDERWEAR"|       // For undergarments, lingerie, etc.
-    "OUTERWEAR";       // For jackets, coats, and other outerwear
 type Props = {
-    type:CategoryType
+    type:CategoryType,
+    className?:string
 }
 
 export default function FilterSidebar(props: Props) {
+  let isSidebarOpen=useAppSelector(state=>state.sidebarReducer.value);
+  let Cnames=`transform transition-all duration-500 ease-in-out ${
+    isSidebarOpen ? "translate-x-0 " : "-translate-x-full opacity-0 w-0"
+  }`
   switch (props.type) {
     case "CLOTHING":
-        return <ClothingFilter {...props}/>
+        return <ClothingFilter {...props} className={Cnames}/>
     case "FOOTWEAR":
-        return <FootwerFilter {...props}/>
+        return <FootwerFilter {...props} className={Cnames}/>
     case "ACCESSORY":
-        return <AccessoryFilter {...props}/>
+        return <AccessoryFilter {...props} className={Cnames}/>
     case "BAG":
-        return <BagFilter {...props}/>
+        return <BagFilter {...props} className={Cnames}/>
     case "WATCH":
-        return <WatchFilter {...props}/>
+        return <WatchFilter {...props} className={Cnames}/>
     case "UNDERWEAR":
-        return <UnderwearFilter {...props}/>
+        return <UnderwearFilter {...props} className={Cnames}/>
     case "OUTERWEAR":
-        return <OuterwearFilter {...props}/>        
+        return <OuterwearFilter {...props} className={Cnames}/>        
     default:
-        return <ClothingFilter {...props}/>
+        return <ClothingFilter {...props} className={Cnames}/>
   }
 }
 
 function FootwerFilter(props:Props) {
   return (
-    <Card>
+    <Card className={cn("absolute left-0 top-0 h-full max-w-[20vw] w-full  rounded-none border-none ", props.className)}>
       <Accordion type="multiple" defaultValue={["item-1", "item-2", "item-3"]} className="w-full ">
         <AccordionItem value="item-1">
           <AccordionTrigger className="font-semibold text-xl hover:no-underline">Brand</AccordionTrigger>
@@ -96,7 +96,7 @@ function ClothingFilter(props:Props) {
     setPrice(value[0]!); 
   };
   return (
-    <Card className="max-w-[20vw] w-full rounded-none border-none">
+    <Card className={cn("max-w-[20vw] w-full rounded-none border-none",props.className)}>
       <Accordion type="multiple"  defaultValue={["item-1", "item-2", "item-3","item-4","item-5","item-6"]} className="w-full p-5">
         <AccordionItem  value="item-1">
           <AccordionTrigger className="font-semibold text-xl hover:no-underline">Brand</AccordionTrigger>
@@ -314,7 +314,7 @@ function ClothingFilter(props:Props) {
       setPrice(value[0]!); 
     };
     return (
-      <Card className="max-w-[20vw] w-full rounded-none border-none">
+      <Card className={cn("max-w-[20vw] w-full rounded-none border-none",props.className)}>
         <Accordion type="multiple"  defaultValue={["item-1", "item-2", "item-3","item-4","item-5","item-6"]} className="w-full p-5">
           <AccordionItem  value="item-1">
             <AccordionTrigger className="font-semibold text-xl hover:no-underline">Brand</AccordionTrigger>

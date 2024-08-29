@@ -1,18 +1,24 @@
-"use Client"
+"use client"
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChevronDownIcon, SlidersHorizontal, User } from "lucide-react";
+import { toggle } from "@repo/redux-utils/libs/redux/features/sidebarFilter-slice";
+import { AppDispatch, useAppSelector } from "@repo/redux-utils/libs/redux/store";
+import {SlidersHorizontal } from "lucide-react";
 import { ReactNode } from "react";
+import { useDispatch } from "react-redux";
 type Props={
     name?:string;
     children?:ReactNode;
 }
 export function CollectionHeader({name,children}:Props) {
+    const dispatch = useDispatch<AppDispatch>();
+    let isSidebarOpen=useAppSelector(state=>state.sidebarReducer.value);
+
   return (
     <Card className="rounded-none border-none max-w-screen min-w-[80vw] w-full flex justify-between">
-        <Button variant="outline" className="rounded-full text-xl border-2  inline-flex">
-            <div>Show Filters</div>
+        <Button variant="outline" className="rounded-full text-xl border-2  inline-flex" onClick={()=>dispatch(toggle())}>
+            <div>{isSidebarOpen?"Hide Filter":"Show Filters"}</div>
             <SlidersHorizontal className="mx-2  " size={18}/>
         </Button>
         <h2 className="text-xl capitalize">{name||"Search"}</h2>
