@@ -166,7 +166,7 @@ function WatchCard({image,name,price,prevPrice,description}: Props) {
           <Button variant={"secondary"} className="w-full hover:bg-secondary-foreground hover:text-secondary  text-sm">Add to Cart</Button>
         </div >
       </div>
-      <CardContent>
+      <CardContent className="pt-5">
           <p className="text-xs">{description}</p>
           <CardTitle className="text-base font-medium">{name}</CardTitle>
         <div className="w-full flex justify-between">
