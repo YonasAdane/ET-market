@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 
-type AuthState = {
+interface AuthState {
     isAuth: boolean;
     username: string;
     uid: string;

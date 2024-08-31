@@ -15,6 +15,8 @@ import {useAppSelector } from "@repo/redux-utils/libs/redux/store";
 import { Star, StarHalf } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import CheckboxByText from "./subComponents/CheckboxByText";
+import CheckboxByStar from "./subComponents/CheckboxByStar";
 type Props = {
     type:CategoryType,
     className?:string
@@ -99,7 +101,29 @@ function ClothingFilter(props:Props) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  
+  let fabrics=['Cotton Blend',
+    'Pure Cotton',
+    'Polycotton',
+    'Lycra Blend',
+    'Cotton Lycra',
+    'Polyester',
+    'Viscose Rayon',
+    'Cotton Linen',
+    'Cotton Silk',
+    'Satin',
+    'Denim',
+    'Poly Viscose',
+    'Corduroy',
+    'Linen Blend',
+    'Silk Blend',
+    'Pure Linen',
+    'Poly Silk',
+    'Crepe',
+    'Chiffon',
+    'Lyocell',
+    'Wool Blend',
+    'Nylon',
+    'Modal']
   const createQueryString = useCallback(
     () => {
       // const params = new URLSearchParams(searchParams.toString())
@@ -126,129 +150,34 @@ function ClothingFilter(props:Props) {
           <AccordionItem  value="item-1">
             <AccordionTrigger className="font-semibold text-xl hover:no-underline">Brand</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-1">
-              <div className=" flex items-center gap-2">
-                <Checkbox id="terms" className="" />
-                <label
-                  htmlFor="terms"
-                  className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  PUMA
-                </label>
-              </div>
-              <div className=" flex items-center gap-2">
-                <Checkbox id="terms" className="" />
-                <label
-                  htmlFor="terms"
-                  className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  NIKE
-                </label>
-              </div>
-              <div className=" flex items-center gap-2">
-                <Checkbox id="terms" className="" />
-                <label
-                  htmlFor="terms"
-                  className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  ADIDAS
-                </label>
-              </div>
+              <CheckboxByText name="brand" value='puma' text="PUMA" id="puma"/>
+              <CheckboxByText name="brand" value='nike' text="NIKE" id="nike"/>
+              <CheckboxByText name="brand" value='adidas' text="ADIDAS" id="adidas"/>
             </AccordionContent>
           </AccordionItem>
           <AccordionItem  value="item-2">
             <AccordionTrigger className="font-semibold text-xl hover:no-underline">Gender</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-1">
-              <div className=" flex items-center gap-2">
-                <Checkbox id="terms" className="" />
-                <label
-                  htmlFor="terms"
-                  className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Male
-                </label>
-              </div>
-              <div className=" flex items-center gap-2">
-                <Checkbox id="terms" className="" />
-                <label
-                  htmlFor="terms"
-                  className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Female
-                </label>
-              </div>
-              <div className=" flex items-center gap-2">
-                <Checkbox id="terms" className="" />
-                <label
-                  htmlFor="terms"
-                  className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Unisex
-                </label>
-              </div>
+              <CheckboxByText name="gender" value='male' text="Male" id="male"/>
+              <CheckboxByText name="gender" value='female' text="Female" id="female"/>
+              <CheckboxByText name="unisex" value='unisex' text="Unisex" id="unisex"/>
             </AccordionContent>
           </AccordionItem>
           <AccordionItem  value="item-6">
             <AccordionTrigger className="font-semibold text-xl hover:no-underline">SIZE</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-1">
-              {[
-                "2XS",
-                "XS",
-                "S",
-                "M",
-                "L",
-                "XL",
-                "2XL",
-                "3XL",
+              {["2XS","XS","S","M","L","XL","2XL","3XL",
               ].map((item,i)=>(
-              <div className=" flex items-center gap-2">
-                <Checkbox id={`${i}`} value={item} name="size" className="" />
-                <label
-                  htmlFor={`${i}`}
-                  className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {item}
-                </label>
-              </div>
+                <CheckboxByText key={i} name="size" value={item} text={item} id={item}/>  
               ))}
             </AccordionContent>
           </AccordionItem>
           <AccordionItem  value="item-5">
             <AccordionTrigger className="font-semibold text-xl hover:no-underline">Fabric</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-1">
-                {['Cotton Blend',
-                'Pure Cotton',
-                'Polycotton',
-                'Lycra Blend',
-                'Cotton Lycra',
-                'Polyester',
-                'Viscose Rayon',
-                'Cotton Linen',
-                'Cotton Silk',
-                'Satin',
-                'Denim',
-                'Poly Viscose',
-                'Corduroy',
-                'Linen Blend',
-                'Silk Blend',
-                'Pure Linen',
-                'Poly Silk',
-                'Crepe',
-                'Chiffon',
-                'Lyocell',
-                'Wool Blend',
-                'Nylon',
-                'Modal'].map(item=>(
-              <div className=" flex items-center gap-2">
-                <Checkbox id="terms" className="" />
-                <label
-                  htmlFor="terms"
-                  className=" text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {item}
-                </label>
-              </div>
-
-  ))}
+              {fabrics.map((item,i)=>(
+              <CheckboxByText name="fabric" value={item} text={item} id={item} key={i}/>  
+              ))}
             </AccordionContent>
           </AccordionItem>
           <AccordionItem  value="item-3">
@@ -261,61 +190,16 @@ function ClothingFilter(props:Props) {
                   <Button variant="outline" className="rounded-none block h-8">2466</Button>
                 </div>
                 <div className="w-full">
-                  <Slider value={[price]} onValueChange={handleSliderChange} name="banana" className="border border-slate-600 rounded-sm" defaultValue={[500]} min={90} max={2466} step={100}/>
+                  <Slider value={[price]} onValueChange={handleSliderChange} name="priceValue" className="border border-slate-600 rounded-sm" defaultValue={[500]} min={90} max={2466} step={100}/>
                   <label className="block " htmlFor="banana">${price}</label>
                 </div>
               </div>
-              
             </AccordionContent>
           </AccordionItem>
           <AccordionItem   value="item-4">
             <AccordionTrigger className="font-semibold text-xl hover:no-underline">Ratings</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-1 ">
-              <div className=" flex flex-col  items-start gap-2 w-full ">
-                <div className="flex gap-2">
-                  <Checkbox/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  {/* <StarHalf fill="##d9d9d9" stroke="##d9d9d9" size={18}/> */}
-                </div>
-                <div className="flex gap-2">
-                  <Checkbox/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                </div>
-                <div className="flex gap-2">
-                  <Checkbox/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                </div>
-                <div className="flex gap-2">
-                  <Checkbox/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                </div>
-                <div className="flex gap-2">
-                  <Checkbox/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                </div>
-
-              </div>
-              
+              <CheckboxByStar/>
             </AccordionContent>
           </AccordionItem>
           
@@ -493,51 +377,7 @@ function ClothingFilter(props:Props) {
           <AccordionItem   value="item-4">
             <AccordionTrigger className="font-semibold text-xl hover:no-underline">Ratings</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-1 ">
-              <div className=" flex flex-col  items-start gap-2 w-full ">
-                <div className="flex gap-2">
-                  <Checkbox/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  {/* <StarHalf fill="##d9d9d9" stroke="##d9d9d9" size={18}/> */}
-                </div>
-                <div className="flex gap-2">
-                  <Checkbox/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                </div>
-                <div className="flex gap-2">
-                  <Checkbox/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                </div>
-                <div className="flex gap-2">
-                  <Checkbox/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                </div>
-                <div className="flex gap-2">
-                  <Checkbox/>
-                  <Star fill="#ffc400" stroke="#ffc400" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                  <Star fill="#d9d9d9" stroke="#d9d9d9" size={18}/>
-                </div>
-
-              </div>
-              
+              <CheckboxByStar/>
             </AccordionContent>
           </AccordionItem>
           

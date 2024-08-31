@@ -1,9 +1,9 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, Store } from "@reduxjs/toolkit";
  import authReducer from "./features/auth-slice";
  import counterReducer from "./features/counter-slice";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 import sidebarReducer from "./features/sidebarFilter-slice";
-export const store=configureStore({
+export const store:Store=configureStore({
     reducer:{
         authReducer,
         counterReducer,

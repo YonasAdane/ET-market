@@ -6,13 +6,15 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "next-env.d.ts",
     "next.config.mjs",
-    "**/*.ts",
-    "**/*.tsx",
+    "./app/**/*.ts",
+    "./app/**/*.tsx",
     ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
