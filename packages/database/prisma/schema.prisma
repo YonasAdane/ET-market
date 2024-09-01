@@ -48,6 +48,7 @@ model Product {
   id          Int         @id @default(autoincrement())
   categoryId  Int?
   brandId     Int?
+  gender      String?
   name        String
   description String?
   price       Float

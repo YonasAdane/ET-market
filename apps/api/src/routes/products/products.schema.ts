@@ -21,12 +21,14 @@ const CategoryType = z.enum([
     'WATCH',
     'UNDERWEAR'
 ]);
+export type CategoryTypeEnum=z.infer<typeof CategoryType>;
 
 // Define the Zod schema for the Product model
 export const productSchema = z.object({
   id: z.number().int().optional(),  
   name: z.string().min(1, 'Name is required'),
   description: z.string().optional(), 
+  gender:z.string().optional(),
   price: z.number().positive('Price must be greater than 0'),
   stock: z.number().int().nonnegative('Stock must be a non-negative integer'),
   size: z.string().optional(), 

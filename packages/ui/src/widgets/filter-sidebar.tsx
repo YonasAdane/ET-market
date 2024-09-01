@@ -23,7 +23,7 @@ type Props = {
 }
 
 export default function FilterSidebar(props: Props) {
-  let isSidebarOpen=useAppSelector(state=>state.sidebarReducer.value);
+  let isSidebarOpen=useAppSelector(state=>state.sidebar.value);
   let Cnames=`transform transition-all duration-500 ease-in-out ${
     isSidebarOpen ? "translate-x-0 " : "-translate-x-full opacity-0 w-0"
   }`

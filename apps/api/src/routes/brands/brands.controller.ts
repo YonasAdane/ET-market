@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { createBrand, DeleteBrand, FindAllBrand, FindSingleBrand, UpdateBrand } from "./brands.service";
 import { createBrandType } from "./brands.schema";
+import { db } from "../../common/prisma-config";
+import Manybrands from "./sample-brand.json"
 
 /**
      * @POST /brands: Create a new brand.
@@ -22,6 +24,8 @@ Usage: To display all brands.
 export async function getBrandHandler(req:Request,res:Response){
     const brands=await FindAllBrand();
     return res.json(brands);
+    // const data =await db.brand.createMany({data:Manybrands});
+    // return res.json(data);
 };
 
 export async function getSingleBrandHandler(req:Request<{id:string}>,res:Response){

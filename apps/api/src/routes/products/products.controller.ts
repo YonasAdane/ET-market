@@ -65,7 +65,7 @@
 
 import { Request, Response } from 'express';
 import { z } from 'zod';
-import { accessoriesSchema, bagsSchema, clothingSchema, cosmeticsSchema, footwearSchema, /* , other schemas */ 
+import { accessoriesSchema, bagsSchema, CategoryTypeEnum, clothingSchema, cosmeticsSchema, footwearSchema, /* , other schemas */ 
 jewellerySchema,
 outerwearSchema,
 ProductType,
@@ -73,7 +73,9 @@ underwearSchema,
 watchesSchema} from './products.schema'; // Assume schemas are exported from here
 import { BaseError } from '../../utils/baseError';
 import { createProduct, DeleteProduct, FindAllProductInCategory, UpdateProduct } from './products.service';
-
+import { db } from '../../common/prisma-config';
+import Manyproduct from "./sample-product.json"
+import { CategoryType } from '@repo/database/src';
 
 // Define schemas for validation based on category
 const schemas: Record<string, z.ZodSchema> = {
@@ -108,7 +110,14 @@ export async function getAllProducts (req:Request<{ category:string },{},Product
 
     const products = await FindAllProductInCategory(category);
     res.json(products);
+
+    // const transformedProducts = Manyproduct.map(product => ({
+    //   ...product,
+    //   categoryType: product.categoryType.toUpperCase() as CategoryType, // Ensure the categoryType matches the enum
+    // }));
   
+    // const products = await db.product.createMany({ data: transformedProducts });
+    // return res.json(products);
 };
 
 // Update a product

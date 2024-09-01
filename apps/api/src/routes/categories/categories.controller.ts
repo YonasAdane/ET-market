@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { createCategoryType } from "./categories.schema";
 import { CreateCategory, FindAllCategories, FindSingleCategory, UpdateCategory } from "./categories.service";
+import { db } from "../../common/prisma-config";
+import Manycategory from "./sample-category.json"
   /**
      * @POST /categories: Create a new category.
 
@@ -21,6 +23,10 @@ export async function postCategoriesHandler(req:Request<{},{},createCategoryType
 export async function getCategoriesHandler(req:Request,res:Response){
     const allCategory=await FindAllCategories();
     return res.json(allCategory);
+    // console.log(Manycategory);
+    
+    // const data=await db.category.createMany({data:Manycategory});
+    // return res.json(data)
 
 };
 /**

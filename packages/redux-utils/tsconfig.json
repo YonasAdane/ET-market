@@ -5,6 +5,8 @@
       "rootDir": "./", 
       "target": "es6",
       "module": "commonjs",
+      "declaration": true,
+      "declarationDir": "dist",
       "strict": true,
       "jsx": "react-jsx",
       "esModuleInterop": true,

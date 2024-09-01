@@ -1,0 +1,103 @@
+[
+    {
+      "name": "Nike",
+      "logoUrl": "https://example.com/logos/nike.png"
+    },
+    {
+      "name": "Adidas",
+      "logoUrl": "https://example.com/logos/adidas.png"
+    },
+    {
+      "name": "Gucci",
+      "logoUrl": "https://example.com/logos/gucci.png"
+    },
+    {
+      "name": "Zara",
+      "logoUrl": "https://example.com/logos/zara.png"
+    },
+    {
+      "name": "H&M",
+      "logoUrl": "https://example.com/logos/hm.png"
+    },
+    {
+      "name": "Levi's",
+      "logoUrl": "https://example.com/logos/levis.png"
+    },
+    {
+      "name": "Puma",
+      "logoUrl": "https://example.com/logos/puma.png"
+    },
+    {
+      "name": "Rolex",
+      "logoUrl": "https://example.com/logos/rolex.png"
+    },
+    {
+      "name": "Under Armour",
+      "logoUrl": "https://example.com/logos/underarmour.png"
+    },
+    {
+      "name": "Burberry",
+      "logoUrl": "https://example.com/logos/burberry.png"
+    },
+    {
+      "name": "Versace",
+      "logoUrl": "https://example.com/logos/versace.png"
+    },
+    {
+      "name": "Calvin Klein",
+      "logoUrl": "https://example.com/logos/calvinklein.png"
+    },
+    {
+      "name": "Ralph Lauren",
+      "logoUrl": "https://example.com/logos/ralphlauren.png"
+    },
+    {
+      "name": "Tommy Hilfiger",
+      "logoUrl": "https://example.com/logos/tommyhilfiger.png"
+    },
+    {
+      "name": "Gap",
+      "logoUrl": "https://example.com/logos/gap.png"
+    },
+    {
+      "name": "Uniqlo",
+      "logoUrl": "https://example.com/logos/uniqlo.png"
+    },
+    {
+      "name": "Louis Vuitton",
+      "logoUrl": "https://example.com/logos/louisvuitton.png"
+    },
+    {
+      "name": "Michael Kors",
+      "logoUrl": "https://example.com/logos/michaelkors.png"
+    },
+    {
+      "name": "Dior",
+      "logoUrl": "https://example.com/logos/dior.png"
+    },
+    {
+      "name": "Prada",
+      "logoUrl": "https://example.com/logos/prada.png"
+    },
+    {
+      "name": "Chanel",
+      "logoUrl": "https://example.com/logos/chanel.png"
+    },
+    {
+      "name": "Hermès",
+      "logoUrl": "https://example.com/logos/hermes.png"
+    },
+    {
+      "name": "Balenciaga",
+      "logoUrl": "https://example.com/logos/balenciaga.png"
+    },
+    {
+      "name": "Fendi",
+      "logoUrl": "https://example.com/logos/fendi.png"
+    },
+    {
+      "name": "Dolce & Gabbana",
+      "logoUrl": "https://example.com/logos/dolcegabbana.png"
+    }
+  ]
+  

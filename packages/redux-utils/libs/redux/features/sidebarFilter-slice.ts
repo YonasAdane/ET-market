@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction, Slice } from '@reduxjs/toolkit'
+import type { PayloadAction, Reducer, Slice } from '@reduxjs/toolkit'
 
 export interface SidebarState {
   value: boolean
@@ -27,4 +27,4 @@ const sidebarSlice: Slice<SidebarState> = createSlice({
 
 export const { on, off, toggle } = sidebarSlice.actions
 
-export default sidebarSlice.reducer
+export default sidebarSlice.reducer as Reducer<SidebarState>

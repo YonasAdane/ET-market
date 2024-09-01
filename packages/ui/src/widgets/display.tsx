@@ -1,7 +1,7 @@
 "use client"
 import { useAppSelector } from "@repo/redux-utils/libs/redux/store"
 function Display() {
-    let number=useAppSelector(state=>state.counterReducer.value);
+    let number=useAppSelector(state=>state.counter.value);
 
   return (
     <div>

@@ -172,6 +172,10 @@ const watches=[
 ]
 export default function  Collections({ params }: { params: { collectionName: string } }) {
   const { collectionName } = params;
+  const param = new URLSearchParams(params);
+  console.log("params from the page",param.toString())
+  // const pro = await getManyProducts(params.toString());
+
   let data;
   switch (collectionName.toUpperCase() as CategoryType) {
     case "CLOTHING":

@@ -1,0 +1,83 @@
+[
+    {
+      "name": "Men",
+      "description": "Clothing and accessories specifically designed for men."
+    },
+    {
+      "name": "Women",
+      "description": "A wide range of apparel and accessories tailored for women."
+    },
+    {
+      "name": "Boys",
+      "description": "Clothing and accessories designed for young boys."
+    },
+    {
+      "name": "Girls",
+      "description": "Fashionable clothing and accessories for young girls."
+    },
+    {
+      "name": "Children",
+      "description": "Clothing and accessories for children of all ages."
+    },
+    {
+      "name": "Unisex",
+      "description": "Fashion items that can be worn by any gender."
+    },
+    {
+      "name": "Shirts",
+      "description": "Various styles of shirts for all genders."
+    },
+    {
+      "name": "T-shirts",
+      "description": "Casual and comfortable T-shirts for everyday wear."
+    },
+    {
+      "name": "Dresses",
+      "description": "A variety of dresses for different occasions and styles."
+    },
+    {
+      "name": "Jeans",
+      "description": "Denim jeans available in multiple cuts and styles."
+    },
+    {
+      "name": "Shoes",
+      "description": "Footwear including casual, formal, and sports shoes."
+    },
+    {
+      "name": "Boots",
+      "description": "Stylish and functional boots for all seasons."
+    },
+    {
+      "name": "Bags",
+      "description": "Handbags, backpacks, and other types of bags for carrying essentials."
+    },
+    {
+      "name": "Belts",
+      "description": "Belts in various styles and materials for fashion and function."
+    },
+    {
+      "name": "Sunglasses",
+      "description": "Protective eyewear with style for all ages."
+    },
+    {
+      "name": "Watches",
+      "description": "A range of watches from casual to luxury designs."
+    },
+    {
+      "name": "Leather Goods",
+      "description": "Products made from high-quality leather, including bags and jackets."
+    },
+    {
+      "name": "Formal Wear",
+      "description": "Clothing suitable for formal events and professional settings."
+    },
+    {
+      "name": "Summer Collection",
+      "description": "Lightweight clothing perfect for warm weather and summer activities."
+    },
+    {
+      "name": "Winter Collection",
+      "description": "Warm clothing and accessories for the winter season."
+    }
+  ]
+  
