@@ -12,6 +12,7 @@
     "@reduxjs/toolkit": "^2.2.7",
     "@repo/redux-utils": "workspace:*",
     "@repo/ui": "workspace:*",
+    "axios": "^1.7.7",
     "lucide-react": "^0.424.0",
     "next": "15.0.0-rc.0",
     "next-themes": "^0.3.0",

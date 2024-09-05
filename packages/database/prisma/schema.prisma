@@ -8,18 +8,18 @@ datasource db {
 }
 
 model User {
-  id          Int       @id @default(autoincrement())
-  username    String    @unique
-  email       String    @unique
+  id          Int            @id @default(autoincrement())
+  username    String         @unique
+  email       String         @unique
   password    String
-  role        Role      @default(CUSTOMER)
+  role        Role           @default(CUSTOMER)
   firstName   String?
   lastName    String?
   phoneNumber String?
   address     String?
-  createdAt   DateTime  @default(now())
-  orders      Order[]   @relation("UserOrders")
-  reviews     Review[]  @relation("UserReviews")
+  createdAt   DateTime       @default(now())
+  orders      Order[]        @relation("UserOrders")
+  reviews     Review[]       @relation("UserReviews")
   wishlist    Wishlist[]
   cartItems   ShoppingCart[]
 
@@ -36,42 +36,45 @@ model Category {
 }
 
 model Brand {
-  id          Int       @id @default(autoincrement())
-  name        String
-  logoUrl     String?
-  products    Product[] @relation("BrandProducts")
+  id       Int       @id @default(autoincrement())
+  name     String
+  logoUrl  String?
+  products Product[] @relation("BrandProducts")
 
   @@map("brands")
 }
 
 model Product {
-  id          Int         @id @default(autoincrement())
-  categoryId  Int?
-  brandId     Int?
-  gender      String?
-  name        String
-  description String?
-  price       Float
-  stock       Int
-  imageUrl    String?
-  size        String?      // Size of the product, applicable to clothing, footwear, etc.
-  material    String?      // Material of the product
-  colour      String?      // Colour of the product
-  pattern     String?      // Pattern of the product, e.g., Solid, Striped (Applicable to clothing)
-  fit         String?      // Fit of the product, e.g., Slim, Regular (Applicable to clothing)
-  soleType    String?      // Sole type, applicable to footwear
-  closureType String?      // Closure type, applicable to footwear
-  occasion    String?      // Occasion, e.g., Wedding, Casual (Applicable to specialty and occasion wear)
-  season      String?      // Season, e.g., Summer, Winter (Applicable to seasonal wear)
-  updatedAt   DateTime    @updatedAt
-  createdAt   DateTime    @default(now())
-  categoryType CategoryType
-  category    Category?   @relation("CategoryProducts", fields: [categoryId], references: [id])
-  brand       Brand?      @relation("BrandProducts", fields: [brandId], references: [id])
-  orderItems  OrderItem[] @relation("ProductOrderItems")
-  reviews     Review[]    @relation("ProductReviews")
-  wishlist    Wishlist[]
-  cartItems   ShoppingCart[]
+  id              Int            @id @default(autoincrement())
+  categoryId      Int?
+  brandId         Int?
+  gender          String?
+  name            String
+  description     String?
+  price           Float
+  stock           Int
+  imageUrl        String?
+  strapMaterial   String?
+  dialShape       String?
+  waterResistance String?
+  size            String? // Size of the product, applicable to clothing, footwear, etc.
+  material        String? // Material of the product
+  colour          String? // Colour of the product
+  pattern         String? // Pattern of the product, e.g., Solid, Striped (Applicable to clothing)
+  fit             String? // Fit of the product, e.g., Slim, Regular (Applicable to clothing)
+  soleType        String? // Sole type, applicable to footwear
+  closureType     String? // Closure type, applicable to footwear
+  occasion        String? // Occasion, e.g., Wedding, Casual (Applicable to specialty and occasion wear)
+  season          String? // Season, e.g., Summer, Winter (Applicable to seasonal wear)
+  updatedAt       DateTime       @updatedAt
+  createdAt       DateTime       @default(now())
+  categoryType    CategoryType
+  category        Category?      @relation("CategoryProducts", fields: [categoryId], references: [id])
+  brand           Brand?         @relation("BrandProducts", fields: [brandId], references: [id])
+  orderItems      OrderItem[]    @relation("ProductOrderItems")
+  reviews         Review[]       @relation("ProductReviews")
+  wishlist        Wishlist[]
+  cartItems       ShoppingCart[]
 
   @@map("products")
 }
@@ -93,7 +96,7 @@ model Order {
 }
 
 model OrderItem {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   orderId   Int
   productId Int
   quantity  Int
@@ -106,13 +109,13 @@ model OrderItem {
 }
 
 model Payment {
-  id           Int          @id @default(autoincrement())
-  orderId      Int @unique
-  amount       Float
-  method       PaymentMethod
-  status       PaymentStatus @default(PENDING)
-  paymentDate  DateTime      @default(now())
-  order        Order         @relation(fields: [orderId], references: [id])
+  id          Int           @id @default(autoincrement())
+  orderId     Int           @unique
+  amount      Float
+  method      PaymentMethod
+  status      PaymentStatus @default(PENDING)
+  paymentDate DateTime      @default(now())
+  order       Order         @relation(fields: [orderId], references: [id])
 
   @@map("payments")
 }
@@ -121,7 +124,7 @@ model Review {
   id        Int      @id @default(autoincrement())
   productId Int
   userId    Int
-  rating    Int      
+  rating    Int
   comment   String?
   createdAt DateTime @default(now())
   product   Product  @relation("ProductReviews", fields: [productId], references: [id])
@@ -154,8 +157,8 @@ model ShoppingCart {
 }
 
 model Shipping {
-  id           Int         @id @default(autoincrement())
-  orderId      Int @unique
+  id           Int            @id @default(autoincrement())
+  orderId      Int            @unique
   address      String
   city         String
   state        String
@@ -163,8 +166,8 @@ model Shipping {
   country      String
   status       ShippingStatus @default(PENDING)
   shippingDate DateTime?
-  createdAt    DateTime    @default(now())
-  order        Order       @relation("OrderShipping", fields: [orderId], references: [id])
+  createdAt    DateTime       @default(now())
+  order        Order          @relation("OrderShipping", fields: [orderId], references: [id])
 
   @@map("shipping")
 }
@@ -198,22 +201,23 @@ enum ShippingStatus {
   SHIPPED
   DELIVERED
 }
+
 enum CategoryType {
-  CLOTHING        // For apparel such as shirts, trousers, dresses, etc.
-  FOOTWEAR        // For shoes, sandals, sneakers, etc.
-  ACCESSORY       // For belts, hats, scarves, etc.
-  BAG             // For handbags, backpacks, luggage, etc.
-  JEWELLERY       // For rings, necklaces, bracelets, etc.
-  WATCH           // For watches and timepieces
-  SUNGLASSES      // For eyewear, including sunglasses
-  UNDERWEAR       // For undergarments, lingerie, etc.
-  SPORTSWEAR      // For athletic clothing, gym wear, etc.
-  OUTERWEAR       // For jackets, coats, and other outerwear
-  SWIMWEAR        // For swimsuits, bikinis, etc.
-  SUIT            // For formal suits, blazers, etc.
-  SLEEPWEAR       // For pajamas, nightgowns, etc.
-  COSTUME         // For costumes, fancy dress, etc.
-  LOUNGEWEAR      // For comfortable, casual wear typically worn at home
-  MATERNITY       // For maternity wear
-  LEATHER_GOODS   // For wallets, belts, and other leather accessories
+  CLOTHING // For apparel such as shirts, trousers, dresses, etc.
+  FOOTWEAR // For shoes, sandals, sneakers, etc.
+  ACCESSORY // For belts, hats, scarves, etc.
+  BAG // For handbags, backpacks, luggage, etc.
+  JEWELLERY // For rings, necklaces, bracelets, etc.
+  WATCH // For watches and timepieces
+  SUNGLASSES // For eyewear, including sunglasses
+  UNDERWEAR // For undergarments, lingerie, etc.
+  SPORTSWEAR // For athletic clothing, gym wear, etc.
+  OUTERWEAR // For jackets, coats, and other outerwear
+  SWIMWEAR // For swimsuits, bikinis, etc.
+  SUIT // For formal suits, blazers, etc.
+  SLEEPWEAR // For pajamas, nightgowns, etc.
+  COSTUME // For costumes, fancy dress, etc.
+  LOUNGEWEAR // For comfortable, casual wear typically worn at home
+  MATERNITY // For maternity wear
+  LEATHER_GOODS // For wallets, belts, and other leather accessories
 }

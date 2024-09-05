@@ -2,6 +2,7 @@ import FilterSidebar from '@/widgets/filter-sidebar';
 import PorductCard from '@repo/ui/widgets/card.tsx';
 import { CollectionHeader } from '@repo/ui/widgets/collection-header.tsx'
 import {CategoryType} from "../../lib/types"
+import { findProducts, findProductsBrand } from 'app/lib/fetchers/product';
 const clothing = [
   {
     id: 1,
@@ -170,48 +171,32 @@ const watches=[
   },
   
 ]
-export default function  Collections({ params }: { params: { collectionName: string } }) {
+export default async function  Collections({ params,searchParams }: { params: { collectionName: string },searchParams:string }) {
   const { collectionName } = params;
-  const param = new URLSearchParams(params);
-  console.log("params from the page",param.toString())
-  // const pro = await getManyProducts(params.toString());
-
-  let data;
-  switch (collectionName.toUpperCase() as CategoryType) {
-    case "CLOTHING":
-        data=clothing;
-        break;
-    case "FOOTWEAR":
-        data=clothing;
-        break;
-    case "ACCESSORY":
-        data=clothing;
-        break;
-    case "BAG":
-        data=clothing;
-        break;
-    case "WATCH":
-        data=watches;
-        break;
-    case "UNDERWEAR":
-        data=clothing;
-        break;
-    case "OUTERWEAR":
-        data=clothing;
-        break;        
-    default:
-        data=clothing;
-        break;
-  }
+  // const babo=new URLSearchParams(searchParams).toString();
+  // console.log("query params from the page",babo);
+  const data=await findProducts(collectionName,searchParams);
+  // console.log(`the URL--- http://localhost:4000/api/v1/products/${collectionName}?${babo}`);
+  
+  const brandsNcategory=await findProductsBrand(collectionName);
+  
   return (
     <div > 
       <div className='w-11/12 mx-auto my-5'>
         <CollectionHeader name={collectionName}/>
         <div className='flex justify-between gap-5 my-5 '>
-            <FilterSidebar type={collectionName.toUpperCase() as CategoryType ||"CLOTHING"} />
+            <FilterSidebar type={collectionName.toUpperCase() as CategoryType ||"CLOTHING"} brandsNcategory={brandsNcategory} />
             <div className='w-full  grid grid-cols-3 gap-6  h-fit'>
-              {data.map((product) => (
-                  <PorductCard  key={product.id} {...product} type={collectionName.toUpperCase() as CategoryType ||"CLOTHING"} />
+              {data && data?.map((product:{id:number,name:string,description:string,price:number,imageUrl:string,brand:{id:number,name:string}}) => (
+                  <PorductCard  
+                    key={product.id} 
+                    image={product.imageUrl}
+                    name={product.name} 
+                    brand={product.brand}
+                    description={product.description}
+                    price={product.price}
+                    prevPrice={2130}
+                    type={collectionName.toUpperCase() as CategoryType ||"CLOTHING"} />
                 ))}
             </div>
          </div>

@@ -68,6 +68,38 @@ export const clothingSchema = z.object({
 
 });
 
+export const productQuerySchema = z.object({
+  name: z.string().min(1).optional(),
+  price: z.string().optional(),
+  size: z.string().optional(),         // e.g., S, M, L, XL
+  material: z.string().optional(),     // e.g., Cotton, Polyester
+  colour: z.string().optional(),       // e.g., Red, Blue
+  pattern: z.string().optional(),      // e.g., Solid, Striped
+  fit: z.string().optional(),          // e.g., Slim, Regular
+  occasion: z.string().optional(),     // e.g., Casual, Formal
+  season: z.string().optional(),       // e.g., Summer, Winter
+  brandId: z.string().optional(),      // Foreign key reference to Brand
+  categoryId: z.string().optional(),              // Foreign key reference to Category
+  categoryType:z.string().optional(),
+  stock: z.number().int().nonnegative().optional(),
+  soleType: z.string().optional(),      // e.g., Rubber, Leather
+  closureType: z.string().optional(),   // e.g., Laces, Velcro
+  gemstone: z.string().optional(),      // e.g., Diamond, Ruby
+  purpose: z.string().optional(),       // e.g., Travel, Daily Use
+  insulationType: z.string().optional(),// e.g., Down, Synthetic
+  type: z.string().optional(),          // e.g., Foundation, Lipstick
+  shade: z.string().optional(),         // e.g., Fair, Medium, Dark
+  skinType: z.string().optional(),      // e.g., Dry, Oily, Combination
+  strapMaterial: z.string().optional(), // e.g., Leather, Metal
+  dialShape: z.string().optional(),     // e.g., Round, Square
+  waterResistance: z.string().optional(), // e.g., 50m, 100m
+  style: z.string().optional(),         // e.g., Briefs, Boxers
+  star: z.string().optional(),         // e.g., Fair, Medium, Dark
+
+});
+export type ProductQueryType=z.infer<typeof productQuerySchema>;
+
+
 export const footwearSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(), 
@@ -101,22 +133,6 @@ export const accessoriesSchema = z.object({
 
 });
 
-export const jewellerySchema = z.object({
-  name: z.string().min(1),
-  price: z.number().positive(),
-  description: z.string().optional(), 
-  imageUrl:z.string(),
-  material: z.string().optional(),      // e.g., Gold, Silver
-  gemstone: z.string().optional(),      // e.g., Diamond, Ruby
-  occasion: z.string().optional(),      // e.g., Wedding, Party
-  brandId: z.number().optional(),       // Foreign key reference to Brand
-  categoryId: z.number(),               // Foreign key reference to Category
-  categoryType:z.string(),
-  stock: z.number().int().nonnegative()
-
-
-});
-
 export const bagsSchema = z.object({
   name: z.string().min(1),
   price: z.number().positive(),
@@ -144,22 +160,6 @@ export const outerwearSchema = z.object({
   categoryId: z.number(),               // Foreign key reference to Category
   categoryType:z.string(),
   stock: z.number().int().nonnegative()
-
-});
-
-export const cosmeticsSchema = z.object({
-  name: z.string().min(1),
-  price: z.number().positive(),
-  description: z.string().optional(), 
-  imageUrl:z.string(),
-  type: z.string().optional(),          // e.g., Foundation, Lipstick
-  shade: z.string().optional(),         // e.g., Fair, Medium, Dark
-  skinType: z.string().optional(),      // e.g., Dry, Oily, Combination
-  brandId: z.number().optional(),       // Foreign key reference to Brand
-  categoryId: z.number(),               // Foreign key reference to Category
-  categoryType:z.string(),
-  stock: z.number().int().nonnegative()
-
 });
 
 export const watchesSchema = z.object({
@@ -181,7 +181,6 @@ export const underwearSchema = z.object({
   name: z.string().min(1),
   price: z.number().positive(),
   description: z.string().optional(), 
-
   size: z.string().optional(),          // e.g., S, M, L, XL
   material: z.string().optional(),      // e.g., Cotton, Polyester
   style: z.string().optional(),         // e.g., Briefs, Boxers
@@ -192,4 +191,33 @@ export const underwearSchema = z.object({
   stock: z.number().int().nonnegative()
 
 });
+
+export const jewellerySchema = z.object({
+  name: z.string().min(1),
+  price: z.number().positive(),
+  description: z.string().optional(), 
+  imageUrl:z.string(),
+  material: z.string().optional(),      // e.g., Gold, Silver
+  gemstone: z.string().optional(),      // e.g., Diamond, Ruby
+  occasion: z.string().optional(),      // e.g., Wedding, Party
+  brandId: z.number().optional(),       // Foreign key reference to Brand
+  categoryId: z.number(),               // Foreign key reference to Category
+  categoryType:z.string(),
+  stock: z.number().int().nonnegative()
+});
+export const cosmeticsSchema = z.object({
+  name: z.string().min(1),
+  price: z.number().positive(),
+  description: z.string().optional(), 
+  imageUrl:z.string(),
+  type: z.string().optional(),          // e.g., Foundation, Lipstick
+  shade: z.string().optional(),         // e.g., Fair, Medium, Dark
+  skinType: z.string().optional(),      // e.g., Dry, Oily, Combination
+  brandId: z.number().optional(),       // Foreign key reference to Brand
+  categoryId: z.number(),               // Foreign key reference to Category
+  categoryType:z.string(),
+  stock: z.number().int().nonnegative()
+
+});
+
 

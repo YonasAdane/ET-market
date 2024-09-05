@@ -10,7 +10,8 @@ type Props = {
   name:string;
   price:number;
   prevPrice:number;
-  description:string;
+  description?:string;
+  brand?:{id:number,name:string};
 }
 
 export default function PorductCard(props:Props) {
@@ -151,7 +152,7 @@ function BagCard({image,name,price,prevPrice,description}: Props) {
   );
 }
 
-function WatchCard({image,name,price,prevPrice,description}: Props) {
+function WatchCard({image,name,price,prevPrice,brand}: Props) {
   return (
     <Card className=" rounded-none flex flex-col justify-between">
       <div className="relative w-full  group">
@@ -167,7 +168,7 @@ function WatchCard({image,name,price,prevPrice,description}: Props) {
         </div >
       </div>
       <CardContent className="pt-5">
-          <p className="text-xs">{description}</p>
+          <p className="text-xs">{brand?.name}</p>
           <CardTitle className="text-base font-medium">{name}</CardTitle>
         <div className="w-full flex justify-between">
           <CardDescription className="font-bold text-xl">${price}</CardDescription>

@@ -1,73 +1,9 @@
-// import { Request, Response } from "express";
-// import {createProduct, DeleteProduct, FindAllProduct, FindSingleProduct, UpdateProduct} from "./products.service"
-// import { createProductType } from "./products.schema";
-//  /**
-//      * @GET /products: Retrieve a list of all products.
-
-//     Usage: To display all products on the website, often used with pagination and filtering.
-//      */
-
-// export async function getProductsHandler(req:Request,res:Response){
-//     const product=await FindAllProduct();
-//     return res.json(product);
-// };
-// /**
-//      * @POST /products: Create a new product.
-
-//     Usage: To add a new product to the catalog.
-//     Payload: { name, description, price, stock, categoryId, productId, imageUrl }
-//      */
-
-// export async function postProductsHandler(req:Request<{},{},createProductType>,res:Response){
-//     const data=req.body;
-//     const brand=await createProduct(data);
-//     return res.json(brand);
-
-// };
-//    /**
-//      * @GET /products/:id: Get product details by ID.
-
-//     Usage: To display a specific product's details.
-//     Parameter: id (Product ID)
-//      */
-// export async function getSingleProductsHandler(req:Request<{id:string}>,res:Response){
-//     const id=parseInt(req.params.id);
-//     const product=await FindSingleProduct(id);
-//     return res.json(product)
-// };
-// /**
-//  * @PUT /products/:id: Update product details.
-
-// Usage: To modify details of an existing product.
-// Parameter: id (Product ID)
-// Payload: { name, description, price, stock, categoryId, productId, imageUrl }
-//     */
-
-// export async function putProductsHandler(req:Request<{id:string},{},createProductType>,res:Response){
-//     const id=parseInt(req.params.id);
-//     const data=req.body;
-//     const product=await UpdateProduct(id,data);
-//     return res.json(product)
-
-// };
-// /**
-//      * @DELETE /products/:id: Delete a product.
-
-//     Usage: To remove a product from the catalog.
-//     Parameter: id (Product ID)
-//      */
-
-// export async function deleteProductHandler(req:Request<{id:string}>,res:Response){
-//     const id=parseInt(req.params.id);
-//     const product=await DeleteProduct(id);
-//     return res.json(product)
-// };
-
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { accessoriesSchema, bagsSchema, CategoryTypeEnum, clothingSchema, cosmeticsSchema, footwearSchema, /* , other schemas */ 
 jewellerySchema,
 outerwearSchema,
+ProductQueryType,
 ProductType,
 underwearSchema,
 watchesSchema} from './products.schema'; // Assume schemas are exported from here
@@ -75,7 +11,7 @@ import { BaseError } from '../../utils/baseError';
 import { createProduct, DeleteProduct, FindAllProductInCategory, UpdateProduct } from './products.service';
 import { db } from '../../common/prisma-config';
 import Manyproduct from "./sample-product.json"
-import { CategoryType } from '@repo/database/src';
+import { Category, CategoryType } from '@repo/database/src';
 
 // Define schemas for validation based on category
 const schemas: Record<string, z.ZodSchema> = {
@@ -101,24 +37,196 @@ export async function postProduct(req:Request<{ category:string },{},ProductType
     
     const product = await createProduct(parsedData);
     return res.json(product);
+  // const watches = [
+  //   {
+  //     name: "Timex MacBook Pro 13", // Sample name
+  //     price: 999.99,
+  //     description: "Timex MacBook Pro 13-inch watch, combining timeless design with modern technology.",
+  //     imageUrl: "https://cdn.shopify.com/s/files/1/0046/3454/2129/files/TW2V44700U9_1.jpg?v=1708690089&width=1000",
+  //     strapMaterial: "Leather", // Assuming strap material
+  //     dialShape: "Round", // Assuming the dial shape
+  //     waterResistance: "50m", // Assuming water resistance
+  //     brandId: 27, // TIMEX brand ID from your data
+  //     categoryId: 1, // Assuming category ID for watches
+  //     categoryType: "ACCESSORY", // Assuming watches are under accessories
+  //     stock: 50, // Sample stock value
+  //   },
+  //   {
+  //     name: "Timex Men Black Round Dial Analog Watch",
+  //     price: 12995,
+  //     description: "A classic Timex men's watch with a black round dial and analog display.",
+  //     imageUrl: "https://www.justwatches.com/cdn/shop/files/TWEG20208.jpg?v=1718772043&width=1000",
+  //     strapMaterial: "Metal",
+  //     dialShape: "Round",
+  //     waterResistance: "100m",
+  //     brandId: 27, // TIMEX brand ID
+  //     categoryId: 1,
+  //     categoryType: "ACCESSORY",
+  //     stock: 100,
+  //   },
+  //   {
+  //     name: "Gc Tiara Women Round Dial Quartz Analog Watch",
+  //     price: 38995,
+  //     description: "Elegant Gc Tiara watch for women with a round dial and quartz movement.",
+  //     imageUrl: "https://www.justwatches.com/cdn/shop/files/Z41002L1MF_7.jpg?v=1709643466&width=1000",
+  //     strapMaterial: "Leather",
+  //     dialShape: "Round",
+  //     waterResistance: "30m",
+  //     brandId: 28, // GC brand ID
+  //     categoryId: 1,
+  //     categoryType: "ACCESSORY",
+  //     stock: 70,
+  //   },
+  //   {
+  //     name: "Gc Prodigy Men Round Dial Quartz Analog Watch",
+  //     price: 38995,
+  //     description: "Stylish Gc Prodigy watch for men with a round dial and quartz analog display.",
+  //     imageUrl: "https://www.justwatches.com/cdn/shop/files/Z39005G3MF_7.jpg?v=1709643209&width=1000",
+  //     strapMaterial: "Metal",
+  //     dialShape: "Round",
+  //     waterResistance: "50m",
+  //     brandId: 28, // GC brand ID
+  //     categoryId: 1,
+  //     categoryType: "ACCESSORY",
+  //     stock: 30,
+  //   },
+  //   {
+  //     name: "Guess Lotus Women Round Dial Quartz Analog Watch",
+  //     price: 11897,
+  //     description: "Guess Lotus watch for women with a stylish round dial and quartz movement.",
+  //     imageUrl: "https://www.justwatches.com/cdn/shop/files/GW0667L1_1.jpg?v=1709641243&width=1000",
+  //     strapMaterial: "Metal",
+  //     dialShape: "Round",
+  //     waterResistance: "30m",
+  //     brandId: 29, // GUESS brand ID
+  //     categoryId: 1,
+  //     categoryType: "ACCESSORY",
+  //     stock: 40,
+  //   },
+  //   {
+  //     name: "Nautica Clearwater Beach Black Dial Round Case Quartz Analog",
+  //     price: 13995,
+  //     description: "Nautica Clearwater Beach watch with a black dial and quartz analog display.",
+  //     imageUrl: "https://www.justwatches.com/cdn/shop/files/NAPCWS303.jpg?v=1693570172&width=1000",
+  //     strapMaterial: "Rubber",
+  //     dialShape: "Round",
+  //     waterResistance: "100m",
+  //     brandId: 30, // Nautica brand ID
+  //     categoryId: 1,
+  //     categoryType: "ACCESSORY",
+  //     stock: 60,
+  //   },
+  //   {
+  //     name: "Nautica KOH May Bay Black Dial Round Case Quartz Analog",
+  //     price: 15995,
+  //     description: "Nautica KOH May Bay watch with a black dial and quartz analog movement.",
+  //     imageUrl: "https://www.justwatches.com/cdn/shop/files/NAPKMS301_11.jpg?v=1724757856&width=1000",
+  //     strapMaterial: "Rubber",
+  //     dialShape: "Round",
+  //     waterResistance: "200m",
+  //     brandId: 30, // Nautica brand ID
+  //     categoryId: 1,
+  //     categoryType: "ACCESSORY",
+  //     stock: 75,
+  //   },
+  //   {
+  //     name: "United Colors of Benetton Social Black Dial Round Case Quartz Analog",
+  //     price: 4797,
+  //     description: "United Colors of Benetton Social watch with a black dial and quartz analog display.",
+  //     imageUrl: "https://www.justwatches.com/cdn/shop/products/UWUCG0101_1.jpg?v=1639658902&width=1000",
+  //     strapMaterial: "Leather",
+  //     dialShape: "Round",
+  //     waterResistance: "30m",
+  //     brandId: 31, // UNITED COLORS OF BENETTON brand ID
+  //     categoryId: 1,
+  //     categoryType: "ACCESSORY",
+  //     stock: 90,
+  //   },
+  //   {
+  //     name: "Ladies Baby-G Blue Watch BG-169PB-2ER",
+  //     price: 38995,
+  //     description: "Ladies Baby-G watch in blue with digital display.",
+  //     imageUrl: "https://www.houseofwatches.co.uk/media/catalog/product/cache/34b4a13777517e40e5b794fdc3ecddeb/2/1/21-52-233_01_dropshadow.jpg",
+  //     strapMaterial: "Plastic",
+  //     dialShape: "Round",
+  //     waterResistance: "100m",
+  //     brandId: 32, // CASIO brand ID
+  //     categoryId: 1,
+  //     categoryType: "ACCESSORY",
+  //     stock: 35,
+  //   },
+  //   {
+  //     name: "Baby-G Transparent Blue Digital Watch BGD-565SJ-2ER",
+  //     price: 66.95,
+  //     description: "Baby-G transparent blue digital watch with multiple functionalities.",
+  //     imageUrl: "https://www.houseofwatches.co.uk/media/catalog/product/2/1/21-52-25121847_casio_05.jpg",
+  //     strapMaterial: "Plastic",
+  //     dialShape: "Square",
+  //     waterResistance: "200m",
+  //     brandId: 32, // CASIO brand ID
+  //     categoryId: 1,
+  //     categoryType: "ACCESSORY",
+  //     stock: 25,
+  //   },
+  // ];
+//  const transformedProducts = watches.map(product => ({
+//     ...product,
+//     categoryType: "WATCH" as CategoryType, // Ensure the categoryType matches the enum
+//   }));
+// try {
   
+//   const products = await db.product.createMany({ data: transformedProducts });
+//   return res.json(products);
+// } catch (error) {
+//   console.log(error);
+  
+// }
 };
 
 // Get all products in a category ++++
-export async function getAllProducts (req:Request<{ category:string },{},ProductType>, res:Response){
+export async function getAllProducts (req:Request<{ category:string },{},ProductType,ProductQueryType>, res:Response){
   const category = req.params.category.toUpperCase();
+  const queryParams=req.query;
+  const filters: any = {};
+  if(category){
+    filters.categoryType=category as CategoryType;
+  }
+  if (queryParams.brandId) {
+    filters.brandId = {
+      in: Array.isArray(queryParams.brandId)
+        ? queryParams.brandId.map((id) => parseInt(id as string)) // Convert all elements to integers
+        : [parseInt(queryParams.brandId as string)], // Convert a single element to an integer array
+    };
+  }
+    // if (queryParams.gender) {
+    //   filters.gender = Array.isArray(gender) ? { in: gender } : { in: [gender] };
+    // }
+    if (queryParams.size) {
+      filters.size = Array.isArray(queryParams.size) ? { in: queryParams.size } : { in: [queryParams.size] };
+    }
+    if (queryParams.material) {
+      filters.material = Array.isArray(queryParams.material) ? { in: queryParams.material } : { in: [queryParams.material] };
+    }
+    if (queryParams.price) {
+      filters.price = { lte: parseFloat(queryParams.price as string) };
+    }
 
-    const products = await FindAllProductInCategory(category);
-    res.json(products);
+  const product= await db.product.findMany({where: filters,include:{brand:true}})
+  console.log("request",queryParams);
 
-    // const transformedProducts = Manyproduct.map(product => ({
-    //   ...product,
-    //   categoryType: product.categoryType.toUpperCase() as CategoryType, // Ensure the categoryType matches the enum
-    // }));
-  
-    // const products = await db.product.createMany({ data: transformedProducts });
-    // return res.json(products);
+   return res.json(product);
 };
+
+export async function getAllProductsBrandsCategories (req:Request<{ category:string },{},ProductType>, res:Response){
+  const category = req.params.category.toUpperCase();
+  const brands=await db.product.findMany({
+    where:{
+    categoryType:category as CategoryType,
+  },
+  select:{brand:true,category:true}
+});
+return res.json(brands);
+}
 
 // Update a product
 export async function putProduct(req:Request<{ category:string, id:string },{},ProductType>, res:Response){

@@ -1,5 +1,5 @@
 import { Express,Request, Response, Router } from "express";
-import { deleteProduct, getAllProducts, postProduct, putProduct } from "./routes/products/products.controller";
+import { deleteProduct, getAllProducts, getAllProductsBrandsCategories, postProduct, putProduct } from "./routes/products/products.controller";
 import { deleteBrandHandler, getBrandHandler, getSingleBrandHandler, postBrandHandler, putBrandHandler } from "./routes/brands/brands.controller";
 import { postReviewsHandler,putReviewHandler,deleteReviewHandler,getReviewsProductHandler,getReviewsUserHandler} from "./routes/reviews/reviews.controller";
 import { deleteCartHandler, getCartHandler, getSingleCartHandler, postCartHandler, putCartHandler } from "./routes/cart/cart.controller";
@@ -25,6 +25,7 @@ const app=Router();
     // app.delete("/products/:id",deleteProductHandler)
         app.post('/products/:category',validateRequest(productSchema), postProduct)
         app.get('/products/:category',getAllProducts )
+        app.get('/products/:category/brands-categories',getAllProductsBrandsCategories )
         app.put('/products/:category/:id',putProduct)
         app.delete('/products/:category/:id',deleteProduct)
         /**
