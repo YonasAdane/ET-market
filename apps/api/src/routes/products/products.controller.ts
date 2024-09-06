@@ -10,8 +10,8 @@ watchesSchema} from './products.schema'; // Assume schemas are exported from her
 import { BaseError } from '../../utils/baseError';
 import { createProduct, DeleteProduct, FindAllProductInCategory, UpdateProduct } from './products.service';
 import { db } from '../../common/prisma-config';
-import Manyproduct from "./sample-product.json"
-import { Category, CategoryType } from '@repo/database/src';
+// import Manyproduct from "./sample-product.json"
+import {  CategoryType } from '@repo/database/src';
 
 // Define schemas for validation based on category
 const schemas: Record<string, z.ZodSchema> = {
