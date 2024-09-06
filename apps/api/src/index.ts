@@ -10,6 +10,9 @@ const PORT=process.env.PORT;
 app.use(express.json())
 app.use(cors())
 app.use(helmet())
+app.get("/",(req,res)=>{
+    res.json({message:"welcome to et-market"})
+})
 app.use("/api/v1", wrapAsyncRoutes(routes));
 app.all('*', (req:Request, res:Response) => {
     res.status(404).json({message:"page not found"})
@@ -19,3 +22,4 @@ app.use(errorHandler);
 app.listen(PORT,()=>{
     console.log(`running on port ${PORT}`)
 })
+export default app;
