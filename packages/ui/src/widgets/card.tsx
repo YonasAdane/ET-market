@@ -160,7 +160,7 @@ function WatchCard({image,name,price,prevPrice,brand}: Props) {
           <Heart fill="#111" size={20}/>
         </div>
         <img
-          className="relative h-full w-full rounded-lg object-contain transition duration-300 ease-in-out " 
+          className="relative h-full w-full  object-contain transition duration-300 ease-in-out " 
           width={300} height={300} src={image} alt="product-picture"
         />
         <div className="w-full flex absolute bottom-0 items-end p-4 opacity-0  group-hover:opacity-100 duration-1000">

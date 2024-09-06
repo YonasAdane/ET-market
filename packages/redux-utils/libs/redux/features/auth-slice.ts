@@ -14,7 +14,7 @@ const initialState: AuthState = {
     isModerator: false,
 };
 
-const auth: Slice<AuthState> = createSlice({
+const auth = createSlice({
     name: "auth",
     initialState,
     reducers: {

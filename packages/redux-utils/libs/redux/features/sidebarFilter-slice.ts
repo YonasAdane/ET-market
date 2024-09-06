@@ -9,7 +9,7 @@ const initialState: SidebarState = {
   value: true,
 }
 
-const sidebarSlice: Slice<SidebarState> = createSlice({
+const sidebarSlice= createSlice({
   name: 'sidebar',
   initialState,
   reducers: {

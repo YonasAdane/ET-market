@@ -50,24 +50,27 @@ export default function FilterSidebar(props: Props) {
   let brandSet=[...new Set(brands.map(item=>JSON.stringify(item)))].map(product=>JSON.parse(product));
 
   const formRef = useRef(null); 
-  const [price,setPrice]=useState<number>(props.price?.max || 255);
+    let [price,setPrice]=useState<number>(props.price?.max||1000);
+  
   const handleSliderChange = (value:Array<number>) => {
     setPrice(value[0]!); 
   };
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const createQueryString = useCallback(
-    () => {
-      const formData = new FormData(formRef.current!); 
-      const asString = new URLSearchParams(formData).toString();
-      console.log("asString : ",asString);
-      setTimeout(() => {
-        router.push(`${pathname}?${asString}`);
-      }, 700);
-    },
-    [searchParams]
-  )
+  const createQueryString = useCallback(() => {
+    const formData = new FormData(formRef.current!);
+    const params = new URLSearchParams();  
+    formData.forEach((value, key) => {
+      params.append(key, value as string);
+    });
+    const asString = params.toString();
+  
+    setTimeout(() => {
+      router.push(`${pathname}?${asString}`);
+    }, 700);
+  }, [searchParams]);
+  
   return (
     <Card className={cn("max-w-[20vw] w-full rounded-none border-none",props.className,Cnames)}>
       <form ref={formRef} onChange={()=>{
