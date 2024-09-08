@@ -1,2 +1,1 @@
-export * from '@prisma/client';
-export {CategoryType} from "@prisma/client"
+export {CategoryType,PrismaClient} from "@prisma/client"

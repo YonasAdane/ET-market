@@ -10,7 +10,7 @@ const PORT=process.env.PORT;
 app.use(express.json())
 app.use(cors())
 app.use(helmet())
-app.get("/",(req,res)=>{
+app.get("/",(req:Request,res:Response)=>{
     res.json({message:"welcome to et-market"})
 })
 app.use("/api/v1", wrapAsyncRoutes(routes));

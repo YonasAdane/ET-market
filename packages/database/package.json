@@ -16,9 +16,9 @@
     "types": "./src/index.ts",
     "default": "./dist/index.js"
   },
-  "./src/": {
+  "./src/index": {
     "types": "./src/index.ts",
-    "default": "./dist/index.ts"
+    "default": "./src/index.ts"
   }
 },
   "dependencies": {
