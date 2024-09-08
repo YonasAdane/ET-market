@@ -20,6 +20,7 @@
       /* Type Checking */
       "strict": true,                                      /* Enable all strict type-checking options. */
       /* Completeness */
+      "typeRoots": ["node_modules/@types"],
       "resolveJsonModule": true,
       "skipLibCheck": true ,                                /* Skip type checking all .d.ts files. */
       "noImplicitAny": false
