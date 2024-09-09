@@ -47,10 +47,10 @@ export const Accessory: Story = {
 };
 export const Bag: Story = {
   args: {
-    image:"https://st2.depositphotos.com/2071605/8913/i/380/depositphotos_89139132-stock-photo-brown-jacket-for-man.jpg",
-    name:"Autumn Jacket",
+    image:"https://rtwcreation.com/cdn/shop/products/peach-mini-top-handle-bag-quarte.jpg?v=1664205942",
+    name:"Peach mini top-handle bag",
     description:"Jacket",
-    price:85,
+    price:2399.00,
     prevPrice:124,
     type:"BAG"
   },
