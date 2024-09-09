@@ -1,5 +1,4 @@
 {
-  "extends": "@repo/typescript-config/nestjs.json",
     "compilerOptions": {
       /* Projects */
       /* Language and Environment */
