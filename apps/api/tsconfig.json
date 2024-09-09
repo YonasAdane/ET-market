@@ -1,4 +1,5 @@
 {
+  "extends": "@repo/typescript-config/nestjs.json",
     "compilerOptions": {
       /* Projects */
       /* Language and Environment */
@@ -23,8 +24,8 @@
       "typeRoots": ["node_modules/@types"],
       "resolveJsonModule": true,
       "skipLibCheck": true ,                                /* Skip type checking all .d.ts files. */
-      "noImplicitAny": false
+      "noImplicitAny": true
     },
-    "include": ["./api/*.ts"]
+    "include": ["./api/*.ts","./src/**/*.ts"]
   }
   
