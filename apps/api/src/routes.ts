@@ -23,53 +23,35 @@ const app=Router();
     // app.put("/products/:id",validateRequest(createProductSchema),putProductsHandler)
     
     // app.delete("/products/:id",deleteProductHandler)
-        app.post('/products/:category',validateRequest(productSchema), postProduct)
-        app.get('/products/:category',getAllProducts )
-        app.get('/products/:category/brands-categories',getAllProductsBrandsCategories )
-        app.put('/products/:category/:id',putProduct)
-        app.delete('/products/:category/:id',deleteProduct)
-        /**
+    app.post('/products/:category',validateRequest(productSchema), postProduct)
+    app.get('/products/:category',getAllProducts )
+    app.get('/products/:category/brands-categories',getAllProductsBrandsCategories )
+    app.put('/products/:category/:id',putProduct)
+    app.delete('/products/:category/:id',deleteProduct)
+    /**
      * @BRAND ROUTE
      */
     app.get("/brands",getBrandHandler)
-
     app.post("/brands",validateRequest(createBrandSchema),postBrandHandler)
-
     app.put("/brands/:id",validateRequest(createBrandSchema),putBrandHandler)
-
     app.delete("/brands/:id",deleteBrandHandler)
-
     app.get("/brands/:id",getSingleBrandHandler)
-    
     /**
      * @Review Routes
      */
     app.post("/reviews",postReviewsHandler)
-    
     app.get("/reviews/product/:productId",getReviewsProductHandler);
-
     app.get("/reviews/user/:userId",getReviewsUserHandler);
-
     app.delete("/reviews/:id",deleteReviewHandler)
-
-        
     app.put("/reviews/:id",putReviewHandler)
-   
     /**
      * @Shopping Cart Routes
      */
     app.post("/cart",postCartHandler)
-
-
     app.get("/cart",getCartHandler)
-
     app.put("/cart",putCartHandler)
-
     app.delete("/cart",deleteCartHandler)
-
     app.get("/cart/:id",getSingleCartHandler)
-    
-    
     /**
      * @Auth
      */
@@ -124,13 +106,9 @@ const app=Router();
      * @CATEGORY ROUTE
      */
     app.post("/categories",validateRequest(createCategorySchema),postCategoriesHandler)
-
     app.get("/categories",getCategoriesHandler)
-
     app.get("/categories/:id",getSingleCategoryHandler)
-
     app.put("/categories/:id",validateRequest(createCategorySchema),putCategoryHandler)
-
     app.delete("/categories/:id",deleteCategoryHandler)
 
 

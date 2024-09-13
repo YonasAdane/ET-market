@@ -7,6 +7,7 @@ export default async function  Collections({ params,searchParams }: { params: { 
   const { collectionName } = params;
   const data=await findProducts(collectionName,searchParams);
   const brandsNcategory=await findProductsBrand(collectionName);
+  console.log("BrandsNcategory",brandsNcategory);
   
   return (
     <div > 

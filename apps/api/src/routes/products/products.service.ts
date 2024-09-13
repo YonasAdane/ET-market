@@ -1,4 +1,4 @@
-import { CategoryType } from "@repo/database/src";
+import type{ CategoryType } from "@repo/database/src";
 import { db } from "../../common/prisma-config";
 import { CategoryTypeEnum, createProductType, ProductQueryType, ProductType } from "./products.schema";
 

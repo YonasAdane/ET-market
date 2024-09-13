@@ -125,7 +125,7 @@ function AccessoryCard({image,name,price,prevPrice,description}: Props) {
 
 function BagCard({image,name,price,prevPrice}: Props) {
   return (
-    <Card className="group  border rounded-xl  flex flex-col justify-between max-w-80">
+    <Card className="group  border rounded-xl overflow-hidden flex flex-col justify-between max-w-72">
       <div className="relative w-full overflow-hidden ">
         <div className="absolute top-4 right-4 z-20 rounded-full p-2 duration-200 hover:bg-slate-600/10">
           <Heart fill="#111" size={20}/>
@@ -141,7 +141,7 @@ function BagCard({image,name,price,prevPrice}: Props) {
           <CardDescription className="font-bold text-lg">${price}</CardDescription>
           <CardDescription className="line-through text-red-500">${prevPrice}</CardDescription>
         </div>
-        <Button variant={"outline"} className="w-fit rounded-full p-1 block  px-3 mx-auto border-2 text-sm">Add to Cart</Button>
+        <Button variant={"outline"} className="w-fit rounded-full h-10 block  px-3 mx-auto border-2 text-sm">Add to Cart</Button>
       </CardContent>
     </Card>
   );
