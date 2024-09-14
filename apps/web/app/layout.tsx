@@ -1,14 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-// import "@repo/ui/index.css"
-import { ThemeProvider } from "./components/theme-provider";
-import {Navigation} from "@repo/ui/widgets/Navigation.tsx"
-// import { ModeToggle } from "@repo/ui/widgets/modeToggle.tsx";
-import { ModeToggle } from "./components/modeTheme";
 import {ReduxProvider} from "@repo/redux-utils/libs/provider";
-import Footer from "@repo/ui/widgets/footer.tsx";
-import { CategoryArray } from "./lib/consts";
+import { ThemeProvider } from "@/widgets/theme-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -39,11 +33,7 @@ export default function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
-              <Navigation categoryArray={CategoryArray}>
-                <ModeToggle/>
-              </Navigation>
-                {children}
-              <Footer className="mt-4 rounded-none"/>
+            {children}
           </ThemeProvider> 
         </ReduxProvider>
       </body>

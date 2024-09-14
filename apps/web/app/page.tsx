@@ -3,6 +3,9 @@ import HeroSection from "@/widgets/herosection";
 import PorductCard from "@repo/ui/widgets/card.tsx"
 import Display from "@repo/ui/widgets/display.tsx";
 import Controls from "@repo/ui/widgets/controls.tsx";
+import Footer from "@/widgets/footer";
+import { Navigation } from "@/widgets/Navigation";
+import { CategoryArray } from "./lib/consts";
 export default function Home() {
   const data = [
     {
@@ -79,6 +82,8 @@ export default function Home() {
     },
   ];
   return (
+  <>
+    <Navigation categoryArray={CategoryArray}/>
     <main className="w-full mx-auto">
       <div className="w-full flex flex-col gap-24 ">
         <div className="">
@@ -101,5 +106,7 @@ export default function Home() {
         </div>
       </div>
     </main>
+    <Footer className="mt-4 rounded-none"/>
+  </>
   );
 }

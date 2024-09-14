@@ -1,11 +1,10 @@
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Heart, Menu, Search, ShoppingBag, ShoppingCart } from "lucide-react"
 import Link from "next/link"
+import { ModeToggle } from "./modeToggle"
 
 
-export function Navigation({children,categoryArray}:{children: React.ReactNode,categoryArray?:string[]}) {
+export function Navigation({categoryArray}:{categoryArray?:string[]}) {
   return (
     <header className='flex border-b py-4 sm:px-8 px-6 font-[sans-serif] min-h-[80px] tracking-wide relative z-50'>
     <div className='flex flex-wrap items-center lg:gap-y-2 gap-4 w-full'>
@@ -35,7 +34,7 @@ export function Navigation({children,categoryArray}:{children: React.ReactNode,c
         </div>
         <div className='flex items-center space-x-8'>
           <span>
-            {children}
+            <ModeToggle/>
           </span>
           {/* <span className="relative">
             <Heart />
