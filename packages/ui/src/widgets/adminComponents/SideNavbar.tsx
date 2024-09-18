@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ShoppingCart, LayoutDashboard, UsersRound, Settings, ChevronRight } from "lucide-react";
+import { ShoppingCart, LayoutDashboard, UsersRound, Settings, ChevronRight, ShoppingBag } from "lucide-react";
 import { useWindowWidth } from "@react-hook/window-size";
 import { Nav } from "../nav";
 import { Button } from "@/components/ui/button";
@@ -49,6 +49,12 @@ export default function SideNavbar() {
             title: "Users",
             href: "/admin/users",
             icon: UsersRound,
+            variant: "ghost"
+          },
+          {
+            title: "Products",
+            href: "/admin/products",
+            icon: ShoppingBag,
             variant: "ghost"
           },
           {
