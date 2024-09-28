@@ -178,27 +178,26 @@ function WatchCard({image,name,price,prevPrice,brand}: Props) {
 
 function UnderwearCard({image,name,price,prevPrice,description}: Props) {
   return (
-    <Card className="group  border overflow-hidden flex flex-col justify-between">
+    <Card className="group border-none rounded-none overflow-hidden flex flex-col justify-between max-w-[350px]">
       <div className="relative w-full overflow-hidden ">
-        <div className="absolute top-4 right-4 z-20 rounded-full p-2 duration-200 hover:bg-slate-600/10">
+        {/* <div className="absolute top-4 right-4 z-20 rounded-full p-2 duration-200 hover:bg-slate-600/10">
           <Heart fill="#111" size={20}/>
-        </div>
+        </div> */}
         <img
           className="relative h-full w-full rounded-lg object-contain transition duration-300 ease-in-out group-hover:scale-105" 
           width={276} height={500} src={image} alt="product-picture"
         />
-        <div className="w-full flex absolute bottom-0 items-end p-4 opacity-0  group-hover:opacity-100 duration-1000">
+        {/* <div className="w-full flex absolute bottom-0 items-end p-4 opacity-0  group-hover:opacity-100 duration-1000">
           <Button variant={"default"} className="w-full  text-sm">Add to Cart</Button>
-        </div >
+        </div > */}
       </div>
       <CardContent>
         <div className="w-full flex justify-between">
           <CardTitle className="text-xl font-medium">{name}</CardTitle>
-          <CardDescription className="font-bold text-xl">${price}</CardDescription>
+          <CardDescription className="font-bold ">${price}</CardDescription>
         </div>
         <div className="w-full flex justify-between">
           <CardDescription>{description}</CardDescription>
-          <CardDescription className="line-through">${prevPrice}</CardDescription>
         </div>
       </CardContent>
     </Card>
@@ -207,7 +206,7 @@ function UnderwearCard({image,name,price,prevPrice,description}: Props) {
 
 function OuterwearCard({image,name,price,prevPrice,description}: Props) {
   return (
-    <Card className="group  border rounded-xl overflow-hidden flex flex-col justify-between">
+    <Card className="max-w-[350px] group  border rounded-none overflow-hidden flex flex-col justify-between">
       <div className="relative w-full overflow-hidden ">
         <div className="absolute top-4 right-4 z-20 rounded-full p-2 duration-200 hover:bg-slate-600/10">
           <Heart fill="#111" size={20}/>
@@ -216,9 +215,9 @@ function OuterwearCard({image,name,price,prevPrice,description}: Props) {
           className="relative h-full w-full rounded-lg object-contain transition duration-300 ease-in-out group-hover:scale-105" 
           width={276} height={500} src={image} alt="product-picture"
         />
-        <div className="w-full flex absolute bottom-0 items-end p-4 opacity-0  group-hover:opacity-100 duration-1000">
+        {/* <div className="w-full flex absolute bottom-0 items-end p-4 opacity-0  group-hover:opacity-100 duration-1000">
           <Button variant={"default"} className="w-full  text-sm">Add to Cart</Button>
-        </div >
+        </div > */}
       </div>
       <CardContent>
         <div className="w-full flex justify-between">
