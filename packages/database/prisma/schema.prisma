@@ -11,12 +11,14 @@ model User {
   id          Int            @id @default(autoincrement())
   username    String         @unique
   email       String         @unique
-  password    String
+  password    String?
   role        Role           @default(CUSTOMER)
   firstName   String?
   lastName    String?
   phoneNumber String?
   address     String?
+  avatar      String?
+  googleId    String?        @unique
   createdAt   DateTime       @default(now())
   orders      Order[]        @relation("UserOrders")
   reviews     Review[]       @relation("UserReviews")
@@ -220,4 +222,11 @@ enum CategoryType {
   LOUNGEWEAR // For comfortable, casual wear typically worn at home
   MATERNITY // For maternity wear
   LEATHER_GOODS // For wallets, belts, and other leather accessories
+}
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt   DateTime
 }

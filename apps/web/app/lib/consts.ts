@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { CategoryType } from "./types";
 
 export const CategoryArray:CategoryType[]= [
@@ -131,3 +132,10 @@ export const filterProduct={
 
 
 }
+  export  const loginSchema = z.object({
+        email:z.string().email(),
+        password:z.string()
+                .min(4,"Password must contain at least 4 characters")
+                .max(15,"Password must contain at most 15 characters")
+      });
+  export type loginSchemaType=z.infer<typeof loginSchema>;

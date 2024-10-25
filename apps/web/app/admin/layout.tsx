@@ -16,6 +16,7 @@ export default function AdminLayout({
               >
             <main className="min-h-screen w-full  flex">
               <SideNavbar />
+
               <div className=" w-full">{children}</div>
             </main>
 

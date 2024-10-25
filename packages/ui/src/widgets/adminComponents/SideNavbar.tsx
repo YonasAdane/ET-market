@@ -4,6 +4,7 @@ import { ShoppingCart, LayoutDashboard, UsersRound, Settings, ChevronRight, Shop
 import { useWindowWidth } from "@react-hook/window-size";
 import { Nav } from "../nav";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function SideNavbar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -24,7 +25,9 @@ export default function SideNavbar() {
   }
 
   return (
-    <div className="relative min-w-[80px] border-r px-3  pb-10 pt-24 ">
+    <div className={cn("relative min-w-[200px] border-r px-3  pb-10 pt-14 ",isCollapsed&&"min-w-fit")}>
+        <h2 className="text-center font-bold text-xl mb-5">Et-market</h2>
+        <div className="h-0 border "></div>
       {!mobileWidth && (
         <div className="absolute right-[-20px] top-7">
           <Button

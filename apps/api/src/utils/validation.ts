@@ -1,15 +1,20 @@
-import { z } from "zod";
+import { z, ZodError } from "zod";
 import { Request, Response, NextFunction } from "express";
 
 export const validateRequest = (schema: z.ZodTypeAny) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const result = schema.safeParse(req.body);
-    if (!result.success) {
-        console.log(result.error);
-      return res.status(400).json({
-        error: result.error.errors[0].message,
-      });
+    try {
+      schema.parse(req.body);
+      next();
+    } catch (error) {
+      if (error instanceof ZodError) {
+      const errorMessages = error.errors.map((issue) => ({
+            message: `${issue.path.join('.')} is ${issue.message}`,
+        }))
+        res.status(400).json({ error: 'Invalid data', details: errorMessages });
+      } else {
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
     }
-       next();
   };
 };

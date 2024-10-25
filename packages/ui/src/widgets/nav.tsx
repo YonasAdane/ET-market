@@ -33,13 +33,13 @@ export function Nav({ links, isCollapsed }: NavProps) {
       <div
         className={cn(
           "group flex flex-col gap-4 py-2",
-          isCollapsed ? "py-2" : "py-4"
+          isCollapsed ? "py-2 w-fit" : "py-4"
         )}
       >
         <nav
           className={cn(
             "grid gap-1 px-2",
-            isCollapsed ? "justify-center px-2" : "justify-start px-4"
+            isCollapsed ? "justify-center px-2 w-fit" : ""
           )}
         >
           {links.map((link, index) => 

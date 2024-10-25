@@ -20,3 +20,23 @@ export const logoutSchema = z.object({
 export type registerSchemaType=z.infer<typeof registerSchema>;
 export type loginSchemaType=z.infer<typeof loginSchema>;
 export type logoutSchemaType=z.infer<typeof logoutSchema>;
+
+export enum Role {
+  CUSTOMER = "CUSTOMER",
+  ADMIN = "ADMIN", 
+}
+
+export interface User {
+  id: number;                  
+  username: string;           
+  email: string;              
+  password?: string;          
+  role: Role;                 
+  firstName?: string;        
+  lastName?: string;         
+  phoneNumber?: string;      
+  address?: string;          
+  avatar?: string;           
+  googleId?: string;         
+  createdAt: Date;           
+}
