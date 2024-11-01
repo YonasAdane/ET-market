@@ -32,6 +32,8 @@ model Category {
   id          Int       @id @default(autoincrement())
   name        String
   description String?
+  bannerImage String
+  sampleImages String[]
   products    Product[] @relation("CategoryProducts")
 
   @@map("categories")
@@ -40,6 +42,8 @@ model Category {
 model Brand {
   id       Int       @id @default(autoincrement())
   name     String
+  description String?
+  bannerImage String
   logoUrl  String?
   products Product[] @relation("BrandProducts")
 
@@ -54,12 +58,13 @@ model Product {
   name            String
   description     String?
   price           Float
+  prevprice       Float
   stock           Int
   imageUrl        String?
   strapMaterial   String?
   dialShape       String?
   waterResistance String?
-  size            String? // Size of the product, applicable to clothing, footwear, etc.
+  size            String[] // Size of the product, applicable to clothing, footwear, etc.
   material        String? // Material of the product
   colour          String? // Colour of the product
   pattern         String? // Pattern of the product, e.g., Solid, Striped (Applicable to clothing)

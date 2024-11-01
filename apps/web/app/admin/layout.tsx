@@ -19,7 +19,6 @@ export default function AdminLayout({
 
               <div className=" w-full">{children}</div>
             </main>
-
         </ThemeProvider>
     </>
   );

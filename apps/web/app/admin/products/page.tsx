@@ -35,12 +35,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { findProducts } from "app/lib/fetchers/product"
 import { CategoryArray } from "app/lib/consts"
 
 export default async function Products() {
@@ -99,7 +93,7 @@ export default async function Products() {
                 </span>
             </Button> */}
             <Button asChild size="sm" className="h-8 gap-1">
-              <Link href="/admin/add-Product">
+              <Link href="/admin/add-product">
                 <PlusCircle className="h-3.5 w-3.5" />
                 <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
                 Add Product
