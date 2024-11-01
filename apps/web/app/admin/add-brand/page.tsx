@@ -6,7 +6,7 @@ import PageTitle from "@/widgets/adminComponents/PageTitle";
         <div className="w-full h-full ">
             <div className="p-5">
                 <PageTitle title="Add New Brand" />
-                <div className="w-4/5 h-full mx-auto ">
+                <div className=" h-full mx-auto ">
                   <CreateBrandForm/>
 
                 </div>
