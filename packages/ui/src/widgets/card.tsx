@@ -5,6 +5,7 @@ import { Heart } from "lucide-react";
 import Image from "next/image"
 
 type Props = {
+  id:number;
   type?:CategoryType;
   image:string;
   name:string;

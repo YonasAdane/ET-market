@@ -22,7 +22,8 @@ export default async function  Collections({ params,searchParams }: { params: { 
               <FilterSidebar type={collectionName.toUpperCase() as CategoryType ||"CLOTHING"} brandsNcategory={brandsNcategory} />
               <div className='w-full  grid grid-cols-3 gap-6  h-fit'>
                 {data && data?.map((product:{id:number,name:string,description:string,price:number,imageUrl:string,brand:{id:number,name:string}}) => (
-                    <PorductCard  
+                    <PorductCard 
+                      id={product.id} 
                       key={product.id} 
                       image={product.imageUrl}
                       name={product.name} 

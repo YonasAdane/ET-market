@@ -9,15 +9,26 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import UploadImage from "./upload-image";
 import UploadLogo from "./logo-upload";
+import { useState } from 'react'
+import Cropper, { Area, Point } from 'react-easy-crop'
 
  const createBrandSchema = z.object({
     name: z.string().min(2).max(100),
     description:z.string().optional(),
-    bannerImage:z.string(),
+    mobileBannerImage:z.array(z.string()),
+    desktopBannerImage:z.array(z.string()),
+    brandImage:z.array(z.string()),
     logoUrl: z.string().optional(),
   });
    type BrandType=z.infer<typeof createBrandSchema>;
 export default function CreateBrandForm() {
+    const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
+  const [zoom, setZoom] = useState(1)
+
+  const onCropComplete = (croppedArea:Area, croppedAreaPixels:Area) => {
+    console.log(croppedArea, croppedAreaPixels)
+  }
+
     const form =useForm<BrandType>({
         resolver:zodResolver(createBrandSchema)
     })
@@ -58,6 +69,19 @@ export default function CreateBrandForm() {
                                 </FormItem>
                             )}
                         />
+                        <div className="relative w-full h-96">
+
+                            <Cropper
+                            classes={{containerClassName:"w-1/2 h-1/2 "}}
+                                image="https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000"
+                                crop={crop}
+                                zoom={zoom}
+                                aspect={4 / 3}
+                                onCropChange={setCrop}
+                                onCropComplete={onCropComplete}
+                                onZoomChange={setZoom}
+                                />
+                        </div>
                         <div className="w-52 ">
                             <UploadLogo />
                         </div>

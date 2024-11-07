@@ -133,6 +133,22 @@ export const productSchema = z.object({
     imageUrl:z.string(),
     material: z.string().optional(),      // e.g., Leather, Fabric
     size: z.string().optional(),          // e.g., Small, Medium, Large
+    brandId: z.number().optional(),       // Foreign key reference to Brand
+    categoryId: z.number(),               // Foreign key reference to Category
+    categoryType:z.string(),
+    stock: z.number().int().nonnegative()
+  
+  });
+  
+  export const bagsSchema = z.object({
+    name: z.string().min(1),
+    price: z.number().positive(),
+    prevprice: z.number().positive(),
+    description: z.string().optional(), 
+    colour: z.string().optional(), 
+    imageUrl:z.string(),
+    material: z.string().optional(),      // e.g., Leather, Fabric
+    size: z.string().optional(),          // e.g., Small, Medium, Large
     purpose: z.string().optional(),       // e.g., Travel, Daily Use
     brandId: z.number().optional(),       // Foreign key reference to Brand
     categoryId: z.number(),               // Foreign key reference to Category

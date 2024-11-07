@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { ShoppingCart, LayoutDashboard, UsersRound, Settings, ChevronRight, ShoppingBag } from "lucide-react";
+import { ShoppingCart, LayoutDashboard, UsersRound, Settings, ChevronRight, ShoppingBag, Award, Tag } from "lucide-react";
 import { useWindowWidth } from "@react-hook/window-size";
 import { Nav } from "../nav";
 import { Button } from "@/components/ui/button";
@@ -25,11 +25,11 @@ export default function SideNavbar() {
   }
 
   return (
-    <div className={cn("relative min-w-[200px] border-r px-3  pb-10 pt-14 ",isCollapsed&&"min-w-fit")}>
+    <div className={cn("group  relative min-w-[200px] border-r px-3  pb-10 pt-14 ",isCollapsed&&"min-w-fit")}>
         <h2 className="text-center font-bold text-xl mb-5">Et-market</h2>
         <div className="h-0 border "></div>
       {!mobileWidth && (
-        <div className="absolute right-[-20px] top-7">
+        <div className="absolute right-[-20px] top-7 opacity-0 group-hover:opacity-100">
           <Button
             onClick={toggleSidebar}
             variant="secondary"
@@ -46,7 +46,7 @@ export default function SideNavbar() {
             title: "Dashboard",
             href: "/admin",
             icon: LayoutDashboard,
-            variant: "default"
+            variant: "ghost"
           },
           {
             title: "Users",
@@ -60,6 +60,19 @@ export default function SideNavbar() {
             icon: ShoppingBag,
             variant: "ghost"
           },
+          {
+            title: "Brands",
+            href: "/admin/brands",
+            icon: Award,
+            variant: "ghost"
+          },
+          {
+            title: "Categories",
+            href: "/admin/categories",
+            icon:Tag,
+            variant: "ghost"
+          },
+
           {
             title: "Orders",
             href: "/admin/orders",

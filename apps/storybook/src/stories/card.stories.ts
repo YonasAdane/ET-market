@@ -17,6 +17,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Clothing: Story = {
   args: {
+    id:1,
     image:"https://st2.depositphotos.com/2071605/8913/i/380/depositphotos_89139132-stock-photo-brown-jacket-for-man.jpg",
     name:"Autumn Jacket",
     description:"Jacket",
@@ -27,6 +28,7 @@ export const Clothing: Story = {
 };
 export const Footwear: Story = {
   args: {
+    id:1,
     image:"https://st2.depositphotos.com/2071605/8913/i/380/depositphotos_89139132-stock-photo-brown-jacket-for-man.jpg",
     name:"Autumn Jacket",
     description:"Jacket",
@@ -37,6 +39,7 @@ export const Footwear: Story = {
 };
 export const Accessory: Story = {
   args: {
+    id:1,
     image:"https://st2.depositphotos.com/2071605/8913/i/380/depositphotos_89139132-stock-photo-brown-jacket-for-man.jpg",
     name:"Autumn Jacket",
     description:"Jacket",
@@ -47,6 +50,7 @@ export const Accessory: Story = {
 };
 export const Bag: Story = {
   args: {
+    id:1,
     image:"https://rtwcreation.com/cdn/shop/products/peach-mini-top-handle-bag-quarte.jpg?v=1664205942",
     name:"Peach mini top-handle bag",
     description:"Jacket",
@@ -57,6 +61,7 @@ export const Bag: Story = {
 };
 export const Watch: Story = {
   args: {
+    id:1,
     image:"https://www.justwatches.com/cdn/shop/files/TWEG18600_1.jpg?v=1709548780&width=300",
     name:"Timex E Class Men Round Dial",
     description:"TIMEX",
@@ -67,6 +72,7 @@ export const Watch: Story = {
 };
 export const Underwear: Story = {
   args: {
+    id:1,
     image:"https://www.skiny.com/media/catalog/product/cache/24eb8ccf329ba5087f039e1050cafd72/s/k/skiny_242_m_cottonmultipack_trunks3pack_086840_08s696_010.jpg",
     name:"trunks 3 pack ",
     description:"Jacket",
@@ -77,6 +83,7 @@ export const Underwear: Story = {
 };
 export const Outerwear: Story = {
   args: {
+    id:1,
     image:"https://mooseknuckles.co/media/catalog/product/m/3/m34mv474g_292_front_category_bjlcyi7uqvlwndue.jpg?optimize=high&fit=bounds&height=&width=1080&quality=85&auto=webp&format=pjpg",
     name:"Autumn Jacket",
     description:"Jacket",

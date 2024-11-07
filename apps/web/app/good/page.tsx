@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CategoryArray } from 'app/lib/consts';
 import { Navigation } from '@/widgets/Navigation';
-import { Gallery } from './gallery';
+import { Gallery } from './good-gallery'; 
 
 interface ProductDetails {
   brand: string;
@@ -16,7 +16,7 @@ interface ProductDetails {
   size: string;
 }
 
-export default function ProductDetailsPage({productid}:{productid:string}) {
+export default function GoodDetailsPage() {
   const [quantity, setQuantity] = useState(1)
   
   const product: ProductDetails = {
@@ -36,13 +36,12 @@ export default function ProductDetailsPage({productid}:{productid:string}) {
       <div className="flex flex-col md:flex-row gap-8 my-8">
       {/* { images: { src: string; altText: string }[] */}
         <div className="md:w-1/2">
-          <Gallery images={[
-            {src:    "https://www.justwatches.com/cdn/shop/products/UWUCG0101_1.jpg?v=1639658902&width=1000",altText:"weyo"},
-            {src:    "https://www.justwatches.com/cdn/shop/files/TWEG20208.jpg?v=1718772043&width=1000",altText:"weyo1"},
-            {src:    "https://www.justwatches.com/cdn/shop/files/Z41002L1MF_7.jpg?v=1709643466&width=1000",altText:"weyo2"},
-            {src:    "https://www.justwatches.com/cdn/shop/files/Z39005G3MF_7.jpg?v=1709643209&width=1000",altText:"weyo3"},
-            {src:    "https://www.justwatches.com/cdn/shop/files/GW0667L1_1.jpg?v=1709641243&width=1000",altText:"weyo4"},
-            {src:    "https://www.justwatches.com/cdn/shop/files/NAPCWS303.jpg?v=1693570172&width=1000",altText:"weyo5"}
+          <Gallery images={[{src:"https://g-iff6oyrytat.vusercontent.net/placeholder.svg?height=500&width=500",altText:"weyo"},
+            {src:"https://g-iff6oyrytat.vusercontent.net/placeholder.svg?height=500&width=500",altText:"weyo1"},
+            {src:"https://g-iff6oyrytat.vusercontent.net/placeholder.svg?height=500&width=500",altText:"weyo2"},
+            {src:"https://g-iff6oyrytat.vusercontent.net/placeholder.svg?height=500&width=500",altText:"weyo3"},
+            {src:"https://g-iff6oyrytat.vusercontent.net/placeholder.svg?height=500&width=500",altText:"weyo4"},
+            {src:"https://g-iff6oyrytat.vusercontent.net/placeholder.svg?height=500&width=500",altText:"weyo5"}
           ]}/>
 
         

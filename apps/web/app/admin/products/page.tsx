@@ -44,26 +44,6 @@ export default async function Products() {
   return (
       <div className="flex min-h-screen w-full  bg-muted/40 flex-col sm:gap-4 sm:py-4">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-          
-          {/* <Breadcrumb className="hidden md:flex">
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href="#">Dashboard</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link href="#">Products</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>All Products</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb> */}
           <div className=" flex items-center gap-2">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -86,12 +66,6 @@ export default async function Products() {
                 </DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
             </DropdownMenu>
-            {/* <Button size="sm" variant="outline" className="h-8 gap-1">
-                <File className="h-3.5 w-3.5" />
-                <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                Export
-                </span>
-            </Button> */}
             <Button asChild size="sm" className="h-8 gap-1">
               <Link href="/admin/add-product">
                 <PlusCircle className="h-3.5 w-3.5" />

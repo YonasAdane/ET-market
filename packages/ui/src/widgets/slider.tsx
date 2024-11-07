@@ -1,33 +1,12 @@
+"use client"
+// @ts-ignore
 import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css';
+// @ts-ignore
 import 'swiper/css/pagination';
-import {
-    A11y,
-    Autoplay,
-    Controller,
-    EffectCoverflow,
-    EffectCube,
-    EffectFade,
-    EffectFlip,
-    EffectCreative,
-    EffectCards,
-    HashNavigation,
-    History,
-    Keyboard,
-    Lazy,
-    Mousewheel,
-    Navigation,
-    Pagination,
-    Parallax,
-    Scrollbar,
-    Thumbs,
-    Virtual,
-    Zoom,
-    FreeMode,
-    Grid,
-    Manipulation,
-  } from 'swiper/modules';
+// @ts-ignore
+import {A11y,Autoplay,Controller,EffectCoverflow,EffectCube,EffectFade,EffectFlip,EffectCreative,EffectCards,HashNavigation,History,Keyboard,Lazy,Mousewheel,Navigation,Pagination,Parallax,Scrollbar,Thumbs,Virtual,Zoom,FreeMode,Grid,Manipulation} from 'swiper/modules';
 
 type Props = {}
 

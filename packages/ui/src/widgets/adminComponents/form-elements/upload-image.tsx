@@ -19,7 +19,9 @@ export default function UploadImage({title}:{title?:string}) {
 
     function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
         const files = event.target.files;
-        if (!files || files==null || files.length===undefined || files===undefined) {
+        console.log("files: ",files);
+        
+        if (!files || files==null || !files.length || files===undefined) {
             return;
         }
         for (let i = 0; i < files.length; i++) {
@@ -41,11 +43,11 @@ export default function UploadImage({title}:{title?:string}) {
     }
   return (
     <Card className="overflow-hidden border-none bg-muted/50" >
-        <h2 className="m-5">{title?title:"Product"} Images</h2>
+        <h2 className="m-5">{title??"Product"} Images</h2>
         <CardContent>
         <div className="grid gap-2">
             <img
-            alt={title?title:"Product"+"image"}
+            alt={title??"Product"+"image"}
             className="aspect-square w-full rounded-md object-cover"
             height="300"
             src={images[0]?images[0].url:"https://ui.shadcn.com/placeholder.svg"}
@@ -59,7 +61,7 @@ export default function UploadImage({title}:{title?:string}) {
                 alt=" image"
                 className="border aspect-square w-full rounded-md object-cover"
                 height="84"
-                src={img.url ? img.url : "https://ui.shadcn.com/placeholder.svg"}
+                src={img.url ??"https://ui.shadcn.com/placeholder.svg"}
                 width="84"
                 />
             </button>

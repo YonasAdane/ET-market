@@ -29,23 +29,25 @@ model User {
 }
 
 model Category {
-  id          Int       @id @default(autoincrement())
-  name        String
-  description String?
-  bannerImage String
+  id           Int       @id @default(autoincrement())
+  name         String
+  description  String?
+  bannerImage  String
   sampleImages String[]
-  products    Product[] @relation("CategoryProducts")
+  products     Product[] @relation("CategoryProducts")
 
   @@map("categories")
 }
 
 model Brand {
-  id       Int       @id @default(autoincrement())
-  name     String
-  description String?
-  bannerImage String
-  logoUrl  String?
-  products Product[] @relation("BrandProducts")
+  id                 Int       @id @default(autoincrement())
+  name               String
+  description        String?
+  mobileBannerImage  String[]
+  desktopBannerImage String[]
+  brandImage         String[]
+  logoUrl            String?
+  products           Product[] @relation("BrandProducts")
 
   @@map("brands")
 }
@@ -233,5 +235,5 @@ model Session {
   id        String   @id
   sid       String   @unique
   data      String
-  expiresAt   DateTime
+  expiresAt DateTime
 }

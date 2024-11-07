@@ -139,3 +139,12 @@ export const filterProduct={
                 .max(15,"Password must contain at most 15 characters")
       });
   export type loginSchemaType=z.infer<typeof loginSchema>;
+ 
+  export const registerSchema = z.object({
+    username: z.string(),
+    firstName: z.string(),
+    lastName: z.string(),
+    email:z.string().email(),
+    password:z.string(),
+});
+export type registerSchemaType=z.infer<typeof registerSchema>;

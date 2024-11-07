@@ -17,8 +17,8 @@ const clothingSchema = z.object({
     description: z.string().optional(), 
     imageUrl:z.string(),
     gender:z.string().optional(),
-    price: z.number().positive(),
-    prevprice:z.number().positive(),
+    price: z.coerce.number().positive(),
+    prevprice:z.coerce.number().positive(),
     size: z.string().optional(),         // e.g., S, M, L, XL
     material: z.string().optional(),     // e.g., Cotton, Polyester
     colour: z.string().optional(),       // e.g., Red, Blue
@@ -27,9 +27,9 @@ const clothingSchema = z.object({
     occasion: z.string().optional(),     // e.g., Casual, Formal
     season: z.string().optional(),       // e.g., Summer, Winter
     brandId: z.number().optional(),      // Foreign key reference to Brand
-    categoryId: z.number(),              // Foreign key reference to Category
+    categoryId: z.coerce.number(),              // Foreign key reference to Category
     categoryType:z.string(),
-    stock: z.number().int().nonnegative()
+    stock: z.coerce.number().int().nonnegative()
   
   });
 export default function AddClothForm() {
@@ -123,13 +123,12 @@ export default function AddClothForm() {
                             <FormItem>
                                 <FormLabel className='text-sm'>Stock</FormLabel>
                                 <FormControl>
-                                    <Input {...field} className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none" type={"number"}/>
+                                    <Input {...field}  className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none" type={"number"}/>
                                 </FormControl>
                                 <FormMessage/>
                             </FormItem>
                         )}
                     />
-
                     </div>
                     </div>
                 </div>
