@@ -4,7 +4,7 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@/components/ui/toggle-group"
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 export default function ToogleElement({description,control,name,label,values,select}:{description?:string,control:any,label:string,name:string,select?:"single"|"multiple",values:string[]}) {
   return (
     <div className='mt-2'>

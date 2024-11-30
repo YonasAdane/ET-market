@@ -6,13 +6,13 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import AddClothForm from "@/widgets/adminComponents/form-elements/add-clothes";
-import AddWatchForm from "@/widgets/adminComponents/form-elements/add-watches";
-import AddBagForm from "@/widgets/adminComponents/form-elements/add-bag";
-import AddAccesoryForm from "@/widgets/adminComponents/form-elements/add-accesories";
-import AddFootwearForm from "@/widgets/adminComponents/form-elements/add-footwear";
-import AddUnderwearForm from "@/widgets/adminComponents/form-elements/add-underwear";
-import AddOuterwearForm from "@/widgets/adminComponents/form-elements/add-outerwear";
+import AddClothForm from "../_components/form-elements/add-clothes";
+import AddWatchForm from "../_components/form-elements/add-watches";
+import AddBagForm from "../_components/form-elements/add-bag";
+import AddAccesoryForm from "../_components/form-elements/add-accesories";
+import AddFootwearForm from "../_components/form-elements/add-footwear";
+import AddUnderwearForm from "../_components/form-elements/add-underwear";
+import AddOuterwearForm from "../_components/form-elements/add-outerwear";
 export default function AddProduct() {
   return (
     <Tabs defaultValue="CLOTHING" className="w-full">

@@ -1,5 +1,5 @@
 "use client";
-import { FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { FormControl, FormDescription, FormField, FormItem, FormLabel } from 'app/components/form';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 export default function Gender({control,name}:{control:any,name:string}) {

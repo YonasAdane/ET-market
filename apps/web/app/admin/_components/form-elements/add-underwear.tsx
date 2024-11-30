@@ -1,4 +1,3 @@
-
 "use client";
 import { Input } from '@/components/ui/input'
 import { filterProduct } from '@/lib/constants'
@@ -8,36 +7,39 @@ import Size from './size'
 import { Button } from '@/components/ui/button';
 import { CalendarDays, Check } from 'lucide-react';
 import ImageNcategory from './imageNcategory';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '@/components/ui/textarea';
 import ToogleElement from './toggle-element';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { MultiSelect } from '@/components/multi-select';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-const outerwearSchema = z.object({
-    name: z.string().min(1),
-    price: z.number().positive(),
-    prevprice: z.number().positive(),
-    description: z.string().optional(), 
-    imageUrl:z.string(),
-    material: z.string().optional(),      // e.g., Wool, Polyester
-    insulationType: z.string().optional(),// e.g., Down, Synthetic
-    season: z.string().optional(),        // e.g., Winter, Fall
-    brandId: z.number().optional(),       // Foreign key reference to Brand
-    categoryId: z.number(),               // Foreign key reference to Category
-    categoryType:z.string(),
-    stock: z.number().int().nonnegative()
-  });
-export default function AddOuterwearForm() {
-  type outerwearType=z.infer<typeof outerwearSchema >;
-    const form=useForm<outerwearType>({
-        resolver:zodResolver(outerwearSchema),
+const underwearSchema = z.object({
+  name: z.string().min(1),
+  price: z.number().positive(),
+  prevprice: z.number().positive(),
+  description: z.string().optional(), 
+  size: z.string().optional(),          // e.g., S, M, L, XL
+  gender:z.string().optional(), 
+  material: z.string().optional(),      // e.g., Cotton, Polyester
+  style: z.string().optional(),         // e.g., Briefs, Boxers
+  brandId: z.number().optional(),       // Foreign key reference to Brand
+  categoryId: z.number(),               // Foreign key reference to Category
+  categoryType:z.string(),
+  imageUrl:z.string(),
+  stock: z.number().int().nonnegative()
+
+});
+export default function AddUnderwearForm() {
+  type underwearType=z.infer<typeof underwearSchema >;
+    const form=useForm<underwearType>({
+        resolver:zodResolver(underwearSchema),
     });
-    function addProduct(data:outerwearType){
+    function addProduct(data:underwearType){
         console.log(data);
 
         alert(JSON.stringify(data))
@@ -306,5 +308,4 @@ export default function AddOuterwearForm() {
 </Form>
   )
 }
-
 

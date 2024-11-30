@@ -1,5 +1,6 @@
 "use client";
 import { Card, CardContent } from '@/components/ui/card';
+import { FormControl, FormField, FormItem, FormMessage } from 'app/components/form';
 import { Upload } from 'lucide-react';
 import { FormEvent, useRef, useState } from 'react';
 
@@ -8,9 +9,8 @@ interface ImageFile {
     url: string;
 }
 
-export default function UploadImage({title}:{title?:string}) {
+export default function UploadImage({title,name,control}:{title?:string,name:string,control:any}) {
     const [images, setImages] = useState<ImageFile[]>([]);
-    const [isDragging, setIsDragging] = useState<boolean>(false);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     function selectFiles() {
@@ -28,16 +28,16 @@ export default function UploadImage({title}:{title?:string}) {
 
             if(files[i].type.split("/")[0] !== 'image') continue;
 
-            if(!images.some((e)=>e.name===files[i].name)){
-                setImages((prevImages)=>[
+            if (!images.some((e) => e.name === files[i].name)) {
+                setImages((prevImages) => [
                     ...prevImages,
                     {
-                        name:files[i].name,
-                        url:URL.createObjectURL(files[i]),
-
-                    }
-                ])
+                        name: files[i].name,
+                        url: URL.createObjectURL(files[i]),
+                    },
+                ]);
             }
+            
             
         }
     }
@@ -79,7 +79,9 @@ export default function UploadImage({title}:{title?:string}) {
                 </button>
             </>)
             }
-                <input name="picture" className='hidden' type="file" ref={fileInputRef} onChange={onFileSelect}/>
+           
+                <input className='hidden' multiple type="file" ref={fileInputRef} onChange={onFileSelect}/>
+               
                 <button onClick={selectFiles} className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
                     <Upload className="h-4 w-4 text-muted-foreground" />
                     <span className="sr-only">Upload</span>

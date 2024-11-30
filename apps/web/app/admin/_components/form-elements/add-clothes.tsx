@@ -5,13 +5,14 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
 import ImageNcategory from './imageNcategory';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 // import {toast} from "sonner"
 // 
 import { Textarea } from '@/components/ui/textarea';
+import UploadImage from './upload-image';
 const clothingSchema = z.object({
     name: z.string().min(1),
     description: z.string().optional(), 
@@ -128,7 +129,7 @@ export default function AddClothForm() {
                                 <FormMessage/>
                             </FormItem>
                         )}
-                    />
+                        />
                     </div>
                     </div>
                 </div>
@@ -138,8 +139,19 @@ export default function AddClothForm() {
                 </div>            
             </div>
             </div>
-            <ImageNcategory/>
-                
+            {/* <UploadImage name="images" control={form.control}/> */}
+            {/* <FormField
+                name="images"
+                control={form.control}
+                render={({field})=>(
+                    <FormItem>
+                        <FormControl>
+                            <UploadImage {...field}/>
+                        </FormControl>
+                        <FormMessage/>
+                    </FormItem>
+                )}
+                /> */}
         </div>
     </form>
 </Form>

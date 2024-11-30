@@ -9,7 +9,7 @@ export default function ImageNcategory() {
     <div className="col-span-1 flex flex-col gap-5 justify-start">
             <UploadImage/>
             <div className="w-full bg-muted/50 rounded-lg p-5">
-                <h2 className="mb-3">Category</h2>
+                {/* <h2 className="mb-3">Category</h2>
                 <label htmlFor="productName" className="text-sm">Product Category</label>
                 <Select>
                     <SelectTrigger className="w-full mt-2">
@@ -25,7 +25,7 @@ export default function ImageNcategory() {
                         <SelectItem value="pineapple">Pineapple</SelectItem>
                         </SelectGroup>
                     </SelectContent>
-                </Select>
+                </Select> */}
                 {/* <div className="w-fit  mt-3">
                     <Button className="p-3 rounded-full mr-0" variant="default"> Add Category</Button>
                 </div> */}
