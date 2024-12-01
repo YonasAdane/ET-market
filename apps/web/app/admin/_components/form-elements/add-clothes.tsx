@@ -20,6 +20,7 @@ import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { MultiSelect } from '@/components/multi-select';
 import { createProduct } from 'app/admin/_actions/productAcion';
+import { Spinner } from '../spinnerLoader';
  
 export default function AddClothForm() {
     const [open, setOpen] = useState(false)
@@ -403,7 +404,14 @@ export default function AddClothForm() {
                 </div>
                 <div className="row-span-1 ">
                     <div className="w-fit ml-auto mt-3">
-                        <Button type='submit' className="p-3 rounded-full mr-0" variant="default"><Check size={18} className="mr-1"/> Add Product</Button>
+                        <Button type='submit' disabled={form.formState.isSubmitting} className={cn(form.formState.isSubmitting && "cursor-not-allowed bg-muted-foreground/100"," p-3 rounded-full mr-0")} variant="default">
+                            {!form.formState.isSubmitting ? 
+                            <Check size={18} className="mr-1"/> 
+                            :
+                            <Spinner className="mr-1 size-5" />
+                            }
+                            Add Product
+                        </Button>
                     </div>         
                 </div>
             </div>

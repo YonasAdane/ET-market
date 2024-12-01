@@ -3,9 +3,8 @@ import Size from './size'
 import Gender from './gender'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
-import ImageNcategory from './imageNcategory';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
+import { Check, Upload } from 'lucide-react';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import z from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,29 +12,55 @@ import { Textarea } from '@/components/ui/textarea';
 import ToogleElement from './toggle-element';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MultiSelect } from '@/components/multi-select';
+import { useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { bagsSchema } from 'app/lib/types/product';
+import { createProduct } from 'app/admin/_actions/productAcion';
+import { Spinner } from '../spinnerLoader';
+import { cn } from '@/lib/utils';
 
 
-const bagSchema = z.object({
-    name: z.string().min(1),
-    price: z.number().positive(),
-    prevprice: z.number().positive(),
-    description: z.string().optional(), 
-    colour: z.string().optional(), 
-    imageUrl:z.string(),
-    material: z.string().optional(),      // e.g., Leather, Fabric
-    size: z.string().optional(),          // e.g., Small, Medium, Large
-    purpose: z.string().optional(),       // e.g., Travel, Daily Use
-    brandId: z.number().optional(),       // Foreign key reference to Brand
-    categoryId: z.number(),               // Foreign key reference to Category
-    categoryType:z.string(),
-    stock: z.number().int().nonnegative()
-  
-  });
 export default function AddBagForm() {
-    type bagType=z.infer<typeof bagSchema >;
+    const [images, setImages] = useState<File[]>([]);
+    const [imageUrl,setImageUrl]=useState<string[]>([])
+   
+    type bagType=z.infer<typeof bagsSchema >;
     const form=useForm<bagType>({
-        resolver:zodResolver(bagSchema),
+        resolver:zodResolver(bagsSchema),
+        defaultValues:{
+            name: "",
+            description: "",
+            price: 1,
+            prevprice: 1,
+            colour: "",
+            size: "",
+            gender:"",
+            material: "",
+            purpose: "",
+            brandId: 1,
+            categoryId: [],
+            categoryType:"BAG",
+            stock: 1,
+            images
+        }
     });
+    function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
+        const files = event.target.files;
+        console.log("onFileSelect files: ",files );
+        
+        if (!files || files==null || !files.length || files===undefined) {
+            return;
+        }
+        if (event.target.files) {
+            const fileArray = Array.from(event.target.files); // Convert FileList to an array
+            setImages((prevImages) => [...prevImages, ...fileArray]);
+          }
+        for (let i = 0; i < files.length; i++) {
+            if(files[i]){
+                setImageUrl((prevUrls)=>[...prevUrls,URL.createObjectURL(files[i]!)])
+            }
+        }
+    }
     function addProduct(data:bagType){
         console.log(data);
 
@@ -44,7 +69,7 @@ export default function AddBagForm() {
     
   return (
 <Form {...form}>
-    <form onSubmit={form.handleSubmit(addProduct)}>
+    <form onSubmit={form.handleSubmit(async data=>await createProduct(data))}>
         <div className='w-full grid grid-cols-3 gap-5 h-full '>
             <div className="col-span-2 bg-muted/50 rounded-lg p-5">
                 <h2>General Information</h2>
@@ -138,8 +163,8 @@ export default function AddBagForm() {
                         />
                         
                         <FormField
+                            name="categoryId"
                             control={form.control}
-                            name="categoryType"
                             render={({ field }) => (
                             <FormItem>
                             <FormLabel>Category Type</FormLabel>
@@ -147,12 +172,15 @@ export default function AddBagForm() {
                                 <MultiSelect
                                 options={
                                     [
-                                        {label:"Apple",value:"Apple"},
-                                        {label:"Banana",value:"Banana"},
-                                        {label:"Orange",value:"Orange"},
-                                        {label:"Pineapple",value:"Pineapple"},
-                                        {label:"Mango",value:"Mango"},
-                                        ]}
+                                        {label:'clothing',value:"1"},
+                                        {label:'footwear',value:"2"},
+                                        {label:'accessory',value:"3"},
+                                        {label:'jewellery',value:"4"},
+                                        {label:'bag',value:"5"},
+                                        {label:'outerwear',value:"6"},
+                                        {label:'watches',value:"7"},
+                                        {label:'underwear',value:"8"},
+                                    ]}
                                 onValueChange={field.onChange}
                                 //   defaultValue={field.value}
                                 placeholder="Select options"
@@ -166,7 +194,18 @@ export default function AddBagForm() {
                             </FormItem>
                         )}
                         />
-            
+                        <FormField
+                            name="categoryType"
+                            control={form.control}
+                            render={({field})=>(
+                                <FormItem>
+                                    <FormControl>
+                                        <Input type='hidden' {...field} value="CLOTHING" />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                            />
                     </div>
                 </div>
                 <div className="w-full bg-muted/50 mt-5 rounded-lg p-5">
@@ -219,11 +258,92 @@ export default function AddBagForm() {
                 </div>
                 <div className="row-span-1 ">
                 <div className="w-fit ml-auto mt-3">
-                    <Button type='submit' className="p-3 rounded-full mr-0" variant="default"><Check size={18} className="mr-1"/> Add Product</Button>
-                </div>            
+                    <Button type='submit' disabled={form.formState.isSubmitting} className={cn(form.formState.isSubmitting && "cursor-not-allowed bg-muted-foreground/100"," p-3 rounded-full mr-0")} variant="default">
+                            {!form.formState.isSubmitting ? 
+                            <Check size={18} className="mr-1"/> 
+                            :
+                            <Spinner className="mr-1 size-5" />
+                            }
+                            Add Product
+                        </Button>    
+                    </div> 
+                </div>
             </div>
-            </div>
-            <ImageNcategory/>
+            <Card className="overflow-hidden border-none bg-muted/50" >
+                <h2 className="m-5">{"Product"} Images</h2>
+                <CardContent>
+                <div className="grid gap-2">
+                    <img
+                    alt={"Product"+"image"}
+                    className="aspect-square w-full rounded-md object-cover"
+                    height="300"
+                    src={imageUrl[0] ? imageUrl[0]:"https://ui.shadcn.com/placeholder.svg"}
+                    width="300"
+                    />
+                    <div className="grid grid-cols-3 gap-2">
+                    {imageUrl.filter(image=>image!==imageUrl[0]).map((img)=>(
+                        
+                    <button key={img}>
+                        <img
+                        alt=" image"
+                        className="border aspect-square w-full rounded-md object-cover"
+                        height="84"
+                        src={img??"https://ui.shadcn.com/placeholder.svg"}
+                        width="84"
+                        />
+                    </button>
+                    ))}
+                    {!images &&
+                    (<>
+                        <button>
+                            <img
+                            alt=" image"
+                            className=" aspect-square w-full rounded-md object-cover"
+                            height="84"
+                            src={"https://ui.shadcn.com/placeholder.svg"}
+                            width="84"
+                            />
+                        </button>
+                    </>)
+                    }
+                        <FormField
+                        name="images"
+                        control={form.control}
+                        render={({ field: { value, onChange, ...fieldProps } }) => (
+                            <FormItem>
+                            <FormLabel  className="cursor-pointer hover:bg-foreground/10 ease-in duration-100 flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
+                                <Upload className="h-4 w-4 text-muted-foreground" />
+                                <span className="sr-only">Upload</span>
+                            </FormLabel>
+                            <FormControl>
+                                <Input
+                                {...fieldProps}
+                                type="file"
+                                className='hidden'
+                                multiple
+                                accept='image/*'
+                                onChange={async(event) =>{
+                                    onFileSelect(event)
+                                    console.log(event.target.files)
+                                    console.log("BLOB instance of",images[0] instanceof File );
+                                    
+                                    console.log("event file",event.target.files);
+                                    
+                                    return onChange(images)
+                                }}
+                                />
+                            </FormControl>
+                            <FormDescription />
+                            <FormMessage />
+                            </FormItem>
+                    )}
+                    />
+                    
+                        
+                    </div>
+                </div>
+                </CardContent>
+            </Card>
                 
         </div>
     </form>
