@@ -44,7 +44,6 @@ const watchesSchema = z.object({
 export default function AddWatchForm() {
     const [images, setImages] = useState<File[]>([]);
     const [imageUrl,setImageUrl]=useState<string[]>([])
-    // url: URL.createObjectURL(files[i]),
 
     type watchType=z.infer<typeof watchesSchema >;
     const form=useForm<watchType>({
@@ -64,7 +63,7 @@ export default function AddWatchForm() {
     size:"",
     colour: "",
     categoryId: [],
-    categoryType:"CLOTHING",
+    categoryType:"WATCH",
     stock: 0,
   },
     });
@@ -218,8 +217,8 @@ export default function AddWatchForm() {
                             </FormItem>
                         )}/>
                         <FormField
-                        control={form.control}
                         name="colour"
+                        control={form.control}
                         render={({field})=>(
                             <FormItem>
                                 <FormLabel>Colour</FormLabel>
@@ -231,8 +230,8 @@ export default function AddWatchForm() {
                         )}
                         />
                         <FormField
-                        control={form.control}
                         name="dialShape"
+                        control={form.control}
                         render={({field})=>(
                             <FormItem>
                                 <FormLabel>Dial Shape</FormLabel>
@@ -278,8 +277,8 @@ export default function AddWatchForm() {
                         )}
                         />
                         <FormField
-                            control={form.control}
                             name="categoryId"
+                            control={form.control}
                             render={({ field }) => (
                             <FormItem>
                             <FormLabel>Category Type</FormLabel>

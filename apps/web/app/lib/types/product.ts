@@ -55,9 +55,9 @@ export const productSchema = z.object({
     name: z.string().min(1),
     description: z.string().optional(), 
     gender:z.string().optional(),
+    size: z.string().optional(),         // e.g., S, M, L, XL
     price: z.coerce.number().positive(),
     prevprice: z.coerce.number().positive(),
-    size: z.string().optional(),         // e.g., S, M, L, XL
     material: z.string().optional(),     // e.g., Cotton, Polyester
     colour: z.string().optional(),       // e.g., Red, Blue
     pattern: z.string().optional(),      // e.g., Solid, Striped
@@ -65,34 +65,35 @@ export const productSchema = z.object({
     occasion: z.string().optional(),     // e.g., Casual, Formal
     season: z.string().optional(),       // e.g., Summer, Winter
     brandId: z.coerce.number ().optional(),      // Foreign key reference to Brand
-    categoryId: z.coerce.number(),              // Foreign key reference to Category
-    categoryType:z.string(),
+    categoryId: z.coerce.number().array(),               // Foreign key reference to Category
+    categoryType:CategoryType,
     stock: z.coerce.number().int().nonnegative(),
     images:  z
-    .instanceof(File).array()
-    .refine((list) => list.length === 0, "No files selected")
-    .refine((list) => list.length <= 5, "Maximum 5 files allowed")
-    .transform((list) => Array.from(list))
-    .refine(
-      (files) => {
-        const allowedTypes: { [key: string]: boolean } = {
-          "image/jpeg": true,
-          "image/png": true,
-          "image/jpg": true,
-          "image/gif": true,
-        };
-        return files.every((file) => allowedTypes[file.type]);
-      },
-      { message: "Invalid file type. Allowed types: JPG, PNG, JPEG, GIF" }
-    )
-    .refine(
-      (files) => {
-        return files.every((file) => file.size <= 10 * 1024 * 1024 );
-      },
-      {
-        message: "File size should not exceed 5MB",
-      }
-    ),
+    // .instanceof(File)
+    .any().array()
+    // .refine((list) => list.length === 0, "No files selected")
+    // .refine((list) => list.length <= 5, "Maximum 5 files allowed")
+    // .transform((list) => Array.from(list))
+    // .refine(
+    //   (files) => {
+    //     const allowedTypes: { [key: string]: boolean } = {
+    //       "image/jpeg": true,
+    //       "image/png": true,
+    //       "image/jpg": true,
+    //       "image/gif": true,
+    //     };
+    //     return files.every((file) => allowedTypes[file.type]);
+    //   },
+    //   { message: "Invalid file type. Allowed types: JPG, PNG, JPEG, GIF" }
+    // )
+    // .refine(
+    //   (files) => {
+    //     return files.every((file) => file.size <= 10 * 1024 * 1024 );
+    //   },
+    //   {
+    //     message: "File size should not exceed 5MB",
+    //   }
+    // ),
   });
   
   export const productQuerySchema = z.object({
@@ -141,8 +142,8 @@ export const productSchema = z.object({
     occasion: z.string().optional(),      // e.g., Casual, Formal
     season: z.string().optional(),        // e.g., Summer, Winter
     brandId: z.coerce.number().optional(),       // Foreign key reference to Brand
-    categoryId: z.coerce.number(),               // Foreign key reference to Category
-    categoryType:z.string(),
+    categoryId: z.coerce.number().array(),               // Foreign key reference to Category
+    categoryType:CategoryType,
     stock: z.coerce.number().int().nonnegative()
   
   });
@@ -157,8 +158,8 @@ export const productSchema = z.object({
     material: z.string().optional(),      // e.g., Leather, Fabric
     size: z.string().optional(),          // e.g., Small, Medium, Large
     brandId: z.coerce.number().optional(),       // Foreign key reference to Brand
-    categoryId: z.coerce.number(),               // Foreign key reference to Category
-    categoryType:z.string(),
+    categoryId: z.coerce.number().array(),               // Foreign key reference to Category
+    categoryType:CategoryType,
     stock: z.coerce.number().int().nonnegative()
   
   });
@@ -174,8 +175,8 @@ export const productSchema = z.object({
     size: z.string().optional(),          // e.g., Small, Medium, Large
     purpose: z.string().optional(),       // e.g., Travel, Daily Use
     brandId: z.coerce.number().optional(),       // Foreign key reference to Brand
-    categoryId: z.coerce.number(),               // Foreign key reference to Category
-    categoryType:z.string(),
+    categoryId: z.coerce.number().array(),               // Foreign key reference to Category
+    categoryType:CategoryType,
     stock: z.coerce.number().int().nonnegative()
   
   });
@@ -190,8 +191,8 @@ export const productSchema = z.object({
     insulationType: z.string().optional(),// e.g., Down, Synthetic
     season: z.string().optional(),        // e.g., Winter, Fall
     brandId: z.coerce.number().optional(),       // Foreign key reference to Brand
-    categoryId: z.coerce.number(),               // Foreign key reference to Category
-    categoryType:z.string(),
+    categoryId: z.coerce.number().array(),               // Foreign key reference to Category
+    categoryType:CategoryType,
     stock: z.coerce.number().int().nonnegative()
   });
   
@@ -248,8 +249,8 @@ export const productSchema = z.object({
     material: z.string().optional(),      // e.g., Cotton, Polyester
     style: z.string().optional(),         // e.g., Briefs, Boxers
     brandId: z.coerce.number().optional(),       // Foreign key reference to Brand
-    categoryId: z.coerce.number(),               // Foreign key reference to Category
-    categoryType:z.string(),
+    categoryId: z.coerce.number().array(),               // Foreign key reference to Category
+    categoryType:CategoryType,
     // imageUrl:z.string(),
     stock: z.coerce.number().int().nonnegative()
   
@@ -264,8 +265,8 @@ export const productSchema = z.object({
     gemstone: z.string().optional(),      // e.g., Diamond, Ruby
     occasion: z.string().optional(),      // e.g., Wedding, Party
     brandId: z.coerce.number().optional(),       // Foreign key reference to Brand
-    categoryId: z.coerce.number(),               // Foreign key reference to Category
-    categoryType:z.string(),
+    categoryId: z.coerce.number().array(),               // Foreign key reference to Category
+    categoryType:CategoryType,
     stock: z.coerce.number().int().nonnegative(),
     images:  z
     .instanceof(File).array()
@@ -303,8 +304,8 @@ export const productSchema = z.object({
     shade: z.string().optional(),         // e.g., Fair, Medium, Dark
     skinType: z.string().optional(),      // e.g., Dry, Oily, Combination
     brandId: z.coerce.number().optional(),       // Foreign key reference to Brand
-    categoryId: z.coerce.number(),               // Foreign key reference to Category
-    categoryType:z.string(),
+    categoryId: z.coerce.number().array(),               // Foreign key reference to Category
+    categoryType:CategoryType,
     stock: z.coerce.number().int().nonnegative()
   
   });
