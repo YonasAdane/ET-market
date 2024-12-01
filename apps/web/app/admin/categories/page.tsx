@@ -4,8 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Pencil, Trash } from 'lucide-react'
-import { Card } from '@/components/ui/card'
-import AddCategoryForm from "@/widgets/adminComponents/form-elements/add-category"
+import AddCategoryForm from "../_components/form-elements/add-category"
 export default function CategoriesPage() {
     const mockCategories = [
         { id: 1, name: 'Shoes', description: 'Footwear for all occasions', bannerImage: 'https://example.com/shoes-banner.jpg' },
