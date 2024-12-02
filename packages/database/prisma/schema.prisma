@@ -77,7 +77,7 @@ model Product {
   updatedAt       DateTime       @updatedAt
   createdAt       DateTime       @default(now())
   categoryType    CategoryType
-  category        Category?      @relation("CategoryProducts", fields: [categoryId], references: [id])
+  category        Category[]      @relation("CategoryProducts")
   brand           Brand?         @relation("BrandProducts", fields: [brandId], references: [id])
   orderItems      OrderItem[]    @relation("ProductOrderItems")
   reviews         Review[]       @relation("ProductReviews")
