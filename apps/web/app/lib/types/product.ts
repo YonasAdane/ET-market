@@ -132,20 +132,20 @@ export const productSchema = z.object({
   export const footwearSchema = z.object({
     name: z.string().min(1),
     description: z.string().optional(), 
-    // imageUrl:z.string(),
+    size: z.string().optional(),          // e.g., 8, 9, 10
+    gender:z.string(),
+    colour: z.string().optional(),        // e.g., Black, White
+    occasion: z.string().optional(),      // e.g., Casual, Formal
     price: z.coerce.number().positive(),
     prevprice: z.coerce.number().positive(),
-    size: z.string().optional(),          // e.g., 8, 9, 10
     material: z.string().optional(),      // e.g., Leather, Suede
-    colour: z.string().optional(),        // e.g., Black, White
-    closureType: z.string().optional(),   // e.g., Laces, Velcro
-    occasion: z.string().optional(),      // e.g., Casual, Formal
-    season: z.string().optional(),        // e.g., Summer, Winter
+    // closureType: z.string().optional(),   // e.g., Laces, Velcro
     brandId: z.coerce.number().optional(),       // Foreign key reference to Brand
     categoryId: z.coerce.number().array(),               // Foreign key reference to Category
     categoryType:CategoryType,
-    stock: z.coerce.number().int().nonnegative()
-  
+    stock: z.coerce.number().int().nonnegative(),
+    images: z.any().array()
+
   });
   
   export const accessoriesSchema = z.object({

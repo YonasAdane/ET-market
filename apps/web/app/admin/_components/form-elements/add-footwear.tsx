@@ -1,12 +1,8 @@
  "use client";
 import { Input } from '@/components/ui/input'
-import { filterProduct } from '@/lib/constants'
-import ToggleGroupComponent from './toggle-group'
 import Gender from './gender'
-import Size from './size'
 import { Button } from '@/components/ui/button';
-import { CalendarDays, Check } from 'lucide-react';
-import ImageNcategory from './imageNcategory';
+import {  Check, Upload } from 'lucide-react';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -14,32 +10,38 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '@/components/ui/textarea';
 import ToogleElement from './toggle-element';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MultiSelect } from '@/components/multi-select';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Card, CardContent } from '@/components/ui/card';
+import { useState } from 'react';
+import { footwearSchema } from 'app/lib/types/product';
+import { Spinner } from '../spinnerLoader';
+import { cn } from '@/lib/utils';
+import { createProduct } from 'app/admin/_actions/productAcion';
 
-const footwearSchema = z.object({
-  name: z.string().min(1),
-  description: z.string().optional(), 
-  imageUrl:z.string(),
-  price: z.number().positive(),
-  prevprice: z.number().positive(),
-  size: z.string().optional(),          // e.g., 8, 9, 10
-  material: z.string().optional(),      // e.g., Leather, Suede
-  colour: z.string().optional(),        // e.g., Black, White
-  closureType: z.string().optional(),   // e.g., Laces, Velcro
-  occasion: z.string().optional(),      // e.g., Casual, Formal
-  season: z.string().optional(),        // e.g., Summer, Winter
-  brandId: z.number().optional(),       // Foreign key reference to Brand
-  categoryId: z.number(),               // Foreign key reference to Category
-  categoryType:z.string(),
-  stock: z.number().int().nonnegative()
-
-});
 export default function AddFootwearForm() {
+    const [images, setImages] = useState<File[]>([]);
+    const [imageUrl,setImageUrl]=useState<string[]>([])
+   
   type footwearType=z.infer<typeof footwearSchema >;
     const form=useForm<footwearType>({
         resolver:zodResolver(footwearSchema),
+        defaultValues:{
+            name:"",
+            description:"",
+            size:"",
+            gender:"",
+            colour:"",
+            occasion:"",
+            price: 1,
+            prevprice: 1,
+            material:"",
+            brandId: 1,
+            categoryId: [],
+            categoryType:"FOOTWEAR",
+            stock: 1,
+            images: []
+        }
     });
     function addProduct(data:footwearType){
         console.log(data);
@@ -123,11 +125,27 @@ export default function AddFootwearForm() {
             image: "path/to/court-shoes.jpg"
         }
     ];
-    
+    function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
+        const files = event.target.files;
+        console.log("onFileSelect files: ",files );
+        
+        if (!files || files==null || !files.length || files===undefined) {
+            return;
+        }
+        if (event.target.files) {
+            const fileArray = Array.from(event.target.files); // Convert FileList to an array
+            setImages((prevImages) => [...prevImages, ...fileArray]);
+          }
+        for (let i = 0; i < files.length; i++) {
+            if(files[i]){
+                setImageUrl((prevUrls)=>[...prevUrls,URL.createObjectURL(files[i]!)])
+            }
+        }
+    }
     
   return (
 <Form {...form}>
-    <form onSubmit={form.handleSubmit(addProduct)}>
+    <form onSubmit={form.handleSubmit(async data=>await createProduct(data))}>
         <div className='w-full grid grid-cols-3 gap-5 h-full '>
             <div className="col-span-2 bg-muted/50 rounded-lg p-5">
                 <h2>General Information</h2>
@@ -207,8 +225,8 @@ export default function AddFootwearForm() {
                             </FormItem>
                         )}/>
                         <FormField
-                        control={form.control}
                         name="colour"
+                        control={form.control}
                         render={({field})=>(
                             <FormItem>
                                 <FormLabel>Colour</FormLabel>
@@ -221,8 +239,8 @@ export default function AddFootwearForm() {
                         />
                         
                         <FormField
-                            control={form.control}
                             name="categoryType"
+                            control={form.control}
                             render={({ field }) => (
                             <FormItem>
                             <FormLabel>Category Type</FormLabel>
@@ -264,7 +282,19 @@ export default function AddFootwearForm() {
                         )}
                         />
                         <ToogleElement select='single' label='Occasion' name="occasion" values={["Casual","Formal","Athletic","Outdoor","Office","Special Occasions","Seasonal"]} control={form.control}/>
-
+                        <FormField
+                        name="material"
+                        control={form.control}
+                        render={({field})=>(
+                            <FormItem>
+                                <FormLabel className='text-sm'>Material</FormLabel>
+                                <FormControl>
+                                    <Input {...field} type='text'/>
+                                </FormControl>
+                                <FormMessage/>
+                            </FormItem>
+                        )}
+                        />
                     </div>
                 </div>
                 <div className="w-full bg-muted/50 mt-5 rounded-lg p-5">
@@ -317,11 +347,92 @@ export default function AddFootwearForm() {
                 </div>
                 <div className="row-span-1 ">
                 <div className="w-fit ml-auto mt-3">
-                    <Button type='submit' className="p-3 rounded-full mr-0" variant="default"><Check size={18} className="mr-1"/> Add Product</Button>
-                </div>            
+                    <Button type='submit' disabled={form.formState.isSubmitting} className={cn(form.formState.isSubmitting && "cursor-not-allowed bg-muted-foreground/100"," p-3 rounded-full mr-0")} variant="default">
+                        {!form.formState.isSubmitting ? 
+                        <Check size={18} className="mr-1"/> 
+                        :
+                        <Spinner className="mr-1 size-5" />
+                        }
+                        Add Product
+                    </Button>               
+                </div>  
             </div>
             </div>
-            <ImageNcategory/>
+                <Card className="overflow-hidden border-none bg-muted/50" >
+                    <h2 className="m-5">{"Product"} Images</h2>
+                    <CardContent>
+                    <div className="grid gap-2">
+                        <img
+                        alt={"Product"+"image"}
+                        className="aspect-square w-full rounded-md object-cover"
+                        height="300"
+                        src={imageUrl[0] ? imageUrl[0]:"https://ui.shadcn.com/placeholder.svg"}
+                        width="300"
+                        />
+                        <div className="grid grid-cols-3 gap-2">
+                        {imageUrl.filter(image=>image!==imageUrl[0]).map((img)=>(
+                            
+                        <button key={img}>
+                            <img
+                            alt=" image"
+                            className="border aspect-square w-full rounded-md object-cover"
+                            height="84"
+                            src={img??"https://ui.shadcn.com/placeholder.svg"}
+                            width="84"
+                            />
+                        </button>
+                        ))}
+                        {!images &&
+                        (<>
+                            <button>
+                                <img
+                                alt=" image"
+                                className=" aspect-square w-full rounded-md object-cover"
+                                height="84"
+                                src={"https://ui.shadcn.com/placeholder.svg"}
+                                width="84"
+                                />
+                            </button>
+                        </>)
+                        }
+                            <FormField
+                        name="images"
+                        control={form.control}
+                        render={({ field: { value, onChange, ...fieldProps } }) => (
+                            <FormItem>
+                              <FormLabel  className="cursor-pointer hover:bg-foreground/10 ease-in duration-100 flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
+                                <Upload className="h-4 w-4 text-muted-foreground" />
+                                <span className="sr-only">Upload</span>
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  {...fieldProps}
+                                  type="file"
+                                  className='hidden'
+                                  multiple
+                                  accept='image/*'
+                                  onChange={async(event) =>{
+                                    onFileSelect(event)
+                                    console.log(event.target.files)
+                                    console.log("BLOB instance of",images[0] instanceof File );
+                                    
+                                    console.log("event file",event.target.files);
+                                    
+                                    return onChange(images)
+                                  }}
+                                />
+                              </FormControl>
+                              <FormDescription />
+                              <FormMessage />
+                            </FormItem>
+                        )}
+                        />
+                        
+                            
+                        </div>
+                    </div>
+                    </CardContent>
+                </Card>
                 
         </div>
     </form>
