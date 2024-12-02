@@ -6,7 +6,7 @@ import ToggleGroupComponent from './toggle-group'
 import Gender from './gender'
 import Size from './size'
 import { Button } from '@/components/ui/button';
-import { CalendarDays, Check } from 'lucide-react';
+import { CalendarDays, Check, ChevronsUpDown } from 'lucide-react';
 import ImageNcategory from './imageNcategory';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import z from 'zod';
@@ -17,25 +17,36 @@ import ToogleElement from './toggle-element';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { UploadProductImage } from '../uploadImages';
+import { outerwearSchema } from 'app/lib/types/product';
+import { Spinner } from '../spinnerLoader';
+import { cn } from '@/lib/utils';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { useState } from 'react';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { createProduct } from 'app/admin/_actions/productAcion';
 
-const outerwearSchema = z.object({
-    name: z.string().min(1),
-    price: z.number().positive(),
-    prevprice: z.number().positive(),
-    description: z.string().optional(), 
-    imageUrl:z.string(),
-    material: z.string().optional(),      // e.g., Wool, Polyester
-    insulationType: z.string().optional(),// e.g., Down, Synthetic
-    season: z.string().optional(),        // e.g., Winter, Fall
-    brandId: z.number().optional(),       // Foreign key reference to Brand
-    categoryId: z.number(),               // Foreign key reference to Category
-    categoryType:z.string(),
-    stock: z.number().int().nonnegative()
-  });
 export default function AddOuterwearForm() {
-  type outerwearType=z.infer<typeof outerwearSchema >;
+    const [open, setOpen] = useState(false)
+    const [value, setValue] = useState("")
+
+    type outerwearType=z.infer<typeof outerwearSchema >;
     const form=useForm<outerwearType>({
         resolver:zodResolver(outerwearSchema),
+        defaultValues:{
+            name: "",
+            price: 1,
+            prevprice: 1,
+            description: "",
+            material: "",
+            insulationType: "",
+            season: "",
+            brandId: 1,
+            categoryId: [],
+            categoryType:"OUTERWEAR",
+            stock: 1,
+            images: []
+        }
     });
     function addProduct(data:outerwearType){
         console.log(data);
@@ -123,7 +134,7 @@ export default function AddOuterwearForm() {
     
   return (
 <Form {...form}>
-    <form onSubmit={form.handleSubmit(addProduct)}>
+    <form onSubmit={form.handleSubmit(async data=>await createProduct(data))}>
         <div className='w-full grid grid-cols-3 gap-5 h-full '>
             <div className="col-span-2 bg-muted/50 rounded-lg p-5">
                 <h2>General Information</h2>
@@ -161,12 +172,80 @@ export default function AddOuterwearForm() {
                     <div className="w-full ">
                         <Gender name='gender' control={form.control}/>
                     </div>
+
                 </div>
                 <div className="w-full bg-muted/50 mt-5 rounded-lg p-5">
                     <h2>Properties</h2>
                     
                     <div className="grid grid-cols-2 gap-5">
-                        
+                        <FormField
+                            name="material"
+                            control={form.control}
+                            render={({field})=>(
+                                <FormItem>
+                                    <FormLabel className='text-sm block'>Material</FormLabel>
+                                    <FormControl>
+                                    <Popover  open={open} onOpenChange={setOpen}>
+                                        <PopoverTrigger asChild {...field}>
+                                            <Button
+                                                variant="outline"
+                                                role="combobox"
+                                                aria-expanded={open}
+                                                className="w-full justify-between"
+                                                >
+                                                {value
+                                                    ? filterProduct.CLOTHING[1]?.value.find((material) => material === value)
+                                                    : "Select Material"}
+                                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="p-0" side="bottom" align="start">
+                                        <Command>
+                                            <CommandInput placeholder="Change status..." />
+                                            <CommandList>
+                                                <CommandEmpty>No results found.</CommandEmpty>
+                                                <CommandGroup>
+                                                    {filterProduct.CLOTHING[1]?.value.map((material) => (
+                                                        <CommandItem
+                                                        key={material+"12"}
+                                                        value={material}
+                                                        onSelect={(currentValue) => {
+                                                            setValue(currentValue === value ? "" : currentValue)
+                                                            setOpen(false)
+                                                        }}
+                                                        >
+                                                        <Check
+                                                            className={cn(
+                                                            "mr-2 h-4 w-4",
+                                                            value === material ? "opacity-100" : "opacity-0"
+                                                            )}
+                                                        />
+                                                        {material}
+                                                        </CommandItem>
+                                                    ))}
+                                                    </CommandGroup>
+                                            </CommandList>
+                                        </Command>
+                                        </PopoverContent>
+                                    </Popover>
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name="season"
+                            control={form.control}
+                            render={({field})=>(
+                                <FormItem>
+                                    <FormLabel>Season</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} type="text"/>
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                         name="brandId"
                         control={form.control}
@@ -181,17 +260,17 @@ export default function AddOuterwearForm() {
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Brands of Products</SelectLabel>
-                                                <SelectItem value="asdfasdf">Calvin Klein</SelectItem>
-                                                <SelectItem value="sdd1">Fruit of the Loom</SelectItem>
-                                                <SelectItem value="sdd2">Tommy Hilfiger</SelectItem>
-                                                <SelectItem value="sdd3">MeUndies</SelectItem>
-                                                <SelectItem value="sdd4">SAXX</SelectItem>
-                                                <SelectItem value="sdd5">Polo Ralph Lauren</SelectItem>
-                                                <SelectItem value="sdd6">Hanky Panky</SelectItem>
-                                                <SelectItem value="sdd7">Savage X Fenty</SelectItem>
-                                                <SelectItem value="sdd8">Bravado Designs</SelectItem>
-                                                <SelectItem value="sdd9">Knix</SelectItem>
-                                                <SelectItem value="sdd0">ThirdLove</SelectItem>
+                                                <SelectItem value="1">Calvin Klein</SelectItem>
+                                                <SelectItem value="2">Fruit of the Loom</SelectItem>
+                                                <SelectItem value="3">Tommy Hilfiger</SelectItem>
+                                                <SelectItem value="4">MeUndies</SelectItem>
+                                                <SelectItem value="5">SAXX</SelectItem>
+                                                <SelectItem value="6">Polo Ralph Lauren</SelectItem>
+                                                <SelectItem value="7">Hanky Panky</SelectItem>
+                                                <SelectItem value="8">Savage X Fenty</SelectItem>
+                                                <SelectItem value="9">Bravado Designs</SelectItem>
+                                                <SelectItem value="10">Knix</SelectItem>
+                                                <SelectItem value="11">ThirdLove</SelectItem>
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -200,49 +279,59 @@ export default function AddOuterwearForm() {
                             </FormItem>
                         )}/>
                         <FormField
+                            name="categoryId"
                             control={form.control}
-                            name="categoryType"
                             render={({ field }) => (
                             <FormItem>
                             <FormLabel>Category Type</FormLabel>
-                            <FormControl>
-                                <Select>
-                                    <SelectTrigger {...field}>
-                                        <SelectValue placeholder="select category" />
-                                    </SelectTrigger>
+                                <Select onValueChange={field.onChange} defaultValue={field.value+''}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="select category" />
+                                        </SelectTrigger>
+                                    </FormControl>
                                     <SelectContent>
-                                        {productCategories.map(category=>(
+                                        {productCategories.map((category,i)=>(
 
                                         <HoverCard key={category.name}>
                                             <HoverCardTrigger asChild>
-                                                <SelectItem value={category.name}>{category.name}</SelectItem>
+                                                <SelectItem value={i+""}>{category.name}</SelectItem>
                                             </HoverCardTrigger>
-                                            <HoverCardContent className="w-80">
+                                            <HoverCardContent className="">
                                                 <div className="flex justify-between space-x-4">
-                                                <Avatar>
-                                                    <AvatarImage src={category.image}
-                                                    />
-                                                    <AvatarFallback>VC</AvatarFallback>
-                                                </Avatar>
-                                                <div className="space-y-1">
-                                                    <h4 className="text-sm font-semibold">{category.name}</h4>
-                                                    <p className="text-sm">
-                                                        {category.description}
-                                                    </p>
-                                                </div>
+                                                    <Avatar>
+                                                        <AvatarImage src={category.image}
+                                                        />
+                                                        <AvatarFallback>VC</AvatarFallback>
+                                                    </Avatar>
+                                                    <div className="space-y-1">
+                                                        <h4 className="text-sm font-semibold">{category.name}</h4>
+                                                        <p className="text-sm">
+                                                            {category.description}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </HoverCardContent>
                                         </HoverCard>
                                         ))}
                                     </SelectContent>
                                 </Select>
-                            </FormControl>
-                            
-                            <FormMessage />
+                            <FormMessage/>
                             </FormItem>
                         )}
                         />
-
+                        <FormField
+                            name="categoryType"
+                            control={form.control}
+                            render={({field})=>(
+                                <FormItem>
+                                    <FormControl>
+                                        <Input type='hidden' {...field} value="CLOTHING" />
+                                    </FormControl>
+                                    <FormMessage/>
+                                </FormItem>
+                            )}
+                            />
                     </div>
                 </div>
                 <div className="w-full bg-muted/50 mt-5 rounded-lg p-5">
@@ -295,12 +384,19 @@ export default function AddOuterwearForm() {
                 </div>
                 <div className="row-span-1 ">
                 <div className="w-fit ml-auto mt-3">
-                    <Button type='submit' className="p-3 rounded-full mr-0" variant="default"><Check size={18} className="mr-1"/> Add Product</Button>
+                    <Button type='submit' disabled={form.formState.isSubmitting} className={cn(form.formState.isSubmitting && "cursor-not-allowed bg-muted-foreground/100"," p-3 rounded-full mr-0")} variant="default">
+                        {!form.formState.isSubmitting ? 
+                        <Check size={18} className="mr-1"/> 
+                        :
+                        <Spinner className="mr-1 size-5" />
+                        }
+                        Add Product
+                    </Button>
                 </div>            
             </div>
             </div>
-            <ImageNcategory/>
-                
+            <UploadProductImage name="images" label='picture' form={form} description='product image' />
+
         </div>
     </form>
 </Form>

@@ -14,26 +14,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '@/components/ui/textarea';
 import ToogleElement from './toggle-element';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MultiSelect } from '@/components/multi-select';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { underwearSchema } from 'app/lib/types/product';
+import { UploadProductImage } from '../uploadImages';
 
-const underwearSchema = z.object({
-  name: z.string().min(1),
-  price: z.number().positive(),
-  prevprice: z.number().positive(),
-  description: z.string().optional(), 
-  size: z.string().optional(),          // e.g., S, M, L, XL
-  gender:z.string().optional(), 
-  material: z.string().optional(),      // e.g., Cotton, Polyester
-  style: z.string().optional(),         // e.g., Briefs, Boxers
-  brandId: z.number().optional(),       // Foreign key reference to Brand
-  categoryId: z.number(),               // Foreign key reference to Category
-  categoryType:z.string(),
-  imageUrl:z.string(),
-  stock: z.number().int().nonnegative()
-
-});
 export default function AddUnderwearForm() {
   type underwearType=z.infer<typeof underwearSchema >;
     const form=useForm<underwearType>({
@@ -301,8 +286,7 @@ export default function AddUnderwearForm() {
                 </div>            
             </div>
             </div>
-            <ImageNcategory/>
-                
+            <UploadProductImage name="images" label='picture' form={form} description='product image' />
         </div>
     </form>
 </Form>

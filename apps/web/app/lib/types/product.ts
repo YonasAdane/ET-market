@@ -186,14 +186,14 @@ export const productSchema = z.object({
     price: z.coerce.number().positive(),
     prevprice: z.coerce.number().positive(),
     description: z.string().optional(), 
-    // imageUrl:z.string(),
     material: z.string().optional(),      // e.g., Wool, Polyester
     insulationType: z.string().optional(),// e.g., Down, Synthetic
     season: z.string().optional(),        // e.g., Winter, Fall
     brandId: z.coerce.number().optional(),       // Foreign key reference to Brand
     categoryId: z.coerce.number().array(),               // Foreign key reference to Category
     categoryType:CategoryType,
-    stock: z.coerce.number().int().nonnegative()
+    stock: z.coerce.number().int().nonnegative(),
+    images: z.any().array()
   });
   
   export const watchesSchema =  z.object({
