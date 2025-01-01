@@ -1,10 +1,10 @@
 "use client";
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CategoryArray } from 'app/lib/consts';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Navigation } from '@/widgets/Navigation';
+import { CategoryArray } from 'app/lib/consts';
+import { useState } from 'react';
 import { Gallery } from './gallery';
 
 interface ProductDetails {
@@ -16,7 +16,14 @@ interface ProductDetails {
   size: string;
 }
 
-export default function ProductDetailsPage({productid}:{productid:string}) {
+
+interface ProductPageProps {
+  params: {
+    productid: string;
+  };
+}
+
+export default function ProductDetailsPage({ params }: ProductPageProps) {  
   const [quantity, setQuantity] = useState(1)
   
   const product: ProductDetails = {

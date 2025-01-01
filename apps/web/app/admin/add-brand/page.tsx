@@ -1,4 +1,4 @@
-  import CreateBrandForm from "@/widgets/adminComponents/form-elements/add-brand";
+  import CreateBrandForm from "../_components/form-elements/add-brand"; 
 import PageTitle from "@/widgets/adminComponents/PageTitle";
 
   export default function ADdclothes() {

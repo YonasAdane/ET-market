@@ -1,8 +1,7 @@
 "use client";
 import { Card, CardContent } from '@/components/ui/card';
-import { FormControl, FormField, FormItem, FormMessage } from 'app/components/form';
 import { Upload } from 'lucide-react';
-import { FormEvent, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface ImageFile {
     name: string;
@@ -26,14 +25,14 @@ export default function UploadImage({title,name,control}:{title?:string,name:str
         }
         for (let i = 0; i < files.length; i++) {
 
-            if(files[i].type.split("/")[0] !== 'image') continue;
+            if(files[i]!.type.split("/")[0] !== 'image') continue;
 
-            if (!images.some((e) => e.name === files[i].name)) {
+            if (!images.some((e) => e.name === files[i]!.name)) {
                 setImages((prevImages) => [
                     ...prevImages,
                     {
-                        name: files[i].name,
-                        url: URL.createObjectURL(files[i]),
+                        name: files[i]!.name,
+                        url: URL.createObjectURL(files[i]!),
                     },
                 ]);
             }

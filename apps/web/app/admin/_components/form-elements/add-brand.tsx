@@ -11,14 +11,15 @@ import UploadImage from "./upload-image";
 import UploadLogo from "./logo-upload";
 import { useState } from 'react'
 import Cropper, { Area, Point } from 'react-easy-crop'
+import { UploadCategoryImage } from "../uploadImages";
 
  const createBrandSchema = z.object({
     name: z.string().min(2).max(100),
     description:z.string().optional(),
-    mobileBannerImage:z.array(z.string()),
-    desktopBannerImage:z.array(z.string()),
+    BannerImage:z.array(z.string()),
     brandImage:z.array(z.string()),
-    logoUrl: z.string().optional(),
+    desktopBannerImage:z.array(z.string()),
+    logoImage: z.string().optional(),
   });
    type BrandType=z.infer<typeof createBrandSchema>;
 export default function CreateBrandForm() {
@@ -57,8 +58,8 @@ export default function CreateBrandForm() {
                             )}
                         />
                         <FormField
-                            control={form.control}
                             name="description"
+                            control={form.control}
                             render={({field})=>(
                                 <FormItem>
                                     <FormDescription>Brand Description</FormDescription>
@@ -70,13 +71,12 @@ export default function CreateBrandForm() {
                             )}
                         />
                         <div className="relative w-full h-96">
-
                             <Cropper
-                            classes={{containerClassName:"w-1/2 h-1/2 "}}
+                                classes={{containerClassName:"  "}}
                                 image="https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000"
                                 crop={crop}
                                 zoom={zoom}
-                                aspect={4 / 3}
+                                aspect={3 / 1}
                                 onCropChange={setCrop}
                                 onCropComplete={onCropComplete}
                                 onZoomChange={setZoom}
@@ -91,7 +91,7 @@ export default function CreateBrandForm() {
                         </Button>
                     </div >
                     <div className="col-span-1">
-                        <UploadImage title="banner"/>
+                        <UploadCategoryImage  form={form} name="" title="banner"/>
                     </div>
                 </div>
             </form>

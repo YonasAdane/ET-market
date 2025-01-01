@@ -9,7 +9,9 @@ const nextConfig = {
           "https://res.cloudinary.com"
         ],
       },
-    
+    // experimental:{
+    //   serverExternalPackages: ['@prisma/client'],
+    // }
 };
 
 export default nextConfig;

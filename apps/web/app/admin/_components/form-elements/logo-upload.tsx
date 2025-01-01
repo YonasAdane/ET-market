@@ -1,7 +1,6 @@
 "use client";
 import { Card, CardContent } from '@/components/ui/card';
-import { Upload } from 'lucide-react';
-import { FormEvent, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface ImageFile {
     name: string;
@@ -9,7 +8,7 @@ interface ImageFile {
 }
 
 export default function UploadLogo() {
-    const [images, setImages] = useState<ImageFile>([]);
+    const [images, setImages] = useState<ImageFile | null>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     function selectFiles() {
@@ -22,8 +21,8 @@ export default function UploadLogo() {
             return;}
         setImages(
             {
-                name:files[0].name,
-                url:URL.createObjectURL(files[0]),
+                name:files[0]!.name,
+                url:URL.createObjectURL(files[0]!),
 
             }
         )
@@ -38,7 +37,7 @@ export default function UploadLogo() {
             alt="Product image" onClick={selectFiles} 
             className="aspect-square w-full rounded-md object-cover"
             height="300"
-            src={images?images.url:"https://ui.shadcn.com/placeholder.svg"}
+            src={images ? images.url : "https://ui.shadcn.com/placeholder.svg"}
             width="300"
             />
             <div className="grid grid-cols-3 gap-2">

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Heart, Menu, Search, ShoppingBag, ShoppingCart } from "lucide-react"
+import { Search, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 import { ModeToggle } from "./modeToggle"
 
@@ -18,7 +18,7 @@ export function Navigation({categoryArray}:{categoryArray?:string[]}) {
                 className=' block font-medium'>New</Link></Button>
             {categoryArray&& categoryArray.map(cat=>(
               <Button key={cat} variant="link" className='max-lg:border-b max-lg:py-3 px-2 capitalize'>
-                <Link href={`/collections/${cat.toLowerCase()}`} className=' block font-medium'>
+                <Link href={`/category/${cat.toLowerCase()}`} className=' block font-medium'>
                   {cat.toLowerCase()}
                 </Link>
               </Button>

@@ -1,11 +1,11 @@
-import Image from "next/image"
-import Link from "next/link"
 import {
   ListFilter,
   MoreHorizontal,
   PlusCircle,
   Search,
 } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -36,10 +36,19 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CategoryArray } from "app/lib/consts"
-import { CategoryType } from "@repo/database/index"
 
-export default async function AdminProductsPage({productType}:{productType:CategoryType}) {
+// export default async function AdminProductsPage({categoryType}:{categoryType:string}) {
+
+interface ProductPageProps {
+  params: {
+    categoryType: string;
+  };
+}
+
+export default function ProductDetailsPage({ params }: ProductPageProps) {
   // const data=await findProducts(collectionName);
+  console.log(params.categoryType);
+  
   // const brandsNcategory=await findProductsBrand(collectionName);
 
   return (

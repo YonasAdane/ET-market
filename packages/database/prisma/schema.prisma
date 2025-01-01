@@ -29,25 +29,28 @@ model User {
 }
 
 model Category {
-  id           Int       @id @default(autoincrement())
-  name         String
-  description  String?
-  bannerImage  String
-  sampleImages String[]
-  products     Product[] @relation("CategoryProducts")
+  id            Int       @id @default(autoincrement())
+  name          String
+  description   String?
+  bannerImage   Image?    @relation(fields: [bannerImageId], references: [id])
+  sampleImages  Image[]   @relation("categorySampleImage")
+  products      Product[] @relation("CategoryProducts")
+  bannerImageId Int?      @unique
 
   @@map("categories")
 }
 
 model Brand {
-  id                 Int       @id @default(autoincrement())
-  name               String
-  description        String?
-  mobileBannerImage  String[]
-  desktopBannerImage String[]
-  brandImage         String[]
-  logoUrl            String?
-  products           Product[] @relation("BrandProducts")
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  BannerImage Image[]   @relation("BrandBannerImage")
+  brandImage  Image[]   @relation("BrandBrandImage")
+  // @relation("BrandBrandImage",fields: [brandImageId], references: [id])  
+  logoImage   Image?    @relation("BrandLogoImage", fields: [brandLogoId], references: [id])
+  products    Product[] @relation("BrandProducts")
+  // brandImageId       Int?  @unique
+  brandLogoId Int?      @unique
 
   @@map("brands")
 }
@@ -62,7 +65,7 @@ model Product {
   price           Float
   prevprice       Float
   stock           Int
-  images          ProductImage[] // Relation to ProductImage table  strapMaterial   String?
+  images          Image[] // Relation to Image table  strapMaterial   String?
   dialShape       String?
   waterResistance String?
   size            String[] // Size of the product, applicable to clothing, footwear, etc.
@@ -77,7 +80,7 @@ model Product {
   updatedAt       DateTime       @updatedAt
   createdAt       DateTime       @default(now())
   categoryType    CategoryType
-  category        Category[]      @relation("CategoryProducts")
+  category        Category[]     @relation("CategoryProducts")
   brand           Brand?         @relation("BrandProducts", fields: [brandId], references: [id])
   orderItems      OrderItem[]    @relation("ProductOrderItems")
   reviews         Review[]       @relation("ProductReviews")
@@ -87,19 +90,22 @@ model Product {
   @@map("products")
 }
 
-
-model ProductImage {
-  id           Int      @id @default(autoincrement())
-  productId    Int      
-  product      Product  @relation(fields: [productId], references: [id]) 
-  publicId     String   
-  url          String   
-  format       String?  
-  width        Int?     
-  height       Int?     
-  bytes        Int?     
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+model Image {
+  id               Int       @id @default(autoincrement())
+  productId        Int?
+  product          Product?  @relation(fields: [productId], references: [id])
+  brandImage       Brand?    @relation("BrandBrandImage", fields: [brandId], references: [id])
+  bannerImage      Brand?    @relation("BrandBannerImage", fields: [bannerImageId], references: [id])
+  bannerImageId    Int?
+  brandLogoUrl     Brand?    @relation("BrandLogoImage")
+  category         Category?
+  categorySample   Category?  @relation("categorySampleImage", fields: [categorySampleId], references: [id])
+  categorySampleId Int?
+  publicId         String
+  url              String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  brandId          Int?      @unique
 
   @@map("product_images")
 }

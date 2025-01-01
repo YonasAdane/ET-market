@@ -17,6 +17,7 @@ import {
 } from 'app/components/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { UploadCategoryImage } from '../uploadImages';
 
 const categorySchema = z.object({
     name: z.string().min(2, { message: 'Category name must be at least 2 characters.' }),
@@ -72,19 +73,7 @@ export default function AddCategoryForm() {
                     </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="bannerImage"
-                    render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Banner Image URL</FormLabel>
-                        <FormControl>
-                        <Input placeholder="Enter banner image URL" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                    )}
-                />
+                <UploadCategoryImage name="bannerImage" form={form}/>
                 <FormField
                     control={form.control}
                     name="sampleImages"
