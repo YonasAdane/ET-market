@@ -44,7 +44,9 @@ interface ProductPageProps {
     categoryType: string;
   };
 }
-
+export function generateStaticParams(){
+  return CategoryArray.map(item=>item.toLowerCase())
+}
 export default function ProductDetailsPage({ params }: ProductPageProps) {
   // const data=await findProducts(collectionName);
   console.log(params.categoryType);

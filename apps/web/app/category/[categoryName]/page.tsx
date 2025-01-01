@@ -7,9 +7,9 @@ import { CategoryArray } from 'app/lib/consts';
 import { findProducts, findProductsBrand } from 'app/lib/fetchers/product';
 import { CategoryType } from "../../lib/types";
 
-// export function generateStaticParams(){
-//   return CategoryArray.map(item=>item.toLowerCase())
-// }
+export function generateStaticParams(){
+  return CategoryArray.map(item=>item.toLowerCase())
+}
 export default async function  Collections({ params,searchParams }: { params: { categoryName: string },searchParams:string }) {
   const { categoryName } = params;
   const data=await findProducts(categoryName,searchParams);

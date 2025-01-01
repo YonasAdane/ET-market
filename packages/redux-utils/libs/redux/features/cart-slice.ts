@@ -39,14 +39,20 @@ const cart=createSlice({
     name:"cart",
     initialState,
     reducers:{
-        addToCart:(state, action)=>{
-            const itemInCart=state.cartItem.findIndex((item)=>item.id===action.payload.id);
-            if(itemInCart && state.cartItem[itemInCart]){
-                state.cartItem[itemInCart].quantity=state.cartItem[itemInCart].quantity+1
-                state.total=state.total+1
-            }else{
-                state.cartItem.push({...action.payload,quantity:1});
-                state.total=state.total+1
+        addToCart: (state, action) => {
+            const itemInCart = state.cartItem.findIndex((item) => item.id === action.payload.id);
+        
+            if (itemInCart !== -1) {
+                // TypeScript still complains, so explicitly handle the possibility
+                const existingItem = state.cartItem[itemInCart];
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                    state.total += 1;
+                }
+            } else {
+                // Item not found, add to cart
+                state.cartItem.push({ ...action.payload, quantity: 1 });
+                state.total += 1;
             }
         },
         removeItem: (state, action) => {
