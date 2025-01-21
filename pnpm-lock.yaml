@@ -263,6 +263,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.0(react@19.0.0-rc-f994737d14-20240522))
+      '@prisma/client':
+        specifier: ^5.18.0
+        version: 5.18.0(prisma@5.18.0)
       '@radix-ui/react-label':
         specifier: ^2.1.0
         version: 2.1.0(@types/react-dom@18.2.19)(@types/react@18.2.61)(react-dom@19.0.0-rc-f994737d14-20240522(react@19.0.0-rc-f994737d14-20240522))(react@19.0.0-rc-f994737d14-20240522)
@@ -594,7 +597,7 @@ importers:
         version: 11.1.14
       table:
         specifier: github:tanstack/react-table
-        version: git+https://git@github.com:tanstack/react-table.git#5de072913cb73bec7e99512090b4cc393f0153ae
+        version: git+https://git@github.com:tanstack/react-table.git#190c66906e8f2b444f86bbf69e50183cb23e65e2
       tailwind-merge:
         specifier: ^2.4.0
         version: 2.4.0
@@ -8073,8 +8076,8 @@ packages:
     resolution: {integrity: sha512-L1dapNV6vu2s/4Sputv8xGsCdAVlb5nRDMFU/E27D44l5U6cw1g0dGd45uLc+OXjNMmF4ntiMdCimzcjFKQI8Q==}
     engines: {node: ^14.18.0 || >=16.0.0}
 
-  table@git+https://git@github.com:tanstack/react-table.git#5de072913cb73bec7e99512090b4cc393f0153ae:
-    resolution: {commit: 5de072913cb73bec7e99512090b4cc393f0153ae, repo: git@github.com:tanstack/react-table.git, type: git}
+  table@git+https://git@github.com:tanstack/react-table.git#190c66906e8f2b444f86bbf69e50183cb23e65e2:
+    resolution: {commit: 190c66906e8f2b444f86bbf69e50183cb23e65e2, repo: git@github.com:tanstack/react-table.git, type: git}
     version: 0.0.0
 
   tailwind-merge@2.4.0:
@@ -18059,7 +18062,7 @@ snapshots:
       '@pkgr/utils': 2.4.2
       tslib: 2.6.3
 
-  table@git+https://git@github.com:tanstack/react-table.git#5de072913cb73bec7e99512090b4cc393f0153ae: {}
+  table@git+https://git@github.com:tanstack/react-table.git#190c66906e8f2b444f86bbf69e50183cb23e65e2: {}
 
   tailwind-merge@2.4.0: {}
 

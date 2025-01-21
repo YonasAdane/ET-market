@@ -1,8 +1,11 @@
 {
   "name": "@repo/database",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "build": "tsc",
     "db:generate": "prisma generate",
     "db:push": "prisma db push --skip-generate"
   },

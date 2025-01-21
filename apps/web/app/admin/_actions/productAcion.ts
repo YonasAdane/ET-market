@@ -3,7 +3,7 @@
 import { CategoryType } from "@repo/database/index";
 import { db } from "app/lib/config/prisma-config";
 import { uploadToCloudinary } from "app/lib/config/uploadtoCloud";
-import { accessoriesSchema, bagsSchema, clothingSchema, footwearSchema, jewellerySchema, outerwearSchema, ProductType, underwearSchema, watchesSchema } from "app/lib/types/product";
+import { accessoriesSchema, bagsSchema, clothingSchema, footwearSchema, jewellerySchema, outerwearSchema, underwearSchema, watchesSchema } from "app/lib/types/product";
 import { z } from "zod";
 interface ImageType{
         publicId:string

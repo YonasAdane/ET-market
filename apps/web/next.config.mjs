@@ -9,9 +9,7 @@ const nextConfig = {
           "https://res.cloudinary.com"
         ],
       },
-    // experimental:{
-    //   serverExternalPackages: ['@prisma/client'],
-    // }
+      transpilePackages: ["@repo/database"], // Ensure the database package is transpiled
 };
 
 export default nextConfig;
