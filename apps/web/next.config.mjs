@@ -9,7 +9,10 @@ const nextConfig = {
           "https://res.cloudinary.com"
         ],
       },
-      transpilePackages: ["@repo/database"], // Ensure the database package is transpiled
+      transpilePackages: [
+        "@repo/database",
+        "@prisma/client",
+      ], // Ensure the database package is transpiled
 };
 
 export default nextConfig;

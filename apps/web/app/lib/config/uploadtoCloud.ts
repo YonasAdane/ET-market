@@ -1,6 +1,8 @@
+"use server"
+import { UploadApiResponse } from 'cloudinary';
 import cloudinary from './cloudinary';
 
-export async function uploadToCloudinary(file:File,path:string) {
+export async function uploadToCloudinary(file: File, path: string): Promise<UploadApiResponse> {
     
     const arrayBuffer = await file.arrayBuffer();
     const buffer = new Uint8Array(arrayBuffer)
@@ -13,7 +15,7 @@ export async function uploadToCloudinary(file:File,path:string) {
                     reject(error)
                     return;
                 }
-                resolve(result)
+                resolve(result as UploadApiResponse);
             }).end(buffer)
     })
 }

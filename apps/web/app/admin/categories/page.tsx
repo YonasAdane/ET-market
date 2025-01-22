@@ -1,18 +1,18 @@
-"use client"
-import { useState } from 'react'
+// "use client"
+// import { useState } from 'react'
 
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Pencil, Trash } from 'lucide-react'
+import { getCategories } from '../_actions/categoryAction'
 import AddCategoryForm from "../_components/form-elements/add-category"
-export default function CategoriesPage() {
-    const mockCategories = [
-        { id: 1, name: 'Shoes', description: 'Footwear for all occasions', bannerImage: 'https://example.com/shoes-banner.jpg' },
-        { id: 2, name: 'Apparel', description: 'Clothing for men and women', bannerImage: 'https://example.com/apparel-banner.jpg' },
-      ]
 
-              
-  return (
+
+
+export default async function CategoriesPage() {
+    const allCategories = await getCategories();
+
+    return (
     <div className="container mx-auto p-6 ">
         <h1 className="text-3xl font-bold mb-6">Categories</h1>
         <div className="space-y-4">
@@ -29,13 +29,13 @@ export default function CategoriesPage() {
                         </TableRow>
                         </TableHeader>
                         <TableBody>
-                        {mockCategories.map((category) => (
+                        {allCategories.map((category) => (
                             <TableRow key={category.id}>
                             <TableCell>{category.name}</TableCell>
                             <TableCell>{category.description}</TableCell>
                             <TableCell>
-                                {category.bannerImage && (
-                                <img src={category.bannerImage} alt={`${category.name} banner`} className="w-20 h-10 object-cover" />
+                                {category.bannerImageId && (
+                                <img src={`${category.bannerImage?.url}`} alt={`${category.name} banner`} className="w-20 h-10 object-cover" />
                                 )}
                             </TableCell>
                             <TableCell>

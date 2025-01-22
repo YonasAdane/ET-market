@@ -31,16 +31,22 @@ export async function createProduct(ParsedData:watchType){
     const schema = schemas[ParsedData.categoryType];
     if (!schema) throw new Error('Invalid categoryType');
     
-    // const parsedData = schema.parse(ParsedData);
-    // console.log("backend parsedData",ParsedData);
 
-    
-    const uploadedFiles:ImageType[]=[];
-    for(const file of ParsedData.images){
-        const result=await uploadToCloudinary(file,"product-pictures") as ImageType;
-        
-        uploadedFiles.push(result)
+    const uploadedFiles = [];
+    for (const file of ParsedData.images) {
+        const result = await uploadToCloudinary(file, "product-pictures");
+
+        // Ensure the result conforms to the expected Prisma schema
+        uploadedFiles.push({
+            publicId: result.publicId, // Ensure this field exists in result
+            url: result.url,
+            format: result.format,
+            width: result.width,
+            height: result.height,
+            bytes: result.bytes,
+        });
     }
+
     // Example using Prisma Client
     const AddedFiles = await db.product.create({
       data: {
@@ -53,7 +59,8 @@ export async function createProduct(ParsedData:watchType){
         },
         categoryType: ParsedData.categoryType as CategoryType,
         images: {
-          create: uploadedFiles, // Array of images to create
+          create: 
+          uploadedFiles, // Array of images to create
         },
       },
     });

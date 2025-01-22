@@ -30,13 +30,14 @@ model User {
 
 model Category {
   id            Int       @id @default(autoincrement())
-  name          String
+  name          String    @unique
   description   String?
   bannerImage   Image?    @relation(fields: [bannerImageId], references: [id])
   sampleImages  Image[]   @relation("categorySampleImage")
   products      Product[] @relation("CategoryProducts")
   bannerImageId Int?      @unique
-
+  // bannerSampleId Int
+  // sampleImagesId   Int[]
   @@map("categories")
 }
 
@@ -46,7 +47,7 @@ model Brand {
   description String?
   BannerImage Image[]   @relation("BrandBannerImage")
   brandImage  Image[]   @relation("BrandBrandImage")
-  // @relation("BrandBrandImage",fields: [brandImageId], references: [id])  
+  // @relation("BrandBrandImage",fields: [brandImageId], references: [id])
   logoImage   Image?    @relation("BrandLogoImage", fields: [brandLogoId], references: [id])
   products    Product[] @relation("BrandProducts")
   // brandImageId       Int?  @unique
