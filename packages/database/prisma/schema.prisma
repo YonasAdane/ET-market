@@ -43,7 +43,7 @@ model Category {
 
 model Brand {
   id          Int       @id @default(autoincrement())
-  name        String
+  name        String    @unique
   description String?
   BannerImage Image[]   @relation("BrandBannerImage")
   brandImage  Image[]   @relation("BrandBrandImage")

@@ -6,10 +6,10 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Upload } from "lucide-react";
 import { useState } from "react";
 import Cropper, { Area, Point } from "react-easy-crop";
-import { FieldValues } from "react-hook-form"
+import { FieldValues } from "react-hook-form";
 
 
-export  function UploadProductImage ({form,...props}: FieldValues){
+export  function UploadMultipleImage ({form,...props}: FieldValues){
     const [images, setImages] = useState<File[]>([]);
     const [imageUrl,setImageUrl]=useState<string[]>([])
    
@@ -19,7 +19,7 @@ export  function UploadProductImage ({form,...props}: FieldValues){
             return;
         }
         if (event.target.files) {
-            const fileArray = Array.from(event.target.files); // Convert FileList to an array
+            const fileArray = Array.from(event.target.files); 
             setImages((prevImages) => [...prevImages, ...fileArray]);
           }
         for (let i = 0; i < files.length; i++) {
@@ -31,7 +31,7 @@ export  function UploadProductImage ({form,...props}: FieldValues){
     return (
 
     <Card className="overflow-hidden border-none bg-muted/50" >
-        <h2 className="m-5">{"Product"} Images</h2>
+        <h2 className="m-5">{props.description}</h2>
         <CardContent>
         <div className="grid gap-2">
             <img
@@ -102,14 +102,14 @@ export  function UploadProductImage ({form,...props}: FieldValues){
     )
 }
 
-export  function UploadCategoryImage ({form,...props}: FieldValues){
+export  function UploadSingleImage ({form,...props}: FieldValues){
     const [images, setImages] = useState<File>();
     const [imageUrl,setImageUrl]=useState<string>('')
    
     function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
         if (event.target.files) {
             const files = event.target.files;
-            const fileArray = Array.from(event.target.files); // Convert FileList to an array
+            const fileArray = Array.from(event.target.files); 
             setImages(fileArray[0])
             //@ts-ignore
             setImageUrl(URL.createObjectURL(files[0]))
@@ -118,7 +118,7 @@ export  function UploadCategoryImage ({form,...props}: FieldValues){
 
     return (
     <Card className="overflow-hidden border-none " >
-        <h3 className="p-1 text-sm">{"Category"} Image</h3>
+        <h3 className="p-1 px-5 text-sm">{props.description}</h3>
         <CardContent>
         <div className="grid gap-2">
             <img
@@ -136,7 +136,6 @@ export  function UploadCategoryImage ({form,...props}: FieldValues){
                 <FormItem>
                   <FormLabel  className="cursor-pointer hover:bg-foreground/10 ease-in duration-100 flex py-2 w-full items-center justify-center rounded-md border border-dashed ml-auto">
                     Upload
-                    {/* <Upload className="h-4 w-4 text-muted-foreground" /> */}
                     <span className="sr-only">Upload</span>
                   </FormLabel>
                   <FormControl>

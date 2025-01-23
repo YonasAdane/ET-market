@@ -1,30 +1,27 @@
 
 "use client";
-import { Input } from '@/components/ui/input'
-import { filterProduct } from '@/lib/constants'
-import ToggleGroupComponent from './toggle-group'
-import Gender from './gender'
-import Size from './size'
-import { Button } from '@/components/ui/button';
-import { CalendarDays, Check, ChevronsUpDown } from 'lucide-react';
-import ImageNcategory from './imageNcategory';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
-import z from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Textarea } from '@/components/ui/textarea';
-import ToogleElement from './toggle-element';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { UploadProductImage } from '../uploadImages';
-import { outerwearSchema } from 'app/lib/types/product';
-import { Spinner } from '../spinnerLoader';
-import { cn } from '@/lib/utils';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { filterProduct } from '@/lib/constants';
+import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { createProduct } from 'app/admin/_actions/productAcion';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
+import { outerwearSchema } from 'app/lib/types/product';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
+import { Spinner } from '../spinnerLoader';
+import { UploadMultipleImage } from '../uploadImages';
+import Gender from './gender';
+import ToogleElement from './toggle-element';
 
 export default function AddOuterwearForm() {
     const [open, setOpen] = useState(false)
@@ -395,7 +392,7 @@ export default function AddOuterwearForm() {
                 </div>            
             </div>
             </div>
-            <UploadProductImage name="images" label='picture' form={form} description='product image' />
+            <UploadMultipleImage name="images" label='picture' form={form} description='product image' />
 
         </div>
     </form>

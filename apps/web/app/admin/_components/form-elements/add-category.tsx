@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from 'app/components/form';
-import { UploadCategoryImage } from '../uploadImages';
+import { UploadSingleImage } from '../uploadImages';
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
@@ -128,7 +128,7 @@ export default function AddCategoryForm() {
                     </FormItem>
                     )}
                 />
-                <UploadCategoryImage name="bannerImage" form={form}/>
+                <UploadSingleImage name="bannerImage" description="Banner Picture" form={form}/>
                 <FormField
                         control={form.control}
                         name="sampleImages"

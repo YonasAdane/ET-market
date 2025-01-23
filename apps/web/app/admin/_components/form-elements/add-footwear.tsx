@@ -1,24 +1,23 @@
  "use client";
-import { Input } from '@/components/ui/input'
-import Gender from './gender'
-import { Button } from '@/components/ui/button';
-import {  Check, Upload } from 'lucide-react';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
-import z from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Textarea } from '@/components/ui/textarea';
-import ToogleElement from './toggle-element';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent } from '@/components/ui/card';
-import { useState } from 'react';
-import { footwearSchema } from 'app/lib/types/product';
-import { Spinner } from '../spinnerLoader';
+import { Button } from '@/components/ui/button';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { createProduct } from 'app/admin/_actions/productAcion';
-import { UploadProductImage } from '../uploadImages';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
+import { footwearSchema } from 'app/lib/types/product';
+import { Check } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
+import { Spinner } from '../spinnerLoader';
+import { UploadMultipleImage } from '../uploadImages';
+import Gender from './gender';
+import ToogleElement from './toggle-element';
 
 export default function AddFootwearForm() {
     const [images, setImages] = useState<File[]>([]);
@@ -359,7 +358,7 @@ export default function AddFootwearForm() {
                 </div>  
             </div>
             </div>
-            <UploadProductImage name="images" label='picture' form={form} description='product image' />
+            <UploadMultipleImage name="images" label='picture' form={form} description='product image' />
         </div>
     </form>
 </Form>

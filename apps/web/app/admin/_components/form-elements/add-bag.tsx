@@ -1,24 +1,23 @@
 "use client";
-import Size from './size'
-import Gender from './gender'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button';
-import { Check, Upload } from 'lucide-react';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
-import z from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Textarea } from '@/components/ui/textarea';
-import ToogleElement from './toggle-element';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MultiSelect } from '@/components/multi-select';
-import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { bagsSchema } from 'app/lib/types/product';
-import { createProduct } from 'app/admin/_actions/productAcion';
-import { Spinner } from '../spinnerLoader';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { UploadProductImage } from '../uploadImages';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { createProduct } from 'app/admin/_actions/productAcion';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
+import { bagsSchema } from 'app/lib/types/product';
+import { Check } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
+import { Spinner } from '../spinnerLoader';
+import { UploadMultipleImage } from '../uploadImages';
+import Gender from './gender';
+import Size from './size';
+import ToogleElement from './toggle-element';
 
 
 export default function AddBagForm() {
@@ -270,7 +269,7 @@ export default function AddBagForm() {
                     </div> 
                 </div>
             </div>
-            <UploadProductImage name="images" label='picture' form={form} description='product image' />
+            <UploadMultipleImage name="images" label='picture' form={form} description='product image' />
         </div>
     </form>
 </Form>

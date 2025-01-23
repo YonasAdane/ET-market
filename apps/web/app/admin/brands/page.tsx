@@ -1,25 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Pencil, Trash } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Pencil, Trash } from 'lucide-react'
-import { Card } from '@/components/ui/card'
+import CreateBrandForm from '../_components/form-elements/add-brand'
 
 // Zod schemas for form validation
 const brandSchema = z.object({
@@ -100,6 +89,7 @@ export default function AdminDashboard() {
             </Table>
           </div>
           <Card className='p-5'>
+            <CreateBrandForm/>
             {/* <Form {...brandForm}>
                 <form onSubmit={brandForm.handleSubmit(onBrandSubmit)} className="space-y-4">
                 <FormField

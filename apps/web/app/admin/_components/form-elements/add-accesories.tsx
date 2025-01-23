@@ -1,23 +1,22 @@
 "use client";
-import Size from './size'
-import Gender from './gender'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button';
-import { Check, Upload } from 'lucide-react';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
-import z from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MultiSelect } from '@/components/multi-select';
-import { accessoriesSchema } from 'app/lib/types/product';
-import { Spinner } from '../spinnerLoader';
-import { Card, CardContent } from '@/components/ui/card';
-import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { createProduct } from 'app/admin/_actions/productAcion';
-import { UploadProductImage } from '../uploadImages';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
+import { accessoriesSchema } from 'app/lib/types/product';
+import { Check } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
+import { Spinner } from '../spinnerLoader';
+import { UploadMultipleImage } from '../uploadImages';
+import Gender from './gender';
+import Size from './size';
 
   export default function AddAccesoryForm() {
     const [images, setImages] = useState<File[]>([]);
@@ -269,7 +268,7 @@ import { UploadProductImage } from '../uploadImages';
                 </div>            
             </div>
             </div>
-            <UploadProductImage name="images" label='picture' form={form} description='product image' />
+            <UploadMultipleImage name="images" label='picture' form={form} description='product image' />
         </div>
     </form>
 </Form>
