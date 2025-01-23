@@ -18,26 +18,43 @@ async function uploadImageToCloudinary(image: File, folder: string) {
     }
 }
 
-export async function createBrand(name: string, description?: string, logo?: File) {
+export async function createBrand(name: string, BannerImage:File[],brandImage:File[], description?: string,logo?: File) {
     if (!name) {
         throw new Error("Brand name is required");
     }
 
-    const existingBrand = await db.brand.findUnique({ where: { name } });
+    const existingBrand = await db.brand.findFirst({ where: { name } });
     if (existingBrand) {
         throw new Error("Brand with this name already exists");
     }
 
-    let uploadedLogo = null;
+    let uploadedLogo,uploadedBannerImage,uploadedbrandImage = null;
     let brand;
     if (logo) {
         uploadedLogo = await uploadImageToCloudinary(logo, "brand_logos");
     }
+    try {
+        uploadedBannerImage = await Promise.all(
+            BannerImage.map(img => uploadImageToCloudinary(img, "banner-images"))
+        );
+        uploadedbrandImage = await Promise.all(
+            brandImage.map(img => uploadImageToCloudinary(img, "banner-images"))
+        );
+    } catch (error) {
+        throw new Error("uploadedBannerImage and uploadedbrandImage are required")
+    }
+
     if(uploadedLogo){
         brand = await db.brand.create({
             data: {
                 name,
                 description,
+                BannerImage: {
+                    connect: uploadedBannerImage.map((img:{id:number}) => ({ id: img.id }))
+                },
+                brandImage: {
+                    connect: uploadedbrandImage.map((img:{id:number}) => ({ id: img.id }))
+                },
                 logoImage: {connect:{id:uploadedLogo.id},}
             }
         }); 
@@ -46,6 +63,12 @@ export async function createBrand(name: string, description?: string, logo?: Fil
             data: {
                 name,
                 description,
+                BannerImage: {
+                    connect: uploadedBannerImage.map((img:{id:number}) => ({ id: img.id }))
+                },
+                brandImage: {
+                    connect: uploadedbrandImage.map((img:{id:number}) => ({ id: img.id }))
+                },
             }
         });
     }
@@ -55,7 +78,7 @@ export async function createBrand(name: string, description?: string, logo?: Fil
 }
 
 export async function getBrands() {
-    return await db.brand.findMany({ include: { logoImage: true } });
+    return await db.brand.findMany({ include: { logoImage: true,BannerImage:true,_count:true } });
 }
 
 export async function getBrandById(id: number) {
