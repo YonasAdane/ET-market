@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createBrand } from "app/admin/_actions/brandAction";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import { useState } from 'react';
 import { Area, Point } from 'react-easy-crop';
@@ -28,7 +29,6 @@ const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/web
       (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
       "Only .jpg, .jpeg, .png and .webp formats are supported."
     ),),
-    desktopBannerImage:z.array(z.string()),
     logoImage:z.any()
     .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
     .refine(
@@ -56,9 +56,16 @@ export default function CreateBrandForm() {
   return (
     <div >
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(addBrand)}>
+            <form onSubmit={form.handleSubmit(async data=>await createBrand(
+                                data.name,
+                                data.BannerImage,
+                                data.brandImage,
+                                data.description,
+                                data.logoImage)
+            )}>
                 <div className=" w-full gap-5 mx-auto ">
                     <div className="col-span-2 space-y-3">
+                        <h2 className="text-xl">Add brand</h2>
                         <FormField
                             name="name"
                             control={form.control}
