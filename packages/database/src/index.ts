@@ -1,8 +1,9 @@
-import { $Enums, Prisma, PrismaClient } from "@prisma/client";
+import type { CategoryType as PrismaCategoryType } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 // Export the CategoryType enum type
-export type CategoryType = $Enums.CategoryType;
+export type CategoryType = PrismaCategoryType;
 
 // Export PrismaClient for use in other files
-export { $Enums, Prisma, PrismaClient };
+export { Prisma, PrismaClient };
 
