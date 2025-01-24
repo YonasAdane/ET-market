@@ -15,17 +15,18 @@
     "prisma": "^5.18.0",
     "typescript": "^5.5.4"
   },
-"exports": {
-  "./index": {
-    "types": "./src/index.ts",
-    "default": "./dist/index.js"
+  "exports": {
+    "./index": {
+      "types": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./src/index": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
   },
-  "./src/index": {
-    "types": "./src/index.ts",
-    "default": "./src/index.ts"
-  }
-},
   "dependencies": {
-    "@prisma/client": "^5.18.0"
+    "@prisma/client": "^5.18.0",
+    "@tanstack/react-table": "^8.20.6"
   }
 }

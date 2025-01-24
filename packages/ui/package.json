@@ -62,6 +62,7 @@
     "@radix-ui/react-tooltip": "^1.1.2",
     "@react-hook/window-size": "^3.1.1",
     "@repo/redux-utils": "workspace:*",
+    "@tanstack/react-table": "^8.20.6",
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
