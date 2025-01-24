@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createProduct } from 'app/admin/_actions/productAcion';
+import { createProduct } from 'app/admin/_actions/productAction';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import { bagsSchema } from 'app/lib/types/product';
 import { Check } from 'lucide-react';

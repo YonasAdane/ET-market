@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { filterProduct } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createProduct } from 'app/admin/_actions/productAcion';
+import { createProduct } from 'app/admin/_actions/productAction';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import { outerwearSchema } from 'app/lib/types/product';
 import { Check, ChevronsUpDown } from 'lucide-react';

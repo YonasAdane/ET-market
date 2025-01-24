@@ -1,28 +1,23 @@
 "use client";
-import { Input } from '@/components/ui/input'
-import { filterProduct } from '@/lib/constants'
-import ToggleGroupComponent from './toggle-group'
-import Gender from './gender'
-import Size from './size'
-import { Button } from '@/components/ui/button';
-import { Check, Upload } from 'lucide-react';
-import ImageNcategory from './imageNcategory';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
-import z from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Textarea } from '@/components/ui/textarea';
-import ToogleElement from './toggle-element';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MultiSelect } from '@/components/multi-select';
-import { CategoryType } from 'app/lib/types/product';
-import UploadImage from './upload-image';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { useRef, useState } from 'react';
-import { createProduct } from 'app/admin/_actions/productAcion';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ListBrands } from 'app/admin/_actions/listBrandsAction';
+import { createProduct } from 'app/admin/_actions/productAction';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
+import { CategoryType } from 'app/lib/types/product';
+import { Check, Upload } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
 import { Spinner } from '../spinnerLoader';
+import Size from './size';
 const fileSizeLimit = 5 * 1024 * 1024; // 5MB
 const watchesSchema = z.object({
     name: z.string().min(1),
@@ -82,20 +77,9 @@ export default function AddWatchForm() {
             setImages((prevImages) => [...prevImages, ...fileArray]);
           }
         for (let i = 0; i < files.length; i++) {
-
-            // if(files[i].type.split("/")[0] !== 'image') continue;
-
-            // if (!images.some((e) => e.name === files[i].name)) {
-            //     setImages((prevImages) => [
-            //         ...prevImages,
-            //             files[i]
-            //     ]
-            // )
             if(files[i]){
                 setImageUrl((prevUrls)=>[...prevUrls,URL.createObjectURL(files[i]!)])
-
             }
-            // }
         }
     }
     
@@ -206,11 +190,7 @@ export default function AddWatchForm() {
                                             <SelectValue placeholder="Select Brand"/>
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectGroup>
-                                                <SelectLabel>Brands of Products</SelectLabel>
-                                                <SelectItem value="1">ROLEX</SelectItem>
-                                                <SelectItem value="2">CASIO</SelectItem>
-                                            </SelectGroup>
+                                            <ListBrands/>
                                         </SelectContent>
                                     </Select>
                                 </FormControl>

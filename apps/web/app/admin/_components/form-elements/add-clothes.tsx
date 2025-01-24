@@ -1,26 +1,25 @@
 "use client";
-import Size from './size'
-import Gender from './gender'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button';
-import { Check, Upload } from 'lucide-react';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
-import z from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Textarea } from '@/components/ui/textarea';
-import { clothingSchema } from 'app/lib/types/product';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { filterProduct } from 'app/lib/consts';
-import {  ChevronsUpDown } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList} from "@/components/ui/command"
-import { Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
-import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import { MultiSelect } from '@/components/multi-select';
-import { createProduct } from 'app/admin/_actions/productAcion';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { cn } from "@/lib/utils";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { createProduct } from 'app/admin/_actions/productAction';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
+import { filterProduct } from 'app/lib/consts';
+import { clothingSchema } from 'app/lib/types/product';
+import { Check, ChevronsUpDown, Upload } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import z from 'zod';
 import { Spinner } from '../spinnerLoader';
+import Gender from './gender';
+import Size from './size';
  
 export default function AddClothForm() {
     const [open, setOpen] = useState(false)
