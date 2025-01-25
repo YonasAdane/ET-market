@@ -1,10 +1,10 @@
 "use client";
-import { useState, useEffect } from "react";
-import { ShoppingCart, LayoutDashboard, UsersRound, Settings, ChevronRight, ShoppingBag, Award, Tag } from "lucide-react";
-import { useWindowWidth } from "@react-hook/window-size";
-import { Nav } from "../nav";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useWindowWidth } from "@react-hook/window-size";
+import { Award, ChevronRight, LayoutDashboard, Settings, ShoppingBag, ShoppingCart, Tag, UsersRound } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Nav } from "../nav";
 
 export default function SideNavbar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -25,7 +25,7 @@ export default function SideNavbar() {
   }
 
   return (
-    <div className={cn("group  relative min-w-[200px] border-r px-3  pb-10 pt-14 ",isCollapsed&&"min-w-fit")}>
+    <div className={cn("group h-screen relative min-w-[200px] border-r px-3  pb-10 pt-14 ",isCollapsed&&"min-w-fit")}>
         <h2 className="text-center font-bold text-xl mb-5">Et-market</h2>
         <div className="h-0 border "></div>
       {!mobileWidth && (

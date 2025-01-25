@@ -12,10 +12,11 @@ export function generateStaticParams(){
 }
 export default async function  Collections({ params,searchParams }: { params: { categoryName: string },searchParams:string }) {
   const { categoryName } = params;
-  const data=await findProducts(categoryName,searchParams);
-  const brandsNcategory=await findProductsBrand(categoryName);
-  console.log("BrandsNcategory",brandsNcategory);
-  
+  const [data, brandsNcategory] = await Promise.all([
+    findProducts(categoryName, searchParams),
+    findProductsBrand(categoryName)
+  ]);
+
   return (
     <>
       <Navigation categoryArray={CategoryArray}/>

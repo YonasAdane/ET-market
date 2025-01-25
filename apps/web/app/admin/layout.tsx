@@ -15,8 +15,9 @@ export default function AdminLayout({
                 disableTransitionOnChange
               >
             <main className="min-h-screen w-full  flex">
-              <SideNavbar />
-
+              <aside className="sticky top-0 h-screen">
+                <SideNavbar />
+              </aside>
               <div className=" w-full">{children}</div>
             </main>
         </ThemeProvider>

@@ -9,19 +9,32 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from "@/lib/utils";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createProduct } from 'app/admin/_actions/productAction';
+import { getCategories } from 'app/admin/_actions/categoryAction';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import { filterProduct } from 'app/lib/consts';
 import { clothingSchema } from 'app/lib/types/product';
 import { Check, ChevronsUpDown, Upload } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
+import { createProduct } from "../../_actions/productAction";
 import { Spinner } from '../spinnerLoader';
 import Gender from './gender';
 import Size from './size';
  
 export default function AddClothForm() {
+    const [categoryArray,setCategoryArray]=useState<{label:string,value:string}[] >();
+    useEffect(()=>{
+        getCategories()
+        .then(res=>{
+            const categories=res.map((category)=>({
+                label:category.name,
+                value:`${category.id}`
+            }));
+        setCategoryArray(categories);
+        })
+        .catch(e=>console.log(e))
+    },[]);
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
 
@@ -72,7 +85,7 @@ export default function AddClothForm() {
 <Form {...form}>
     <form onSubmit={form.handleSubmit(async data=>await createProduct(data))}>
         <div className='w-full grid grid-cols-3 gap-5 h-full '>
-            <div className="col-span-2 bg-muted/50 rounded-lg p-5">
+            <div className="col-span-2 bg-muted/50 overflow-scroll rounded-lg p-5">
                 <h2>General Information</h2>
                 <FormField
                 name="name"
@@ -316,6 +329,7 @@ export default function AddClothForm() {
                             <FormControl>
                                 <MultiSelect
                                 options={
+                                    categoryArray?categoryArray:
                                     [
                                         {label:'clothing',value:"1"},
                                         {label:'footwear',value:"2"},
@@ -325,7 +339,8 @@ export default function AddClothForm() {
                                         {label:'outerwear',value:"6"},
                                         {label:'watches',value:"7"},
                                         {label:'underwear',value:"8"},
-                                    ]}
+                                    ]
+                                }
                                 onValueChange={field.onChange}
                                 //   defaultValue={field.value}
                                 placeholder="Select options"
@@ -414,7 +429,7 @@ export default function AddClothForm() {
                     </div>         
                 </div>
             </div>
-                <Card className="overflow-hidden border-none bg-muted/50" >
+                <Card className="h-fit border-none bg-muted/50" >
                     <h2 className="m-5">{"Product"} Images</h2>
                     <CardContent>
                     <div className="grid gap-2">

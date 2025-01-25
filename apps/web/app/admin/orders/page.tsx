@@ -13,11 +13,10 @@
 /** @format */
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
-import React from "react";
 import { cn } from "@/lib/utils";
 import { DataTable } from "@/widgets/adminComponents/DataTable";
 import PageTitle from "@/widgets/adminComponents/PageTitle";
+import { ColumnDef } from "@tanstack/react-table";
 
 type Props = {};
 type Payment = {
