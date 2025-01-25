@@ -7,7 +7,9 @@ import z from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { CategoryType, CategoryType as PrismaCategoryType } from '@repo/database/index';
 import { createCategory } from 'app/admin/_actions/categoryAction';
 import {
   Form,
@@ -19,12 +21,22 @@ import {
   FormMessage,
 } from 'app/components/form';
 import { UploadSingleImage } from '../uploadImages';
-const MAX_FILE_SIZE = 5000000;
+const MAX_FILE_SIZE = 10000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-
+const categoryTypes:PrismaCategoryType[]=[
+  'CLOTHING',
+  'FOOTWEAR',
+  'ACCESSORY',
+  'BAG',
+  'OUTERWEAR',
+  'JEWELLERY',
+  'WATCH',
+  'UNDERWEAR'
+]
 const categorySchema = z.object({
   name: z.string().min(2, { message: 'Category name must be at least 2 characters.' }),
   description: z.string(),
+  categoryType:z.string(),
   bannerImage:  z.any()
   .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
   .refine(
@@ -48,34 +60,17 @@ export default function AddCategoryForm() {
   const [imageUrl,setImageUrl]=useState<string[]>([])
  
     type categoryType= z.infer<typeof categorySchema>;
-    const mockCategories = [
-        { id: 1, name: 'Shoes', description: 'Footwear for all occasions', bannerImage: 'https://example.com/shoes-banner.jpg' },
-        { id: 2, name: 'Apparel', description: 'Clothing for men and women', bannerImage: 'https://example.com/apparel-banner.jpg' },
-      ]
-      const [categories, setCategories] = useState(mockCategories)
       const form = useForm<categoryType>({
         resolver: zodResolver(categorySchema),
-       
-      })
-      async function onCategorySubmit(values: categoryType) {
-        try {
-            // Call your server action to create the category
-            "use server"
-            const category = await createCategory(
-                values.name,
-                values.description,
-                values.bannerImage,
-                values.sampleImages
-            );
-
-            // Handle success (e.g., show a success message or reset form)
-            console.log('Category created:', category);
-            form.reset(); // Reset the form after submission
-
-        } catch (error) {
-            console.error('Error creating category:', error);
+        defaultValues:{
+          name:"",
+          description:"",
+          categoryType:"CLOTHING",
+          bannerImage:null,
+          sampleImages:[]
         }
-    }
+      })
+      
     function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
       const files = event.target.files;
       console.log("onFileSelect files: ",files );
@@ -98,6 +93,7 @@ export default function AddCategoryForm() {
         <Form {...form}>
             <form onSubmit={form.handleSubmit(
               async data=>await createCategory(
+                data.categoryType as CategoryType,
                 data.name,
                 data.description,
                 data.bannerImage,
@@ -128,6 +124,35 @@ export default function AddCategoryForm() {
                     </FormItem>
                     )}
                 />
+                {JSON.stringify(form.formState.errors)}
+                <FormField
+                    name="categoryType"
+                    control={form.control}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm">Category Type</FormLabel>
+                        <FormControl>
+                          <Select onValueChange={field.onChange} value={field.value}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select Category" />
+                            </SelectTrigger>
+                            <SelectContent className="mb-5">
+                              <SelectGroup>
+                                <SelectLabel>Categories of Products</SelectLabel>
+                                {categoryTypes.map((Category) => (
+                                  <SelectItem key={Category} value={Category} className="uppercase">
+                                    {Category}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                 <UploadSingleImage name="bannerImage" description="Banner Picture" form={form}/>
                 <FormField
                         control={form.control}

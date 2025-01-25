@@ -1,11 +1,11 @@
-import Image from "next/image"
-import Link from "next/link"
 import {
   ListFilter,
   MoreHorizontal,
   PlusCircle,
   Search,
 } from "lucide-react"
+import Image from "next/image"
+import Link from "next/link"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -36,11 +36,12 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { CategoryArray } from "app/lib/consts"
+import { getProducts } from "../_actions/productAction"
 
 export default async function Products() {
-  // const data=await findProducts(collectionName);
-  // const brandsNcategory=await findProductsBrand(collectionName);
-
+  const data=await getProducts();
+  console.log("Data is :",data);
+  
   return (
       <div className="flex min-h-screen w-full  bg-muted/40 flex-col sm:gap-4 sm:py-4">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -139,12 +140,12 @@ export default async function Products() {
                           <span className="sr-only">Image</span>
                         </TableHead>
                         <TableHead>Name</TableHead>
-                        <TableHead>Status</TableHead>
+                        <TableHead>categoryType</TableHead>
                         <TableHead className="hidden md:table-cell">
                           Price
                         </TableHead>
                         <TableHead className="hidden md:table-cell">
-                          Total Sales
+                          Stock
                         </TableHead>
                         <TableHead className="hidden md:table-cell">
                           Created at
@@ -155,30 +156,32 @@ export default async function Products() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
+                      {data && data.map(product=>(
+
                       <TableRow>
                         <TableCell className="hidden sm:table-cell">
                           <Image
                             alt="Product image"
                             className="aspect-square rounded-md object-cover"
                             height="64"
-                            src="/placeholder.svg"
+                            src={product.images[0] ? product.images[0]?.url:""}
                             width="64"
                           />
                         </TableCell>
                         <TableCell className="font-medium">
-                          Laser Lemonade Machine
+                          {product.name}
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline">Draft</Badge>
+                          <Badge className="uppercase" variant="outline">{product.categoryType}</Badge>
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          $499.99
+                          {product.price}
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          25
+                          {product.stock}
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          2023-07-12 10:42 AM
+                          {product.createdAt.toString()}
                         </TableCell>
                         <TableCell>
                           <DropdownMenu>
@@ -200,6 +203,7 @@ export default async function Products() {
                           </DropdownMenu>
                         </TableCell>
                       </TableRow>
+                      ))}
                       <TableRow>
                         <TableCell className="hidden sm:table-cell">
                           <Image

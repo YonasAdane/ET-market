@@ -36,6 +36,7 @@ model Category {
   sampleImages  Image[]   @relation("categorySampleImage")
   products      Product[] @relation("CategoryProducts")
   bannerImageId Int?      @unique
+  categoryType  CategoryType
   // bannerSampleId Int
   // sampleImagesId   Int[]
   @@map("categories")

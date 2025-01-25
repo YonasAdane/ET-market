@@ -38,12 +38,12 @@ export async function createProduct(ParsedData:watchType){
 
         // Ensure the result conforms to the expected Prisma schema
         uploadedFiles.push({
-            publicId: result.publicId, // Ensure this field exists in result
-            url: result.url,
-            format: result.format,
-            width: result.width,
-            height: result.height,
-            bytes: result.bytes,
+            publicId: result.public_id, // Ensure this field exists in result
+            url: result.secure_url,
+            // format: result.format,
+            // width: result.width,
+            // height: result.height,
+            // bytes: result.bytes,
         });
     }
 
@@ -72,7 +72,10 @@ export async function createProduct(ParsedData:watchType){
     
 }
 
-
+export async function getProducts(){
+  const product=await db.product.findMany({include: { brand: true,images:true }});
+  return product;
+}
 // const AddedFiles = await db.product.create({
 //   data: {
 //     name: "Example Product",

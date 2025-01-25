@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from "@/lib/utils";
 import { zodResolver } from '@hookform/resolvers/zod';
+import { getBrands } from 'app/admin/_actions/brandAction';
 import { getCategories } from 'app/admin/_actions/categoryAction';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import { filterProduct } from 'app/lib/consts';
@@ -23,17 +24,30 @@ import Gender from './gender';
 import Size from './size';
  
 export default function AddClothForm() {
-    const [categoryArray,setCategoryArray]=useState<{label:string,value:string}[] >();
+    const [categoryArray,setCategoryArray]=useState<{label:string,value:string}[] >([]);
+    const [brandArray,setBrandArray]=useState<{label:string,value:string}[] >([]);
     useEffect(()=>{
-        getCategories()
-        .then(res=>{
-            const categories=res.map((category)=>({
-                label:category.name,
-                value:`${category.id}`
-            }));
-        setCategoryArray(categories);
-        })
-        .catch(e=>console.log(e))
+        const fetchData = async () => {
+            try {
+                const [categories,brands]=await Promise.all([ getCategories(),getBrands()])
+        
+        setCategoryArray(categories.map((category)=>({
+            label:category.name,
+            value:`${category.id}`})
+        ));
+        setBrandArray(brands.map((brand)=>({
+            label:brand.name,
+            value:`${brand.id}`})
+        ));
+        console.log(categoryArray,brandArray);
+        
+            } catch (error) {
+                console.log("error fetching data",error);
+                
+            }
+
+        }
+        fetchData();
     },[]);
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
@@ -189,8 +203,11 @@ export default function AddClothForm() {
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Brands of Products</SelectLabel>
-                                                <SelectItem value="1">Adidas</SelectItem>
-                                                <SelectItem value="2">puma</SelectItem>
+                                                {
+                                                    brandArray.length>0 && brandArray.map(brand=>(
+                                                        <SelectItem key={brand.label} value={`${brand.value}`}>{brand.label}</SelectItem>
+                                                    ))
+                                                }
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -217,9 +234,9 @@ export default function AddClothForm() {
                             render={({field})=>(
                             <FormItem>
                                 <FormLabel className='text-sm'>Fit</FormLabel>
-                                    <Select {...field}>
+                                    <Select>
                                         <FormControl>
-                                            <SelectTrigger>
+                                            <SelectTrigger {...field}>
                                                 <SelectValue placeholder="select Fit Types" />
                                             </SelectTrigger>
                                         </FormControl>
@@ -243,7 +260,6 @@ export default function AddClothForm() {
                                                 <SelectItem value="Bootcut Fit">Bootcut Fit </SelectItem>
                                                 <SelectItem value="Wide Leg Fit">Wide Leg Fit </SelectItem>
                                                 <SelectItem value="Cropped Fit">Cropped Fit </SelectItem>
-
                                             </SelectGroup>
                                             <SelectGroup>
                                                 <SelectLabel>Dresses</SelectLabel>
@@ -325,20 +341,13 @@ export default function AddClothForm() {
                             control={form.control}
                             render={({ field }) => (
                             <FormItem>
-                            <FormLabel>Category Type</FormLabel>
+                            <FormLabel>Category (collection)</FormLabel>
                             <FormControl>
                                 <MultiSelect
                                 options={
                                     categoryArray?categoryArray:
                                     [
-                                        {label:'clothing',value:"1"},
-                                        {label:'footwear',value:"2"},
-                                        {label:'accessory',value:"3"},
-                                        {label:'jewellery',value:"4"},
-                                        {label:'bag',value:"5"},
-                                        {label:'outerwear',value:"6"},
-                                        {label:'watches',value:"7"},
-                                        {label:'underwear',value:"8"},
+                                        {label:'Empty',value:"1"},
                                     ]
                                 }
                                 onValueChange={field.onChange}
