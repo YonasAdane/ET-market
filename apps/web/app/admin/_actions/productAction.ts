@@ -76,6 +76,10 @@ export async function getProducts(){
   const product=await db.product.findMany({include: { brand: true,images:true }});
   return product;
 }
+export async function deleteProduct(id:number){
+  const product=await db.product.delete({where:{id}});
+  return product;
+}
 // const AddedFiles = await db.product.create({
 //   data: {
 //     name: "Example Product",
