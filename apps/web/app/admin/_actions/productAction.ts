@@ -3,8 +3,10 @@
 import { CategoryType } from "@repo/database/index";
 import { db } from "app/lib/config/prisma-config";
 import { uploadToCloudinary } from "app/lib/config/uploadtoCloud";
-import { accessoriesSchema, bagsSchema, clothingSchema, footwearSchema, jewellerySchema, outerwearSchema, underwearSchema, watchesSchema } from "app/lib/types/product";
+import { accessoriesSchema, bagsSchema, clothingSchema, footwearSchema, jewellerySchema, outerwearSchema, underwearSchema, watchesSchema, CategoryType as ZcategoryType } from "app/lib/types/product";
 import { z } from "zod";
+// import {  ProductType, ProductQueryType } from '@/types/';
+
 interface ImageType{
         publicId:string
         url:string
@@ -80,36 +82,6 @@ export async function deleteProduct(id:number){
   const product=await db.product.delete({where:{id}});
   return product;
 }
-// const AddedFiles = await db.product.create({
-//   data: {
-//     name: "Example Product",
-//     price: 100,
-//     description: "Example description",
-//     categoryType: "CLOTHING",
-//     images: {
-//       create: [
-//         {
-//           publicId: "ET-market/product-pictures/hma5dxjkqu3kf4hrikfp",
-//           url: "https://res.cloudinary.com/dpxbxdrt2/image/upload/v1732992593/ET-market/product-pictures/hma5dxjkqu3kf4hrikfp.png",
-//           format: "png",
-//           width: 204,
-//           height: 192,
-//           bytes: 1984,
-//         },
-//         {
-//           publicId: "ET-market/product-pictures/f4skdb6nhz3qp5ngeut4",
-//           url: "https://res.cloudinary.com/dpxbxdrt2/image/upload/v1732992596/ET-market/product-pictures/f4skdb6nhz3qp5ngeut4.png",
-//           format: "png",
-//           width: 225,
-//           height: 225,
-//           bytes: 16508,
-//         },
-//       ],
-//     },
-//   },
-// });
-
-
 
 
 
@@ -139,3 +111,45 @@ export async function deleteProduct(id:number){
 //     throw new Error("Failed to add product");
 //   }
 // }
+
+
+
+export async function findProducts(categoryType: CategoryType, queryParams: any) {
+  const category = categoryType.toUpperCase();
+  if(ZcategoryType.safeParse(category).error){
+    console.log("error validating data");
+    return;
+  }
+  const filters: any = {};
+
+  if (category) {
+    filters.categoryType = category as CategoryType;
+  }
+
+  if (queryParams.brandId) {
+    filters.brandId = {
+      has: Array.isArray(queryParams.brandId)
+        ? queryParams.brandId.map((id:any) => parseInt(id as string))
+        : [parseInt(queryParams.brandId as string)],
+    };
+  }
+
+  if (queryParams.size) {
+    filters.size = Array.isArray(queryParams.size) ? { has: queryParams.size } : { has: [queryParams.size] };
+  }
+
+  if (queryParams.material) {
+    filters.material = Array.isArray(queryParams.material) ? { has: queryParams.material } : { has: [queryParams.material] };
+  }
+
+  if (queryParams.price) {
+    filters.price = { lte: parseFloat(queryParams.price as string) };
+  }
+
+  const products = await db.product.findMany({ where: filters, include: { brand: true,images: true } });
+  console.log('findProducts query:', queryParams);
+
+  return products;
+}
+
+ 

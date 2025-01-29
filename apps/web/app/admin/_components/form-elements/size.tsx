@@ -1,10 +1,9 @@
 "use client";
-import { Bold, Italic, Underline } from "lucide-react"
  
 import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
+    ToggleGroup,
+    ToggleGroupItem,
+} from "@/components/ui/toggle-group";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel } from 'app/components/form';
 export default function Size({control,name,values}:{control:any,name:string,values:string[]}) {
   return (
@@ -20,7 +19,7 @@ export default function Size({control,name,values}:{control:any,name:string,valu
                     <ToggleGroup {...field} variant="outline" type="multiple" className='w-full flex justify-around'>
                         {values.map(size=>(
 
-                        <ToggleGroupItem value={size} aria-label="Toggle underline">
+                        <ToggleGroupItem value={size} key={size} aria-label="Toggle underline">
                              {size}
                         </ToggleGroupItem>
                         ))}

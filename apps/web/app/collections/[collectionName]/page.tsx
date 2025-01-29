@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button"
-import BannerSwiper from "@/widgets/banner-swiper"
 import Footer from "@/widgets/footer"
 import { Navigation } from "@/widgets/Navigation"
 import NewArivals from "@/widgets/slide"
+import { getCategories } from "app/admin/_actions/categoryAction"
 import { CategoryArray } from "app/lib/consts"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
 
-export default function Component() {
+export default async function Component() {
   const navItems = ["Brands", "Men", "Women", "Jewelry", "Luxury", "Stores", "Sale", "Blog"]
   const trendingNow = [
     {
@@ -54,14 +54,15 @@ export default function Component() {
     { icon: "credit-card", text: "COD available upto 25k" },
     { icon: "percent", text: "10% off on 1st purchase Use 'WELCOME10'" },
   ]
-
+const categories=await getCategories();
+console.log("categories : ",categories);
 
 
   return (
     <div className="flex min-h-screen flex-col">
       <Navigation categoryArray={CategoryArray}/>
       <main className="flex-1">
-        <BannerSwiper/>
+        {/* <BannerSwiper {...categories as BannerProps}/> */}
         <section className="border-b py-8 text-muted-foreground bg-[#0c0c0e]">
           <div className="container grid grid-cols-2 gap-4 px-4 md:grid-cols-5">
             {features.map((feature, index) => (

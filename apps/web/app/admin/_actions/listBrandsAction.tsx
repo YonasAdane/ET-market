@@ -8,7 +8,7 @@ export async function ListBrands(){
             <SelectLabel>Brands of Products</SelectLabel>
             {
                 brands.map(brand=>(
-                <SelectItem value={`${brand.id}`}>{brand.name}</SelectItem>
+                <SelectItem key={brand.id} value={`${brand.id}`}>{brand.name}</SelectItem>
                 ))
             }
         </SelectGroup>

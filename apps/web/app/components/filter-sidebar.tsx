@@ -4,18 +4,20 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
+import { filterProduct } from "@/lib/constants";
 import { CategoryType } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import {useAppSelector } from "@repo/redux-utils/libs/redux/store";
-import { useCallback, useRef, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import CheckboxByText from "./subComponents/CheckboxByText";
-import CheckboxByStar from "./subComponents/CheckboxByStar";
-import { filterProduct } from "@/lib/constants";
+import { useAppSelector } from "@repo/redux-utils/libs/redux/store";
+import CheckboxByStar from "@repo/ui/widgets/subComponents/CheckboxByStar.tsx";
+import CheckboxByText from "@repo/ui/widgets/subComponents/CheckboxByText.tsx";
+import { getBrandsByCategory } from "app/admin/_actions/brandAction";
+import { getCategoryByType } from "app/admin/_actions/categoryAction";
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useRef, useState } from "react";
 type Props = {
   type: CategoryType;
   className?: string;
@@ -23,31 +25,42 @@ type Props = {
     min: number;
     max: number;
   };
-  brandsNcategory: {
-    brand: {
-      id: number;
-      name: string;
-      logoUrl?: string;
-    };
-    category: {
-      id: number;
-      name: string;
-      description?: string;
-    };
-  }[];
+    
 };
 
 export default function FilterSidebar(props: Props) {
+  const [brands,setBrands]=useState<{
+    id: number;
+    name: string;
+    description: string | null;
+  }[]>([]);
+  const [category,setCategory]=useState<{
+    id: number;
+    name: string;
+    description: string | null;
+  }[]>([]);
+  useEffect(()=>{
+    async () => {
+      try {
+        const [ allbrands,allcategory] = await Promise.all([
+          getBrandsByCategory(props.type as CategoryType),
+          getCategoryByType(props.type as CategoryType)
+        ]);
+        setBrands(allbrands);
+        setCategory(allcategory);
+        console.log(brands,"good",category);
+        
+      } catch (error) {
+        console.log("Error occured: ",error);
+        
+      }
+    }
+  },[])
   let isSidebarOpen=useAppSelector(state=>state.sidebar.value);
   let Cnames=`transform transition-all duration-500 ease-in-out ${
     isSidebarOpen ? "translate-x-0 " : "-translate-x-full opacity-0 w-0"
   }`
   let data=filterProduct[props.type];
-  let categories=props.brandsNcategory.map(item=>(item.category));
-  let brands=props.brandsNcategory.map(item=>(item.brand));
-
-  let categorySet=[...new Set(categories.map(item=>JSON.stringify(item)))].map(product=>JSON.parse(product));
-  let brandSet=[...new Set(brands.map(item=>JSON.stringify(item)))].map(product=>JSON.parse(product));
 
   const formRef = useRef(null); 
     let [price,setPrice]=useState<number>(props.price?.max||1000);
@@ -80,15 +93,15 @@ export default function FilterSidebar(props: Props) {
           <AccordionItem  value="item-1">
             <AccordionTrigger className="font-semibold text-xl hover:no-underline">Brand</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-1">
-              {brandSet.map((item)=>(
-                <CheckboxByText name="brandId" value={String(item.id)} key={item.id+"a"} text={item.name} id={item.name}/>
+              {brands && brands?.map((item)=>(
+                <CheckboxByText name="brandId" value={`${item.id}`} key={`${item.id}q`} text={item.name} id={item.name}/>
               ))}
             </AccordionContent>
           </AccordionItem>
           <AccordionItem  value="item-2">
             <AccordionTrigger className="font-semibold text-xl hover:no-underline">Category</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-1">
-              {categorySet.map(item=>(
+              {category && category.map(item=>(
                 <CheckboxByText name={item.name} value={String(item.id)} key={item.id+"b"} text={item.name} id={item.name}/>
               ))}
             </AccordionContent>
@@ -101,12 +114,12 @@ export default function FilterSidebar(props: Props) {
               <CheckboxByText name="gender" value='unisex' text="Unisex" id="unisex"/>
             </AccordionContent>
           </AccordionItem>
-          {data.map((item,i)=>(
+          {data && data.map((item,i)=>(
           <AccordionItem  key={i+"d"} value={`item-${i+4}`}>
             <AccordionTrigger className="font-semibold text-xl hover:no-underline">{item.name}</AccordionTrigger>
             <AccordionContent className="flex flex-col gap-1">
               {item.value.map((value,j)=>(
-                <CheckboxByText key={j*i} name={item.name} value={value} text={value} id={value}/>  
+                <CheckboxByText key={j*i+value} name={item.name} value={value} text={value} id={value}/>  
               ))}
             </AccordionContent>
           </AccordionItem>

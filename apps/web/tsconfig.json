@@ -8,7 +8,8 @@
       }
     ],
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true
   },
   "include": [
     "next-env.d.ts",
@@ -16,6 +17,6 @@
     "./app/**/*.ts",
     "./app/**/*.tsx",
     ".next/types/**/*.ts"
-, "../../packages/ui/src/widgets/adminComponents/form-elements/gender.tsx", "../../packages/ui/src/widgets/adminComponents/form-elements/size.tsx", "../../packages/ui/src/widgets/adminComponents/form-elements/toggle-group.tsx", "../../packages/ui/src/widgets/adminComponents/form-elements/upload-image.tsx"  ],
+, "../../packages/ui/src/widgets/**/*.ts","../../packages/ui/src/widgets/**/*.tsx" ],
   "exclude": ["node_modules"]
 }

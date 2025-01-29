@@ -61,6 +61,11 @@ export async function getCategories() {
     return await db.category.findMany({ include: { bannerImage: true, sampleImages: true } });
 }
 
+export async function getCategoryByType(categoryType:CategoryType) {
+    return await db.category.findMany({where:{products:{some:{categoryType}}} });
+}
+
+
 export async function getCategoryById(id: number) {
     if (!id) throw new Error("Category ID is required");
     return await db.category.findUnique({ where: { id }, include: { bannerImage: true, sampleImages: true } });

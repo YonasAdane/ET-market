@@ -116,7 +116,7 @@ export default async function Products() {
             <div className="flex items-center mb-5">
               {
               CategoryArray.map(categoryName=>(
-                <Button asChild size="sm" variant="ghost" className="h-8 mr-3 capitalize">
+                <Button asChild size="sm" key={categoryName} variant="ghost" className="h-8 mr-3 capitalize">
                   <Link href={`/admin/products/${categoryName.toLowerCase()}`}>
                     {categoryName.toLowerCase()}
                   </Link>
@@ -158,7 +158,7 @@ export default async function Products() {
                     <TableBody>
                       {data && data.map(product=>(
 
-                      <TableRow>
+                      <TableRow key={product.name}>
                         <TableCell className="hidden sm:table-cell">
                           <Image
                             alt="Product image"
