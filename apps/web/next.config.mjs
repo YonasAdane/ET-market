@@ -13,6 +13,7 @@ const nextConfig = {
       transpilePackages: [
         "@repo/database",
         "@prisma/client",
+        "bcryptjs",
       ], // Ensure the database package is transpiled
 };
 

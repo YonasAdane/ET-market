@@ -1,12 +1,13 @@
 // import { ModeToggle } from "./components/modeTheme";
-import HeroSection from "@/widgets/herosection";
-import PorductCard from "@repo/ui/widgets/card.tsx"
-import Display from "@repo/ui/widgets/display.tsx";
-import Controls from "@repo/ui/widgets/controls.tsx";
 import Footer from "@/widgets/footer";
-import { Navigation } from "@/widgets/Navigation";
+import HeroSection from "@/widgets/herosection";
+import PorductCard from "@repo/ui/widgets/card.tsx";
+import Controls from "@repo/ui/widgets/controls.tsx";
+import Display from "@repo/ui/widgets/display.tsx";
+import { NavigationBar } from "./components/navigationBar";
+import { auth } from "./lib/auth";
 import { CategoryArray } from "./lib/consts";
-export default function Home() {
+export default async function Home() {
   const data = [
     {
       id: 1,
@@ -81,9 +82,12 @@ export default function Home() {
         "https://cdn.thewirecutter.com/wp-content/media/2022/08/macbook-2048px-9765.jpg",
     },
   ];
+  const session=await auth();
+  console.log("session Home: ",session);
+  
   return (
   <>
-    <Navigation categoryArray={CategoryArray}/>
+    <NavigationBar categoryArray={CategoryArray}/>
     <main className="w-full mx-auto">
       <div className="w-full flex flex-col gap-24 ">
         <div className="">

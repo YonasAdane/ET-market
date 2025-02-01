@@ -141,7 +141,6 @@ export const filterProduct={
   export type loginSchemaType=z.infer<typeof loginSchema>;
  
   export const registerSchema = z.object({
-    username: z.string(),
     firstName: z.string(),
     lastName: z.string(),
     email:z.string().email(),

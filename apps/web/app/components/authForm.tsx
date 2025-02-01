@@ -1,34 +1,28 @@
 "use client";
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import GoogleButton from "./googleButton";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { loginSchema, loginSchemaType, registerSchema, registerSchemaType } from "app/lib/consts";
-import { Login, Register } from "../lib/auth/action";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import GoogleButton from "./googleButton";
+// import { Login, Register } from "../lib/auth/action";
+import { CreateUser, CredentialLogin } from "app/lib/auth/action";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 export function LoginForm() {
     const [err,setErr]=useState("");
-    const router=useRouter();
     const {
         register,
         handleSubmit,
-        watch,
         formState: { errors },
-      } = useForm<loginSchemaType>({resolver:zodResolver(loginSchema)})
+        } = useForm<loginSchemaType>({resolver:zodResolver(loginSchema)})
     async function LoginLocal(data:loginSchemaType){
-        
-        const auth=await Login(data);
-        console.log(auth);
-        
-        if(auth){
-            router.push("/")
-        }else{
-        setErr("authentication failed");
-        }
-
+        const res=await CredentialLogin(data);
+        console.log("res- ",res);
+        // if(res.error){
+        //     setErr("Login failed")
+        // }
     }
   
    
@@ -89,14 +83,11 @@ export default function RegisterForm() {
         formState: { errors },
       } = useForm<registerSchemaType>({resolver:zodResolver(registerSchema)})
     async function RegisterLocal(data:registerSchemaType){
-        
-        const auth=await Register(data);
-        console.log(auth);
-        
-        if(auth){
-            router.push("/")
-        }else{
-        setErr("Registration failed");
+        try {
+            await CreateUser(data);
+            router.push('/login')
+        } catch (error) {
+            setErr("Something went Wrong")
         }
 
     }
@@ -130,15 +121,6 @@ export default function RegisterForm() {
                 className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-1 px-4 block w-full appearance-none"
                  type="text"/>
                 {errors.lastName && <div className="block text-red-500 text-sm font-bold mb-2">{errors.lastName.message}</div>}
-
-            </div>
-            <div className="mt-2">
-                <label className="block text-gray-700 text-sm font-bold mb-2">User Name</label>
-                <input 
-                {...register("username")} 
-                className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-1 px-4 block w-full appearance-none"
-                 type="text"/>
-                {errors.username && <div className="block text-red-500 text-sm font-bold mb-2">{errors.username.message}</div>}
 
             </div>
             <div className="mt-2">

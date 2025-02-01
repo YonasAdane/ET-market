@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import Footer from "@/widgets/footer"
-import { Navigation } from "@/widgets/Navigation"
 import NewArivals from "@/widgets/slide"
 import { getCategories } from "app/admin/_actions/categoryAction"
+import { NavigationBar } from "app/components/navigationBar"
 import { CategoryArray } from "app/lib/consts"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
@@ -60,7 +60,7 @@ console.log("categories : ",categories);
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navigation categoryArray={CategoryArray}/>
+      <NavigationBar categoryArray={CategoryArray}/>
       <main className="flex-1">
         {/* <BannerSwiper {...categories as BannerProps}/> */}
         <section className="border-b py-8 text-muted-foreground bg-[#0c0c0e]">

@@ -1,10 +1,10 @@
 import Footer from '@/widgets/footer';
-import { Navigation } from '@/widgets/Navigation';
 import { Skeleton } from "@repo/ui/components/ui/skeleton";
 import PorductCard from '@repo/ui/widgets/card.tsx';
 import { CollectionHeader } from '@repo/ui/widgets/collection-header.tsx';
 import { findProducts } from 'app/admin/_actions/productAction';
 import FilterSidebar from 'app/components/filter-sidebar';
+import { NavigationBar } from 'app/components/navigationBar';
 import { CategoryArray } from 'app/lib/consts';
 import { CategoryType as ZcategoryType } from 'app/lib/types/product';
 import { Suspense } from 'react';
@@ -26,7 +26,7 @@ export default async function  Collections({ params,searchParams }: { params: { 
 
   return (
     <>
-      <Navigation categoryArray={CategoryArray}/>
+      <NavigationBar categoryArray={CategoryArray}/>
       <div > 
         <div className='w-11/12 mx-auto my-5'>
           <CollectionHeader name={categoryName}/>

@@ -1,10 +1,9 @@
-"use client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Navigation } from '@/widgets/Navigation';
+import { NavigationBar } from "app/components/navigationBar";
 import { CategoryArray } from 'app/lib/consts';
-import { useState } from 'react';
+import Quantity from "./_compoenents/quantity";
 import { Gallery } from './gallery';
 
 interface ProductDetails {
@@ -24,7 +23,6 @@ interface ProductPageProps {
 }
 
 export default function ProductDetailsPage({ params }: ProductPageProps) {  
-  const [quantity, setQuantity] = useState(1)
   
   const product: ProductDetails = {
     brand: "UNITED COLORS OF BENETTON",
@@ -37,7 +35,7 @@ export default function ProductDetailsPage({ params }: ProductPageProps) {
 
   return (
 <>
-    <Navigation categoryArray={CategoryArray}/>
+    <NavigationBar categoryArray={CategoryArray}/>
    
     <div className=" w-10/12 mx-auto px-4">
       <div className="flex flex-col md:flex-row gap-8 my-8">
@@ -71,23 +69,7 @@ export default function ProductDetailsPage({ params }: ProductPageProps) {
             <span className="text-green-500">{product.discountPercentage}% off</span>
           </div>
           <p className="mb-4">Size: {product.size}</p>
-          <div className="flex items-center gap-4 mb-4">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            >
-              -
-            </Button>
-            <span>{quantity}</span>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setQuantity(quantity + 1)}
-            >
-              +
-            </Button>
-          </div>
+          <Quantity/>
           <Button className="w-full mb-4">Buy Now</Button>
           <Tabs defaultValue="features" className="w-full">
             <TabsList className="grid w-full grid-cols-4">
