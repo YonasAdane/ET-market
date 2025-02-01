@@ -6,11 +6,13 @@ import { loginSchema, loginSchemaType, registerSchema, registerSchemaType } from
 import { useForm } from "react-hook-form";
 import GoogleButton from "./googleButton";
 // import { Login, Register } from "../lib/auth/action";
-import { CreateUser, CredentialLogin } from "app/lib/auth/action";
+import { CreateUser } from "app/lib/auth/action";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 export function LoginForm() {
+    const router=useRouter();
     const [err,setErr]=useState("");
     const {
         register,
@@ -18,11 +20,23 @@ export function LoginForm() {
         formState: { errors },
         } = useForm<loginSchemaType>({resolver:zodResolver(loginSchema)})
     async function LoginLocal(data:loginSchemaType){
-        const res=await CredentialLogin(data);
-        console.log("res- ",res);
+        // const res=await CredentialLogin(data);
+        // console.log("res- ",res);
         // if(res.error){
         //     setErr("Login failed")
         // }
+
+    const result = await signIn("credentials", {
+        email:data.email,
+        password:data.password,
+        redirect: false, 
+      });
+  
+      if (result?.error) {
+        setErr(result.error);
+      } else {
+        router.push("/"); 
+      }
     }
   
    

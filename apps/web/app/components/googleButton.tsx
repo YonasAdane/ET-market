@@ -1,10 +1,10 @@
 "use client";
-import { Button } from '@/components/ui/button'
-import React from 'react'
+import { Button } from '@/components/ui/button';
+import { signIn } from 'next-auth/react';
 
 export default function GoogleButton() {
     async function googleAuth(){
-        window.open("http://localhost:4000/api/v1/auth/google", "_self");
+        signIn("google")
     }
   return (
     <Button onClick={()=>googleAuth()} variant={"ghost"} className="flex w-full items-center justify-center mt-4 text-white rounded-lg shadow-md hover:bg-gray-100">
