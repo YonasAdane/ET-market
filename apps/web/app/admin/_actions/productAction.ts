@@ -78,6 +78,10 @@ export async function getProducts(){
   const product=await db.product.findMany({include: { brand: true,images:true }});
   return product;
 }
+export async function getProductById(id:number){
+  const product=await db.product.findUnique({where:{id},include: { brand: true,images:true }});
+  return product;
+}
 export async function deleteProduct(id:number){
   const product=await db.product.delete({where:{id}});
   return product;

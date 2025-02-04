@@ -79,7 +79,10 @@ export async function createBrand(name: string, BannerImage: File[], brandImage:
 }
 
 export async function getBrands() {
-    return await db.brand.findMany({ include: { logoImage: true, BannerImage: true, _count: true } });
+    const brands =await db.brand.findMany({ include: { logoImage: true, BannerImage: true, _count: true } });
+    console.log("brads: ",brands);
+    
+    return  brands;
 }
 
 export async function getBrandById(id: number) {

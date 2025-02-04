@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getProductById } from "app/admin/_actions/productAction";
 import { NavigationBar } from "app/components/navigationBar";
 import { CategoryArray } from 'app/lib/consts';
+import { notFound } from "next/navigation";
+import { Gallery } from "./_compoenents/gallery";
 import Quantity from "./_compoenents/quantity";
-import { Gallery } from './gallery';
 
 interface ProductDetails {
   brand: string;
@@ -22,8 +24,16 @@ interface ProductPageProps {
   };
 }
 
-export default function ProductDetailsPage({ params }: ProductPageProps) {  
+export default async function ProductDetailsPage({ params }: ProductPageProps) { 
+  // if(z.number().safeParse(params.productid).error){
+  //   return notFound();
+  // }
+  const products=await getProductById(Number(params.productid))
+  console.log("products data: ",products);
   
+  if(!products){
+    return notFound();
+  }
   const product: ProductDetails = {
     brand: "UNITED COLORS OF BENETTON",
     name: "United Colors of Benetton Signature Women Black Dial Quartz Analog",

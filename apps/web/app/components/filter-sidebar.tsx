@@ -39,23 +39,24 @@ export default function FilterSidebar(props: Props) {
     name: string;
     description: string | null;
   }[]>([]);
-  useEffect(()=>{
-    async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       try {
-        const [ allbrands,allcategory] = await Promise.all([
+        const [allbrands, allcategory] = await Promise.all([
           getBrandsByCategory(props.type as CategoryType),
           getCategoryByType(props.type as CategoryType)
         ]);
         setBrands(allbrands);
         setCategory(allcategory);
-        console.log(brands,"good",category);
-        
+        console.log(allbrands, "good", allcategory);
       } catch (error) {
-        console.log("Error occured: ",error);
-        
+        console.log("Error occurred: ", error);
       }
-    }
-  },[])
+    };
+  
+    fetchData();
+  }, [props.type]);
+  
   let isSidebarOpen=useAppSelector(state=>state.sidebar.value);
   let Cnames=`transform transition-all duration-500 ease-in-out ${
     isSidebarOpen ? "translate-x-0 " : "-translate-x-full opacity-0 w-0"

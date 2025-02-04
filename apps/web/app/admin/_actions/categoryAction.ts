@@ -2,7 +2,6 @@
 import { CategoryType } from '@repo/database/index';
 import { db } from 'app/lib/config/prisma-config';
 import { uploadToCloudinary } from 'app/lib/config/uploadtoCloud';
-import { CategoryTypeEnum } from 'app/lib/types/product';
 import { revalidatePath } from 'next/cache';
 
 async function uploadImageToCloudinary(image: File, folder: string) {
@@ -41,7 +40,7 @@ export async function createCategory(categoryType:CategoryType,name: string, des
     }
     const category = await db.category.create({
         data: {
-            categoryType:categoryType as CategoryTypeEnum,
+            categoryType:categoryType as CategoryType,
             name,
             description,
             bannerImageId: uploadedBannerImage.id || null,
@@ -62,7 +61,9 @@ export async function getCategories() {
 }
 
 export async function getCategoryByType(categoryType:CategoryType) {
-    return await db.category.findMany({where:{products:{some:{categoryType}}} });
+    const category= await db.category.findMany({where:{products:{some:{categoryType}}} });
+    return category;
+
 }
 
 
