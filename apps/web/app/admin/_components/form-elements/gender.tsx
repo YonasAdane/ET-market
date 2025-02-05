@@ -1,6 +1,6 @@
 "use client";
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel } from 'app/components/form';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 
 export default function Gender({control,name}:{control:any,name:string}) {
   return (
@@ -13,7 +13,10 @@ export default function Gender({control,name}:{control:any,name:string}) {
                     <FormLabel>Gender</FormLabel>
                     <FormDescription className="text-xs text-muted-foreground">pick Available Gender</FormDescription>
                     <FormControl>
-                        <ToggleGroup {...field} variant="outline" type="single" className='w-full flex justify-around'>
+                        <ToggleGroup {...field}
+                            onValueChange={(value) => field.onChange(value)}
+                            value={field.value }
+                            variant="outline" type="single" className='w-full flex justify-around'>
                             <ToggleGroupItem value="Men" aria-label="Toggle underline">
                                 Men
                             </ToggleGroupItem>

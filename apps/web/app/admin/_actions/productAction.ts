@@ -28,7 +28,7 @@ const schemas: Record<string, z.ZodSchema> = {
 
 type watchType=z.infer<typeof watchesSchema >;
 
-export async function createProduct(ParsedData:watchType){
+export async function createProduct(ParsedData:any){
 
     const schema = schemas[ParsedData.categoryType];
     if (!schema) throw new Error('Invalid categoryType');

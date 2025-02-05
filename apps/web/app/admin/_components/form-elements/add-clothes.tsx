@@ -62,7 +62,7 @@ export default function AddClothForm() {
                 name: "",
                 description: "",
                 gender:"",
-                size: "",
+                size: [],
                 price:1,
                 prevprice:1,
                 material: "",
@@ -129,7 +129,7 @@ export default function AddClothForm() {
                 />
                 <div className="grid grid-cols-2  gap-5">
                     <div className="w-full ">
-                        <Size values={["2XS","XS","S","M","L","XL","2XL"]} control={form.control} name="size"/>
+                        <Size values={["2XS","XS","S","M","L","XL","2XL"]}  control={form.control} name="size"/>
                     </div>
                     <div className="w-full ">
                         <Gender name='gender' control={form.control}/>

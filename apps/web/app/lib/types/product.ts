@@ -55,7 +55,7 @@ export const productSchema = z.object({
     name: z.string().min(1),
     description: z.string().optional(), 
     gender:z.string().optional(),
-    size: z.string().optional(),         // e.g., S, M, L, XL
+    size: z.array(z.string()),         // e.g., S, M, L, XL
     price: z.coerce.number().positive(),
     prevprice: z.coerce.number().positive(),
     material: z.string().optional(),     // e.g., Cotton, Polyester

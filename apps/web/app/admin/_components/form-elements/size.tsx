@@ -16,11 +16,17 @@ export default function Size({control,name,values}:{control:any,name:string,valu
                 <FormLabel>Size</FormLabel>
                 <FormDescription className="text-xs text-muted-foreground">pick Available Size</FormDescription>
                 <FormControl>
-                    <ToggleGroup {...field} variant="outline" type="multiple" className='w-full flex justify-around'>
-                        {values.map(size=>(
+                    <ToggleGroup {...field} 
+                        variant="outline" 
+                        type="multiple" 
+                        className='w-full flex justify-around'
+                        onValueChange={(value) => field.onChange(value)}
+                        value={field.value || []} 
+                        >
+                        {values.map((size:string)=>(
 
                         <ToggleGroupItem value={size} key={size} aria-label="Toggle underline">
-                             {size}
+                            {size}
                         </ToggleGroupItem>
                         ))}
                     </ToggleGroup>

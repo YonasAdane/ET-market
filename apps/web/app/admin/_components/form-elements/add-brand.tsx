@@ -6,10 +6,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createBrand } from "app/admin/_actions/brandAction";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
+import { Check } from "lucide-react";
 import { useState } from 'react';
 import { Area, Point } from 'react-easy-crop';
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { Spinner } from "../spinnerLoader";
 import { UploadMultipleImage, UploadSingleImage } from "../uploadImages";
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
@@ -56,12 +58,13 @@ export default function CreateBrandForm() {
   return (
     <div >
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(async data=>await createBrand(
-                                data.name,
-                                data.BannerImage,
-                                data.brandImage,
-                                data.description,
-                                data.logoImage)
+            <form onSubmit={form.handleSubmit(
+                async data=>await createBrand(
+                    data.name,
+                    data.BannerImage,
+                    data.brandImage,
+                    data.description,
+                    data.logoImage)
             )}>
                 <div className=" w-full gap-5 mx-auto ">
                     <div className="col-span-2 space-y-3">
@@ -108,7 +111,12 @@ export default function CreateBrandForm() {
                         <UploadMultipleImage name="BannerImage" label='picture' form={form} description='Banner Image' />
                         <UploadMultipleImage name="brandImage" label='picture' form={form} description='Brand Image' />
                         <Button className="rounded-full m-5" type="submit">
-                            Submit
+                        {!form.formState.isSubmitting ? 
+                        <Check size={18} className="mr-1"/> 
+                        :
+                        <Spinner className="mr-1 size-5" />
+                        }
+                        Submit
                         </Button>
                     </div>
                 </div>
