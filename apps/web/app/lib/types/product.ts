@@ -209,34 +209,10 @@ export const productSchema = z.object({
     categoryId: z.coerce.number().array(),               // Foreign key reference to Category
     categoryType:CategoryType,
     gender:z.string().optional(),
-    size:z.string().optional(),
+    size:z.array(z.string()),
     stock: z.coerce.number().int().nonnegative(),
-    // images:z.any().array()
-    images:  z
-    .instanceof(File).array()
-    .refine((list) => list.length === 0, "No files selected")
-    .refine((list) => list.length <= 5, "Maximum 5 files allowed")
-    .transform((list) => Array.from(list))
-    .refine(
-      (files) => {
-        const allowedTypes: { [key: string]: boolean } = {
-          "image/jpeg": true,
-          "image/png": true,
-          "image/jpg": true,
-          "image/gif": true,
-        };
-        return files.every((file) => allowedTypes[file.type]);
-      },
-      { message: "Invalid file type. Allowed types: JPG, PNG, JPEG, GIF" }
-    )
-    .refine(
-      (files) => {
-        return files.every((file) => file.size <= 10 * 1024 * 1024 );
-      },
-      {
-        message: "File size should not exceed 5MB",
-      }
-    ),
+    images:z.any().array()
+
 })
   
   export const underwearSchema = z.object({

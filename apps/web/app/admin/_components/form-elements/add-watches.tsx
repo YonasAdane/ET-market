@@ -1,22 +1,23 @@
 "use client";
 import { MultiSelect } from '@/components/multi-select';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ListBrands } from 'app/admin/_actions/listBrandsAction';
+import { getBrands } from 'app/admin/_actions/brandAction';
+import { getCategories } from 'app/admin/_actions/categoryAction';
 import { createProduct } from 'app/admin/_actions/productAction';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import { CategoryType } from 'app/lib/types/product';
-import { Check, Upload } from 'lucide-react';
-import { useState } from 'react';
+import { Check } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { Spinner } from '../spinnerLoader';
+import { UploadMultipleImage } from '../uploadImages';
+import Gender from './gender';
 import Size from './size';
 const fileSizeLimit = 5 * 1024 * 1024; // 5MB
 const watchesSchema = z.object({
@@ -32,14 +33,38 @@ const watchesSchema = z.object({
     categoryId: z.coerce.number().array(),               // Foreign key reference to Category
     categoryType:CategoryType,
     gender:z.string().optional(),
-    size:z.string().optional(),
+    size:z.array(z.string()),
     stock: z.coerce.number().int().nonnegative(),
     images:z.any().array()
 })
 
 export default function AddWatchForm() {
-    const [images, setImages] = useState<File[]>([]);
-    const [imageUrl,setImageUrl]=useState<string[]>([])
+ const [categoryArray,setCategoryArray]=useState<{label:string,value:string}[] >([]);
+    const [brandArray,setBrandArray]=useState<{label:string,value:string}[] >([]);
+    useEffect(()=>{
+        const fetchData = async () => {
+            try {
+                const [categories,brands]=await Promise.all([ getCategories(),getBrands()])
+        
+        setCategoryArray(categories.map((category)=>({
+            label:category.name,
+            value:`${category.id}`})
+        ));
+        setBrandArray(brands.map((brand)=>({
+            label:brand.name,
+            value:`${brand.id}`})
+        ));
+        console.log(categoryArray,brandArray);
+        
+            } catch (error) {
+                console.log("error fetching data",error);
+                
+            }
+
+        }
+        fetchData();
+    },[]);
+
 
     type watchType=z.infer<typeof watchesSchema >;
     const form=useForm<watchType>({
@@ -56,7 +81,7 @@ export default function AddWatchForm() {
     waterResistance: "",
     brandId: undefined,
     gender:"",
-    size:"",
+    size:[],
     colour: "",
     categoryId: [],
     categoryType:"WATCH",
@@ -64,28 +89,12 @@ export default function AddWatchForm() {
   },
     });
    
-    function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
-        const files = event.target.files;
-        console.log("onFileSelect files: ",files );
-        
-        if (!files || files==null || !files.length || files===undefined) {
-            return;
-        }
-        if (event.target.files) {
-            const fileArray = Array.from(event.target.files); // Convert FileList to an array
-            
-            setImages((prevImages) => [...prevImages, ...fileArray]);
-          }
-        for (let i = 0; i < files.length; i++) {
-            if(files[i]){
-                setImageUrl((prevUrls)=>[...prevUrls,URL.createObjectURL(files[i]!)])
-            }
-        }
-    }
     
   return (
 <Form {...form}>
-    <form onSubmit={form.handleSubmit(async data=>await createProduct(data))}>
+    <form onSubmit={form.handleSubmit( async data=>{
+        await createProduct(data)
+        })}>
         <div className='w-full grid grid-cols-3 gap-5 h-full '>
             <div className="col-span-2 bg-muted/50 rounded-lg p-5">
                 <h2>General Information</h2>
@@ -120,32 +129,8 @@ export default function AddWatchForm() {
                         <Size control={form.control} values={["Small","Medium","Large"]} name="size"/>
                     </div>
                     <div className="w-full ">
-                        {/* <Gender name='gender' control={form.control}/> */}
-                        <div className='pt-3'>
-                            <FormField
-                                name={"gender"}
-                                control={form.control}
-                                render={({field})=>(
-                                    <FormItem>
-                                        <FormLabel>Gender</FormLabel>
-                                        <FormDescription className="text-xs text-muted-foreground">pick Available Gender</FormDescription>
-                                        <FormControl>
-                                            <ToggleGroup {...field} variant="outline" type="single" className='w-full flex justify-around'>
-                                                <ToggleGroupItem value="Men" aria-label="Toggle underline">
-                                                    Men
-                                                </ToggleGroupItem>
-                                                <ToggleGroupItem value="Women" aria-label="Toggle bold">
-                                                    Women
-                                                </ToggleGroupItem>
-                                                <ToggleGroupItem value="Unisex" aria-label="Toggle italic">
-                                                    Unisex
-                                                </ToggleGroupItem>
-                                            </ToggleGroup>
-                                        </FormControl>
-                                    </FormItem>
-                                )}
-                            />
-                        </div> 
+                        <Gender name='gender' control={form.control}/>
+                        
                     </div>
                 </div>
                 <div className="w-full bg-muted/50 mt-5 rounded-lg p-5">
@@ -190,7 +175,14 @@ export default function AddWatchForm() {
                                             <SelectValue placeholder="Select Brand"/>
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <ListBrands/>
+                                            <SelectGroup>
+                                                <SelectLabel>Brands of Products</SelectLabel>
+                                                {
+                                                    brandArray.length>0 && brandArray.map(brand=>(
+                                                        <SelectItem key={brand.label} value={`${brand.value}`}>{brand.label}</SelectItem>
+                                                    ))
+                                                }
+                                            </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                 </FormControl>
@@ -262,20 +254,15 @@ export default function AddWatchForm() {
                             control={form.control}
                             render={({ field }) => (
                             <FormItem>
-                            <FormLabel>Category Type</FormLabel>
+                            <FormLabel>Category (collection)</FormLabel>
                             <FormControl>
                                 <MultiSelect
                                 options={
+                                    categoryArray?categoryArray:
                                     [
-                                        {label:'clothing',value:"1"},
-                                        {label:'footwear',value:"2"},
-                                        {label:'accessory',value:"3"},
-                                        {label:'jewellery',value:"4"},
-                                        {label:'bag',value:"5"},
-                                        {label:'outerwear',value:"6"},
-                                        {label:'watches',value:"7"},
-                                        {label:'underwear',value:"8"},
-                                    ]}
+                                        {label:'Empty',value:"1"},
+                                    ]
+                                }
                                 onValueChange={field.onChange}
                                 //   defaultValue={field.value}
                                 placeholder="Select options"
@@ -354,86 +341,10 @@ export default function AddWatchForm() {
             </div>
             </div>
             <div className="col-span-1 flex flex-col gap-5 justify-start">
+                <UploadMultipleImage name="images" label='Product' form={form} description='Brand Image' />
             
                 {/* <UploadImage name="images" control={form.control}/> */}
-                <Card className="overflow-hidden border-none bg-muted/50" >
-                    <h2 className="m-5">{"Product"} Images</h2>
-                    <CardContent>
-                    <div className="grid gap-2">
-                        <img
-                        alt={"Product"+"image"}
-                        className="aspect-square w-full rounded-md object-cover"
-                        height="300"
-                        src={imageUrl[0] ? imageUrl[0]:"https://ui.shadcn.com/placeholder.svg"}
-                        width="300"
-                        />
-                        <div className="grid grid-cols-3 gap-2">
-                        {imageUrl.filter(image=>image!==imageUrl[0]).map((img)=>(
-                            
-                        <button key={img}>
-                            <img
-                            alt=" image"
-                            className="border aspect-square w-full rounded-md object-cover"
-                            height="84"
-                            src={img??"https://ui.shadcn.com/placeholder.svg"}
-                            width="84"
-                            />
-                        </button>
-                        ))}
-                        {!images &&
-                        (<>
-                            <button>
-                                <img
-                                alt=" image"
-                                className=" aspect-square w-full rounded-md object-cover"
-                                height="84"
-                                src={"https://ui.shadcn.com/placeholder.svg"}
-                                width="84"
-                                />
-                            </button>
-                        </>)
-                        }
-                            <FormField
-                        name="images"
-                        control={form.control}
-                        render={({ field: { value, onChange, ...fieldProps } }) => (
-                            <FormItem>
-                              <FormLabel  className="cursor-pointer hover:bg-foreground/10 ease-in duration-100 flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
-                                <Upload className="h-4 w-4 text-muted-foreground" />
-                                <span className="sr-only">Upload</span>
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  {...fieldProps}
-                                  type="file"
-                                  className='hidden'
-                                  multiple
-                                  accept='image/*'
-                                  onChange={async(event) =>{
-                                    onFileSelect(event)
-                                    console.log(event.target.files)
-                                    console.log("BLOB instance of",images[0] instanceof File );
-                                    
-                                    console.log("event file",event.target.files);
-                                    
-                                    return onChange(images)
-                                  }}
-                                />
-                              </FormControl>
-                              <FormDescription />
-                              <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-                        
-                            {/* <button onClick={selectFiles} className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
-                                <Upload className="h-4 w-4 text-muted-foreground" />
-                                <span className="sr-only">Upload</span>
-                            </button> */}
-                        </div>
-                    </div>
-                    </CardContent>
-                </Card>
+        
             <FormField
                 name="categoryType"
                 control={form.control}

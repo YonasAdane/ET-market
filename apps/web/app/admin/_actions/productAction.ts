@@ -3,75 +3,79 @@
 import { CategoryType } from "@repo/database/index";
 import { db } from "app/lib/config/prisma-config";
 import { uploadToCloudinary } from "app/lib/config/uploadtoCloud";
-import { accessoriesSchema, bagsSchema, clothingSchema, footwearSchema, jewellerySchema, outerwearSchema, underwearSchema, watchesSchema, CategoryType as ZcategoryType } from "app/lib/types/product";
+import { accessoriesSchema, bagsSchema, clothingSchema, footwearSchema, outerwearSchema, underwearSchema, watchesSchema, CategoryType as ZcategoryType } from "app/lib/types/product";
 import { z } from "zod";
 // import {  ProductType, ProductQueryType } from '@/types/';
 
-interface ImageType{
-        publicId:string
-        url:string
-        format:string
-        width: number,
-        height: number,
-        bytes: number,
-}
-const schemas: Record<string, z.ZodSchema> = {
-    'CLOTHING': clothingSchema,
-    'FOOTWEAR': footwearSchema,
-    'ACCESSORY':accessoriesSchema,
-    'BAG':bagsSchema,
-    'OUTERWEAR':outerwearSchema,
-    'JEWELLERY':jewellerySchema,
-    'WATCH':watchesSchema,
-    'UNDERWEAR':underwearSchema,
+const schemas: Record<CategoryType, z.ZodSchema> = {
+  CLOTHING: clothingSchema,
+  FOOTWEAR: footwearSchema,
+  ACCESSORY: accessoriesSchema,
+  BAG: bagsSchema,
+  OUTERWEAR: outerwearSchema,
+  WATCH: watchesSchema,
+  UNDERWEAR: underwearSchema,
 };
 
-type watchType=z.infer<typeof watchesSchema >;
+export async function createProduct(ParsedData: any) {
+  console.log("Received product data:", ParsedData);
 
-export async function createProduct(ParsedData:any){
+  // Validate using Zod
+  const schema = schemas[ParsedData.categoryType as CategoryType];
+  if (!schema) throw new Error("Invalid categoryType");
 
-    const schema = schemas[ParsedData.categoryType];
-    if (!schema) throw new Error('Invalid categoryType');
-    
+  const parsedResult = await schema.safeParseAsync(ParsedData);
+  if (!parsedResult.success) {
+    console.error("Validation errors:", parsedResult.error);
+    throw new Error("Invalid product data");
+  }
 
-    const uploadedFiles = [];
-    for (const file of ParsedData.images) {
-        const result = await uploadToCloudinary(file, "product-pictures");
+  // Parallelize image uploads
+  const uploadedFiles = await Promise.all(
+    ParsedData.images.map((file: any) => uploadToCloudinary(file, "product-pictures"))
+  );
 
-        // Ensure the result conforms to the expected Prisma schema
-        uploadedFiles.push({
-            publicId: result.public_id, // Ensure this field exists in result
-            url: result.secure_url,
-            // format: result.format,
-            // width: result.width,
-            // height: result.height,
-            // bytes: result.bytes,
-        });
-    }
+  // Format images for Prisma
+  const formattedImages = uploadedFiles.map(result => ({
+    publicId: result.public_id,
+    url: result.secure_url,
+  }));
 
-    // Example using Prisma Client
-    const AddedFiles = await db.product.create({
+  // Use a transaction for better reliability
+  const AddedFiles = await db.$transaction(async (prisma) => {
+    return prisma.product.create({
       data: {
         name: ParsedData.name,
-        price:ParsedData.price, 
-        prevprice:ParsedData.prevprice,
-        stock:ParsedData.stock,
+        description: ParsedData.description,
+        size: ParsedData.size,
+        gender: ParsedData.gender,
+        material: ParsedData.material || ParsedData.strapMaterial,
+        price: ParsedData.price,
+        colour: ParsedData.colour,
+        prevprice: ParsedData.prevprice,
+        stock: ParsedData.stock,
+        pattern: ParsedData.pattern,
+        fit: ParsedData.fit,
+        occasion: ParsedData.occasion,
+        season: ParsedData.season,
+        brandId: ParsedData.brandId,
+        dialShape:ParsedData.dialShape,
+        waterResistance:ParsedData.waterResistance,
         category: {
-          connect: ParsedData.categoryId.map((id: number) => ({ id })),
+          connect: Array.isArray(ParsedData.categoryId)
+            ? ParsedData.categoryId.map((id: number) => ({ id }))
+            : [{ id: ParsedData.categoryId }],
         },
         categoryType: ParsedData.categoryType as CategoryType,
         images: {
-          create: 
-          uploadedFiles, // Array of images to create
+          create: formattedImages,
         },
       },
     });
-    
-  
-    console.log("uploadedFiles",uploadedFiles);
-    console.log("AddedFiles",AddedFiles);
-    return AddedFiles;
-    
+  });
+
+  console.log("Product successfully added:", AddedFiles);
+  return AddedFiles;
 }
 
 export async function getProducts(){

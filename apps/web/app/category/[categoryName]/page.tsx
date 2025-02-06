@@ -50,7 +50,8 @@ async function ProductList({categoryName,searchParams}:{categoryName: CategoryTy
   console.log("categoryName  :",categoryName);
   
   const data=await findProducts(categoryName as CategoryType, searchParams);
-
+  console.log("Watch data: ",data);
+  
   return(<>
       {data ? data?.map((product) => (
           <PorductCard

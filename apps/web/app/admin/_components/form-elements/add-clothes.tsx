@@ -88,7 +88,7 @@ export default function AddClothForm() {
         if (event.target.files) {
             const fileArray = Array.from(event.target.files); // Convert FileList to an array
             setImages((prevImages) => [...prevImages, ...fileArray]);
-          }
+            }
         for (let i = 0; i < files.length; i++) {
             if(files[i]){
                 setImageUrl((prevUrls)=>[...prevUrls,URL.createObjectURL(files[i]!)])
