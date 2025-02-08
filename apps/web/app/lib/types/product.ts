@@ -33,7 +33,7 @@ export const productSchema = z.object({
     price: z.number().positive(),
     prevprice: z.number().positive(),
     stock: z.number().int().nonnegative('Stock must be a non-negative integer'),
-    size: z.string().optional(), 
+    size:z.array(z.string()),
     // imageUrl:z.string(),
     material: z.string().optional(), 
     colour: z.string().optional(), 
@@ -55,7 +55,7 @@ export const productSchema = z.object({
     name: z.string().min(1),
     description: z.string().optional(), 
     gender:z.string().optional(),
-    size: z.array(z.string()),         // e.g., S, M, L, XL
+    size:z.array(z.string()),
     price: z.coerce.number().positive(),
     prevprice: z.coerce.number().positive(),
     material: z.string().optional(),     // e.g., Cotton, Polyester
@@ -100,7 +100,7 @@ export const productSchema = z.object({
     name: z.string().min(1).optional(),
     price: z.string().optional(),
     prevprice: z.string().optional(),
-    size: z.string().optional(),         // e.g., S, M, L, XL
+    size:z.array(z.string()),
     material: z.string().optional(),     // e.g., Cotton, Polyester
     colour: z.string().optional(),       // e.g., Red, Blue
     pattern: z.string().optional(),      // e.g., Solid, Striped
@@ -132,7 +132,7 @@ export const productSchema = z.object({
   export const footwearSchema = z.object({
     name: z.string().min(1),
     description: z.string().optional(), 
-    size: z.string().optional(),          // e.g., 8, 9, 10
+    size:z.array(z.string()),
     gender:z.string(),
     colour: z.string().optional(),        // e.g., Black, White
     occasion: z.string().optional(),      // e.g., Casual, Formal
@@ -153,7 +153,7 @@ export const productSchema = z.object({
     description: z.string().optional(), 
     colour: z.string().optional(), 
     material: z.string().optional(),      // e.g., Leather, Fabric
-    size: z.string().optional(),          // e.g., Small, Medium, Large
+    size:z.array(z.string()),
     gender:z.string(),
     price: z.coerce.number().positive(),
     prevprice: z.coerce.number().positive(),
@@ -170,7 +170,7 @@ export const productSchema = z.object({
     price: z.coerce.number().positive(),
     prevprice: z.coerce.number().positive(),
     colour: z.string().optional(), 
-    size: z.string().optional(), 
+    size:z.array(z.string()),
     gender:z.string().optional(),
     material: z.string().optional(),      // e.g., Leather, Fabric
     purpose: z.string().optional(),       // e.g., Travel, Daily Use
@@ -220,7 +220,7 @@ export const productSchema = z.object({
     price: z.coerce.number().positive(),
     prevprice: z.coerce.number().positive(),
     description: z.string().optional(), 
-    size: z.string().optional(),          // e.g., S, M, L, XL
+    size:z.array(z.string()),
     gender:z.string(), 
     material: z.string().optional(),      // e.g., Cotton, Polyester
     style: z.string().optional(),         // e.g., Briefs, Boxers

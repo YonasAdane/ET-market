@@ -1,9 +1,9 @@
+import { ThemeProvider } from "@/widgets/theme-provider";
+import { ReduxProvider } from "@repo/redux-utils/libs/provider";
+import { Toaster } from "@repo/ui/components/ui/toaster";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import {ReduxProvider} from "@repo/redux-utils/libs/provider";
-import { ThemeProvider } from "@/widgets/theme-provider";
-
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -34,6 +34,7 @@ export default function RootLayout({
                 disableTransitionOnChange
               >
             {children}
+            <Toaster />
           </ThemeProvider> 
         </ReduxProvider>
       </body>

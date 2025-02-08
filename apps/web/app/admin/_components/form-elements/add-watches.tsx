@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getBrands } from 'app/admin/_actions/brandAction';
@@ -40,7 +41,9 @@ const watchesSchema = z.object({
 
 export default function AddWatchForm() {
  const [categoryArray,setCategoryArray]=useState<{label:string,value:string}[] >([]);
-    const [brandArray,setBrandArray]=useState<{label:string,value:string}[] >([]);
+const [brandArray,setBrandArray]=useState<{label:string,value:string}[] >([]);
+const { toast } = useToast()
+
     useEffect(()=>{
         const fetchData = async () => {
             try {
@@ -86,22 +89,36 @@ export default function AddWatchForm() {
     categoryId: [],
     categoryType:"WATCH",
     stock: 0,
-  },
-    });
-   
+        },
+            });
     
-  return (
+    return (
 <Form {...form}>
-    <form onSubmit={form.handleSubmit( async data=>{
-        await createProduct(data)
+    <form onSubmit={form.handleSubmit(async data=>{
+        console.log("Sending this data: ",data)
+        const response=await createProduct(data)
+        if(response.error){
+            toast({
+                variant:'destructive',
+                title: "Error: something went wrong",
+                description: response.error,
+                })
+        }
+        if(response.success){
+            toast({
+                title: "Data sent successfully ",
+                description: "product added successfully",
+                })
+            form.reset()
+        }
         })}>
         <div className='w-full grid grid-cols-3 gap-5 h-full '>
             <div className="col-span-2 bg-muted/50 rounded-lg p-5">
                 <h2>General Information</h2>
                 <FormField
-                name="name"
-                control={form.control}
-                render={({field})=>(
+                    name="name"
+                    control={form.control}
+                    render={({field})=>(
                     <FormItem>
                         <FormLabel className='text-sm'>Product Name</FormLabel>
                         <FormControl>
@@ -164,9 +181,9 @@ export default function AddWatchForm() {
                         )}
                         />
                         <FormField
-                        name="brandId"
-                        control={form.control}
-                        render={({field})=>(
+                            name="brandId"
+                            control={form.control}
+                            render={({field})=>(
                             <FormItem>
                                 <FormLabel className='text-sm'>Brand</FormLabel>
                                 <FormControl>
@@ -190,9 +207,9 @@ export default function AddWatchForm() {
                             </FormItem>
                         )}/>
                         <FormField
-                        name="colour"
-                        control={form.control}
-                        render={({field})=>(
+                            name="colour"
+                            control={form.control}
+                            render={({field})=>(
                             <FormItem>
                                 <FormLabel>Colour</FormLabel>
                                 <FormControl>
@@ -203,9 +220,9 @@ export default function AddWatchForm() {
                         )}
                         />
                         <FormField
-                        name="dialShape"
-                        control={form.control}
-                        render={({field})=>(
+                            name="dialShape"
+                            control={form.control}
+                            render={({field})=>(
                             <FormItem>
                                 <FormLabel>Dial Shape</FormLabel>
                                 <FormControl>
@@ -226,9 +243,9 @@ export default function AddWatchForm() {
                         )}
                         />
                         <FormField
-                        name="waterResistance"
-                        control={form.control}
-                        render={({field})=>(
+                            name="waterResistance"
+                            control={form.control}
+                            render={({field})=>(
                             <FormItem>
                                 <FormLabel>Water Resistance</FormLabel>
                                 <FormControl>
@@ -285,9 +302,9 @@ export default function AddWatchForm() {
                     <div className="flex justify-between gap-5">
                     <div className="w-full">
                         <FormField
-                        name="prevprice"
-                        control={form.control}
-                        render={({field})=>(
+                            name="prevprice"
+                            control={form.control}
+                            render={({field})=>(
                             <FormItem>
                                 <FormLabel className="text-sm">Base Pricing</FormLabel>
                                 <FormControl>
@@ -298,9 +315,9 @@ export default function AddWatchForm() {
                         )}
                         />
                         <FormField
-                        name="price"
-                        control={form.control}
-                        render={({field})=>(
+                            name="price"
+                            control={form.control}
+                            render={({field})=>(
                             <FormItem>
                                 <FormLabel className="text-sm">Current Price</FormLabel>
                                 <FormControl>
@@ -312,9 +329,9 @@ export default function AddWatchForm() {
                     </div>
                     <div className="w-full">
                         <FormField
-                        name="stock"
-                        control={form.control}
-                        render={({field})=>(
+                            name="stock"
+                            control={form.control}
+                            render={({field})=>(
                             <FormItem>
                                 <FormLabel className='text-sm'>Stock</FormLabel>
                                 <FormControl>
@@ -337,14 +354,11 @@ export default function AddWatchForm() {
                         }
                         Add Product
                     </Button>
-                </div>            
+                </div>
             </div>
             </div>
             <div className="col-span-1 flex flex-col gap-5 justify-start">
                 <UploadMultipleImage name="images" label='Product' form={form} description='Brand Image' />
-            
-                {/* <UploadImage name="images" control={form.control}/> */}
-        
             <FormField
                 name="categoryType"
                 control={form.control}

@@ -83,9 +83,10 @@ export  function UploadMultipleImage ({form,...props}: FieldValues){
                       className='hidden'
                       multiple
                       accept='image/*'
-                      onChange={async(event) =>{
+                      onChange={(event) =>{
                         onFileSelect(event)
-                        return onChange(images)
+                        console.log("files",[...images, ...Array.from(event.target.files || [])]);
+                        return onChange([...images, ...Array.from(event.target.files || [])]);
                       }}
                     />
                   </FormControl>

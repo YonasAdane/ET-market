@@ -1,21 +1,23 @@
 
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { MultiSelect } from '@/components/multi-select';
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import { filterProduct } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { getBrands } from 'app/admin/_actions/brandAction';
+import { getCategories } from 'app/admin/_actions/categoryAction';
 import { createProduct } from 'app/admin/_actions/productAction';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import { outerwearSchema } from 'app/lib/types/product';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { Spinner } from '../spinnerLoader';
@@ -24,6 +26,33 @@ import Gender from './gender';
 import ToogleElement from './toggle-element';
 
 export default function AddOuterwearForm() {
+    const [categoryArray,setCategoryArray]=useState<{label:string,value:string}[] >([]);
+    const [brandArray,setBrandArray]=useState<{label:string,value:string}[] >([]);
+    const { toast } = useToast()
+
+    useEffect(()=>{
+        const fetchData = async () => {
+            try {
+                const [categories,brands]=await Promise.all([ getCategories(),getBrands()])
+        
+        setCategoryArray(categories.map((category)=>({
+            label:category.name,
+            value:`${category.id}`})
+        ));
+        setBrandArray(brands.map((brand)=>({
+            label:brand.name,
+            value:`${brand.id}`})
+        ));
+        console.log(categoryArray,brandArray);
+        
+            } catch (error) {
+                console.log("error fetching data",error);
+                
+            }
+
+        }
+        fetchData();
+    },[]);
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
 
@@ -131,7 +160,24 @@ export default function AddOuterwearForm() {
     
   return (
 <Form {...form}>
-    <form onSubmit={form.handleSubmit(async data=>await createProduct(data))}>
+    <form onSubmit={form.handleSubmit(async data=>{
+        console.log("Sending this data: ",data)
+        const response=await createProduct(data)
+        if(response.error){
+            toast({
+                variant:'destructive',
+                title: "Error: something went wrong",
+                description: response.error,
+                })
+        }
+        if(response.success){
+            toast({
+                title: "Data sent successfully ",
+                description: "product added successfully",
+                })
+            form.reset()
+        }
+        })}>
         <div className='w-full grid grid-cols-3 gap-5 h-full '>
             <div className="col-span-2 bg-muted/50 rounded-lg p-5">
                 <h2>General Information</h2>
@@ -163,8 +209,7 @@ export default function AddOuterwearForm() {
                 />
                 <div className="flex justify-between gap-5">
                     <div className="w-full ">
-                      <ToogleElement control={form.control} description='select size' label='Size'  select='single' values={["S","M","L","XL","XXL"]} name="size"/>
-
+                        <ToogleElement control={form.control} description='select size' label='Size'  select='single' values={["S","M","L","XL","XXL"]} name="size"/>
                     </div>
                     <div className="w-full ">
                         <Gender name='gender' control={form.control}/>
@@ -257,7 +302,12 @@ export default function AddOuterwearForm() {
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Brands of Products</SelectLabel>
-                                                <SelectItem value="1">Calvin Klein</SelectItem>
+                                                {
+                                                    brandArray.length>0 && brandArray.map(brand=>(
+                                                        <SelectItem key={brand.label} value={`${brand.value}`}>{brand.label}</SelectItem>
+                                                    ))
+                                                }
+                                                {/* <SelectItem value="1">Calvin Klein</SelectItem>
                                                 <SelectItem value="2">Fruit of the Loom</SelectItem>
                                                 <SelectItem value="3">Tommy Hilfiger</SelectItem>
                                                 <SelectItem value="4">MeUndies</SelectItem>
@@ -267,7 +317,7 @@ export default function AddOuterwearForm() {
                                                 <SelectItem value="8">Savage X Fenty</SelectItem>
                                                 <SelectItem value="9">Bravado Designs</SelectItem>
                                                 <SelectItem value="10">Knix</SelectItem>
-                                                <SelectItem value="11">ThirdLove</SelectItem>
+                                                <SelectItem value="11">ThirdLove</SelectItem> */}
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -281,16 +331,26 @@ export default function AddOuterwearForm() {
                             render={({ field }) => (
                             <FormItem>
                             <FormLabel>Category Type</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value+''}>
+                                        
+                                {/* <Select onValueChange={field.onChange} defaultValue={field.value+''}> */}
                                     <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="select category" />
-                                        </SelectTrigger>
                                     </FormControl>
-                                    <SelectContent>
-                                        {productCategories.map((category,i)=>(
-
-                                        <HoverCard key={category.name}>
+                                    {/* <SelectContent> */}
+                                        <MultiSelect
+                                        options={
+                                            categoryArray?categoryArray:
+                                            [
+                                                {label:'Empty',value:"1"},
+                                            ]
+                                        }
+                                        onValueChange={field.onChange}
+                                        //   defaultValue={field.value}
+                                        placeholder="Select options"
+                                        variant="inverted"
+                                        //   animation={2}
+                                        maxCount={3}
+                                        />
+                                        {/* <HoverCard key={category.name}>
                                             <HoverCardTrigger asChild>
                                                 <SelectItem value={i+""}>{category.name}</SelectItem>
                                             </HoverCardTrigger>
@@ -309,10 +369,9 @@ export default function AddOuterwearForm() {
                                                     </div>
                                                 </div>
                                             </HoverCardContent>
-                                        </HoverCard>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                                        </HoverCard> */}
+                                    {/* </SelectContent> */}
+                                {/* </Select> */}
                             <FormMessage/>
                             </FormItem>
                         )}
@@ -389,7 +448,7 @@ export default function AddOuterwearForm() {
                         }
                         Add Product
                     </Button>
-                </div>            
+                </div>
             </div>
             </div>
             <UploadMultipleImage name="images" label='picture' form={form} description='product image' />

@@ -4,13 +4,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { getBrands } from 'app/admin/_actions/brandAction';
+import { getCategories } from 'app/admin/_actions/categoryAction';
 import { createProduct } from 'app/admin/_actions/productAction';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import { accessoriesSchema } from 'app/lib/types/product';
 import { Check } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { Spinner } from '../spinnerLoader';
@@ -19,9 +22,33 @@ import Gender from './gender';
 import Size from './size';
 
   export default function AddAccesoryForm() {
-    const [images, setImages] = useState<File[]>([]);
-    const [imageUrl,setImageUrl]=useState<string[]>([])
-   
+    const [categoryArray,setCategoryArray]=useState<{label:string,value:string}[] >([]);
+    const [brandArray,setBrandArray]=useState<{label:string,value:string}[] >([]);
+
+    const { toast } = useToast()
+    useEffect(()=>{
+        const fetchData = async () => {
+            try {
+                const [categories,brands]=await Promise.all([ getCategories(),getBrands()])
+        
+        setCategoryArray(categories.map((category)=>({
+            label:category.name,
+            value:`${category.id}`})
+        ));
+        setBrandArray(brands.map((brand)=>({
+            label:brand.name,
+            value:`${brand.id}`})
+        ));
+        console.log(categoryArray,brandArray);
+        
+            } catch (error) {
+                console.log("error fetching data",error);
+                
+            }
+
+        }
+        fetchData();
+    },[]);
     type accessoryType=z.infer<typeof accessoriesSchema >;
     const form=useForm<accessoryType>({
         resolver:zodResolver(accessoriesSchema),
@@ -30,34 +57,17 @@ import Size from './size';
             description: "",
             colour: "",
             material: "",
-            size: "",
+            size: [],
             gender:"",
             price: 1,
             prevprice: 1,
             brandId: 1,
-            categoryId: [],               
+            categoryId: [],
             categoryType:"ACCESSORY",
             stock: 0
         }
     });
     
-    function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
-        const files = event.target.files;
-        console.log("onFileSelect files: ",files );
-        
-        if (!files || files==null || !files.length || files===undefined) {
-            return;
-        }
-        if (event.target.files) {
-            const fileArray = Array.from(event.target.files); // Convert FileList to an array
-            setImages((prevImages) => [...prevImages, ...fileArray]);
-          }
-        for (let i = 0; i < files.length; i++) {
-            if(files[i]){
-                setImageUrl((prevUrls)=>[...prevUrls,URL.createObjectURL(files[i]!)])
-            }
-        }
-    }
 
     async function addProduct(data:accessoryType){
        try {
@@ -70,7 +80,24 @@ import Size from './size';
     
   return (
 <Form {...form}>
-    <form onSubmit={form.handleSubmit(async data=>await createProduct(data))}>
+    <form onSubmit={form.handleSubmit(async data=>{
+        console.log("Sending this data: ",data)
+        const response=await createProduct(data)
+        if(response.error){
+            toast({
+                variant:'destructive',
+                title: "Error: something went wrong",
+                description: response.error,
+                })
+        }
+        if(response.success){
+            toast({
+                title: "Data sent successfully ",
+                description: "product added successfully",
+                })
+            form.reset()
+        }
+        })}>
         <div className='w-full grid grid-cols-3 gap-5 h-full '>
             <div className="col-span-2 bg-muted/50 rounded-lg p-5">
                 <h2>General Information</h2>
@@ -139,8 +166,11 @@ import Size from './size';
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Brands of Products</SelectLabel>
-                                                <SelectItem value="asdfasdf">ROLEX</SelectItem>
-                                                <SelectItem value="sdd">CASIO</SelectItem>
+                                                {
+                                                    brandArray.length>0 && brandArray.map(brand=>(
+                                                        <SelectItem key={brand.label} value={`${brand.value}`}>{brand.label}</SelectItem>
+                                                    ))
+                                                }
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -170,17 +200,7 @@ import Size from './size';
                             <FormLabel>Category Type</FormLabel>
                             <FormControl>
                                 <MultiSelect
-                                options={
-                                    [
-                                        {label:'clothing',value:"1"},
-                                        {label:'footwear',value:"2"},
-                                        {label:'accessory',value:"3"},
-                                        {label:'jewellery',value:"4"},
-                                        {label:'bag',value:"5"},
-                                        {label:'outerwear',value:"6"},
-                                        {label:'watches',value:"7"},
-                                        {label:'underwear',value:"8"},
-                                    ]}
+                                options={categoryArray}
                                 onValueChange={field.onChange}
                                 //   defaultValue={field.value}
                                 placeholder="Select options"
@@ -265,7 +285,7 @@ import Size from './size';
                         }
                         Add Product
                     </Button>
-                </div>            
+                </div>
             </div>
             </div>
             <UploadMultipleImage name="images" label='picture' form={form} description='product image' />

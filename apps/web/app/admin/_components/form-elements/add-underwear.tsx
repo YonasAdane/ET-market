@@ -1,14 +1,17 @@
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { getBrands } from 'app/admin/_actions/brandAction';
+import { getCategories } from 'app/admin/_actions/categoryAction';
+import { createProduct } from 'app/admin/_actions/productAction';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import { underwearSchema } from 'app/lib/types/product';
 import { Check } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { UploadMultipleImage } from '../uploadImages';
@@ -16,6 +19,33 @@ import Gender from './gender';
 import ToogleElement from './toggle-element';
 
 export default function AddUnderwearForm() {
+    const [categoryArray,setCategoryArray]=useState<{label:string,value:string}[] >([]);
+    const [brandArray,setBrandArray]=useState<{label:string,value:string}[] >([]);
+    const { toast } = useToast()
+
+    useEffect(()=>{
+        const fetchData = async () => {
+            try {
+                const [categories,brands]=await Promise.all([ getCategories(),getBrands()])
+        
+        setCategoryArray(categories.map((category)=>({
+            label:category.name,
+            value:`${category.id}`})
+        ));
+        setBrandArray(brands.map((brand)=>({
+            label:brand.name,
+            value:`${brand.id}`})
+        ));
+        console.log(categoryArray,brandArray);
+        
+            } catch (error) {
+                console.log("error fetching data",error);
+                
+            }
+
+        }
+        fetchData();
+    },[]);
   type underwearType=z.infer<typeof underwearSchema >;
     const form=useForm<underwearType>({
         resolver:zodResolver(underwearSchema),
@@ -106,7 +136,24 @@ export default function AddUnderwearForm() {
     
   return (
 <Form {...form}>
-    <form onSubmit={form.handleSubmit(addProduct)}>
+    <form onSubmit={form.handleSubmit(async data=>{
+            console.log("Sending this data: ",data)
+            const response=await createProduct(data)
+            if(response.error){
+                toast({
+                    variant:'destructive',
+                    title: "Error: something went wrong",
+                    description: response.error,
+                    })
+            }
+            if(response.success){
+                toast({
+                    title: "Data sent successfully ",
+                    description: "product added successfully",
+                    })
+                form.reset()
+            }
+            })}>
         <div className='w-full grid grid-cols-3 gap-5 h-full '>
             <div className="col-span-2 bg-muted/50 rounded-lg p-5">
                 <h2>General Information</h2>
@@ -157,14 +204,19 @@ export default function AddUnderwearForm() {
                             <FormItem>
                                 <FormLabel className='text-sm'>Brand</FormLabel>
                                 <FormControl>
-                                    <Select >
-                                        <SelectTrigger {...field}>
+                                    <Select onValueChange={field.onChange} >
+                                        <SelectTrigger >
                                             <SelectValue placeholder="Select Brand"/>
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Brands of Products</SelectLabel>
-                                                <SelectItem value="asdfasdf">Calvin Klein</SelectItem>
+                                                {
+                                                    brandArray.length>0 && brandArray.map(brand=>(
+                                                        <SelectItem key={brand.label} value={`${brand.value}`}>{brand.label}</SelectItem>
+                                                    ))
+                                                }
+                                                {/* <SelectItem value="asdfasdf">Calvin Klein</SelectItem>
                                                 <SelectItem value="sdd1">Fruit of the Loom</SelectItem>
                                                 <SelectItem value="sdd2">Tommy Hilfiger</SelectItem>
                                                 <SelectItem value="sdd3">MeUndies</SelectItem>
@@ -174,7 +226,7 @@ export default function AddUnderwearForm() {
                                                 <SelectItem value="sdd7">Savage X Fenty</SelectItem>
                                                 <SelectItem value="sdd8">Bravado Designs</SelectItem>
                                                 <SelectItem value="sdd9">Knix</SelectItem>
-                                                <SelectItem value="sdd0">ThirdLove</SelectItem>
+                                                <SelectItem value="sdd0">ThirdLove</SelectItem> */}
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -184,21 +236,21 @@ export default function AddUnderwearForm() {
                         )}/>
                         <FormField
                             control={form.control}
-                            name="categoryType"
+                            name="categoryId"
                             render={({ field }) => (
                             <FormItem>
                             <FormLabel>Category Type</FormLabel>
                             <FormControl>
-                                <Select>
-                                    <SelectTrigger {...field}>
+                                <Select onValueChange={field.onChange}>
+                                    <SelectTrigger >
                                         <SelectValue placeholder="select category" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {productCategories.map(category=>(
-
-                                        <HoverCard key={category.name}>
+                                        {categoryArray.map(category=>(
+                                            <SelectItem key={category.value} value={category.value}>{category.label}</SelectItem>
+                                        ))}
+                                        {/* <HoverCard key={category.name}>
                                             <HoverCardTrigger asChild>
-                                                <SelectItem value={category.name}>{category.name}</SelectItem>
                                             </HoverCardTrigger>
                                             <HoverCardContent className="w-80">
                                                 <div className="flex justify-between space-x-4">
@@ -215,8 +267,7 @@ export default function AddUnderwearForm() {
                                                 </div>
                                                 </div>
                                             </HoverCardContent>
-                                        </HoverCard>
-                                        ))}
+                                        </HoverCard> */}
                                     </SelectContent>
                                 </Select>
                             </FormControl>
@@ -279,7 +330,7 @@ export default function AddUnderwearForm() {
                 <div className="row-span-1 ">
                 <div className="w-fit ml-auto mt-3">
                     <Button type='submit' className="p-3 rounded-full mr-0" variant="default"><Check size={18} className="mr-1"/> Add Product</Button>
-                </div>            
+                </div>
             </div>
             </div>
             <UploadMultipleImage name="images" label='picture' form={form} description='product image' />

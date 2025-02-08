@@ -5,13 +5,16 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/h
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { getBrands } from 'app/admin/_actions/brandAction';
+import { getCategories } from 'app/admin/_actions/categoryAction';
 import { createProduct } from 'app/admin/_actions/productAction';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import { footwearSchema } from 'app/lib/types/product';
 import { Check } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { Spinner } from '../spinnerLoader';
@@ -20,16 +23,38 @@ import Gender from './gender';
 import ToogleElement from './toggle-element';
 
 export default function AddFootwearForm() {
-    const [images, setImages] = useState<File[]>([]);
-    const [imageUrl,setImageUrl]=useState<string[]>([])
-   
+    const [categoryArray,setCategoryArray]=useState<{label:string,value:string}[] >([]);
+    const [brandArray,setBrandArray]=useState<{label:string,value:string}[] >([]);
+    const { toast } = useToast()
+    useEffect(()=>{
+    const fetchData = async () => {
+        try {
+            const [categories, brands] = await Promise.all([getCategories(), getBrands()])
+
+            setCategoryArray(categories.map((category) => ({label: category.name, value: `${
+                    category.id
+                }`})));
+            setBrandArray(brands.map((brand) => ({label: brand.name, value: `${
+                    brand.id
+                }`})));
+            console.log(categoryArray, brandArray);
+
+        } catch (error) {
+            console.log("error fetching data", error);
+
+        }
+
+        }
+        fetchData();
+    },[]);
+
   type footwearType=z.infer<typeof footwearSchema >;
     const form=useForm<footwearType>({
         resolver:zodResolver(footwearSchema),
         defaultValues:{
             name:"",
             description:"",
-            size:"",
+            size:[],
             gender:"",
             colour:"",
             occasion:"",
@@ -125,27 +150,27 @@ export default function AddFootwearForm() {
             image: "path/to/court-shoes.jpg"
         }
     ];
-    function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
-        const files = event.target.files;
-        console.log("onFileSelect files: ",files );
-        
-        if (!files || files==null || !files.length || files===undefined) {
-            return;
-        }
-        if (event.target.files) {
-            const fileArray = Array.from(event.target.files); // Convert FileList to an array
-            setImages((prevImages) => [...prevImages, ...fileArray]);
-          }
-        for (let i = 0; i < files.length; i++) {
-            if(files[i]){
-                setImageUrl((prevUrls)=>[...prevUrls,URL.createObjectURL(files[i]!)])
-            }
-        }
-    }
     
-  return (
+    return (
 <Form {...form}>
-    <form onSubmit={form.handleSubmit(async data=>await createProduct(data))}>
+    <form onSubmit={form.handleSubmit(async data=>{
+        console.log("Sending this data: ",data)
+        const response=await createProduct(data)
+        if(response.error){
+            toast({
+                variant:'destructive',
+                title: "Error: something went wrong",
+                description: response.error,
+                })
+        }
+        if(response.success){
+            toast({
+                title: "Data sent successfully ",
+                description: "product added successfully",
+                })
+            form.reset()
+        }
+        })}>
         <div className='w-full grid grid-cols-3 gap-5 h-full '>
             <div className="col-span-2 bg-muted/50 rounded-lg p-5">
                 <h2>General Information</h2>
@@ -215,8 +240,11 @@ export default function AddFootwearForm() {
                                         <SelectContent>
                                             <SelectGroup>
                                                 <SelectLabel>Brands of Products</SelectLabel>
-                                                <SelectItem value="asdfasdf">ROLEX</SelectItem>
-                                                <SelectItem value="sdd">CASIO</SelectItem>
+                                                {
+                                                    brandArray.length>0 && brandArray.map(brand=>(
+                                                        <SelectItem key={brand.label} value={`${brand.value}`}>{brand.label}</SelectItem>
+                                                    ))
+                                                }
                                             </SelectGroup>
                                         </SelectContent>
                                     </Select>
@@ -239,25 +267,25 @@ export default function AddFootwearForm() {
                         />
                         
                         <FormField
-                            name="categoryType"
+                            name="categoryId"
                             control={form.control}
                             render={({ field }) => (
                             <FormItem>
                             <FormLabel>Category Type</FormLabel>
                             <FormControl>
-                                <Select>
-                                    <SelectTrigger {...field}>
+                                <Select onValueChange={field.onChange}>
+                                    <SelectTrigger >
                                         <SelectValue placeholder="select category" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {productCategories.map(category=>(
 
-                                        <HoverCard key={category.name}>
+                                        <HoverCard openDelay={500} key={category.name}>
                                             <HoverCardTrigger asChild>
                                                 <SelectItem value={category.name}>{category.name}</SelectItem>
                                             </HoverCardTrigger>
-                                            <HoverCardContent className="w-80">
-                                                <div className="flex justify-between space-x-4">
+                                            <HoverCardContent className="w-80 ">
+                                                <div className="flex justify-between space-x-4 z-2">
                                                 <Avatar>
                                                     <AvatarImage src={category.image}
                                                     />
@@ -348,14 +376,14 @@ export default function AddFootwearForm() {
                 <div className="row-span-1 ">
                 <div className="w-fit ml-auto mt-3">
                     <Button type='submit' disabled={form.formState.isSubmitting} className={cn(form.formState.isSubmitting && "cursor-not-allowed bg-muted-foreground/100"," p-3 rounded-full mr-0")} variant="default">
-                        {!form.formState.isSubmitting ? 
-                        <Check size={18} className="mr-1"/> 
+                        {!form.formState.isSubmitting ?
+                        <Check size={18} className="mr-1"/>
                         :
                         <Spinner className="mr-1 size-5" />
                         }
                         Add Product
-                    </Button>               
-                </div>  
+                    </Button>
+                </div>
             </div>
             </div>
             <UploadMultipleImage name="images" label='picture' form={form} description='product image' />

@@ -1,31 +1,34 @@
 "use client";
 import { MultiSelect } from '@/components/multi-select';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import { cn } from "@/lib/utils";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getBrands } from 'app/admin/_actions/brandAction';
 import { getCategories } from 'app/admin/_actions/categoryAction';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import { filterProduct } from 'app/lib/consts';
 import { clothingSchema } from 'app/lib/types/product';
-import { Check, ChevronsUpDown, Upload } from 'lucide-react';
+import { Check, ChevronsUpDown } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { createProduct } from "../../_actions/productAction";
 import { Spinner } from '../spinnerLoader';
+import { UploadMultipleImage } from '../uploadImages';
 import Gender from './gender';
 import Size from './size';
  
 export default function AddClothForm() {
     const [categoryArray,setCategoryArray]=useState<{label:string,value:string}[] >([]);
     const [brandArray,setBrandArray]=useState<{label:string,value:string}[] >([]);
+    const { toast } = useToast()
+
     useEffect(()=>{
         const fetchData = async () => {
             try {
@@ -52,9 +55,6 @@ export default function AddClothForm() {
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState("")
 
-    const [images, setImages] = useState<File[]>([]);
-    const [imageUrl,setImageUrl]=useState<string[]>([])
-   
     type clothingType=z.infer<typeof clothingSchema >;
     const form=useForm<clothingType>({
         resolver:zodResolver(clothingSchema),
@@ -78,41 +78,42 @@ export default function AddClothForm() {
                 images:[]
         }
     });
-    function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
-        const files = event.target.files;
-        console.log("onFileSelect files: ",files );
-        
-        if (!files || files==null || !files.length || files===undefined) {
-            return;
-        }
-        if (event.target.files) {
-            const fileArray = Array.from(event.target.files); // Convert FileList to an array
-            setImages((prevImages) => [...prevImages, ...fileArray]);
-            }
-        for (let i = 0; i < files.length; i++) {
-            if(files[i]){
-                setImageUrl((prevUrls)=>[...prevUrls,URL.createObjectURL(files[i]!)])
-            }
-        }
-    }
-  return (
+    
+    return (
 <Form {...form}>
-    <form onSubmit={form.handleSubmit(async data=>await createProduct(data))}>
+    <form onSubmit={form.handleSubmit(async data=>{
+        console.log("Sending this data: ",data)
+        const response=await createProduct(data)
+        if(response.error){
+            toast({
+                variant:'destructive',
+                title: "Error: something went wrong",
+                description: response.error,
+                })
+        }
+        if(response.success){
+            toast({
+                title: "Data sent successfully ",
+                description: "product added successfully",
+                })
+            form.reset()
+        }
+        })}>
         <div className='w-full grid grid-cols-3 gap-5 h-full '>
             <div className="col-span-2 bg-muted/50 overflow-scroll rounded-lg p-5">
                 <h2>General Information</h2>
                 <FormField
-                name="name"
-                control={form.control}
-                render={({field})=>(
-                    <FormItem>
-                        <FormLabel className='text-sm'>Product Name</FormLabel>
-                        <FormControl>
-                            <Input {...field} className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none" type="text"/>
-                        </FormControl>
-                        <FormMessage/>
-                    </FormItem>
-                )}
+                    name="name"
+                    control={form.control}
+                    render={({field})=>(
+                        <FormItem>
+                            <FormLabel className='text-sm'>Product Name</FormLabel>
+                            <FormControl>
+                                <Input {...field} className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none" type="text"/>
+                            </FormControl>
+                            <FormMessage/>
+                        </FormItem>
+                    )}
                 />
                 <FormField
                     name="description"
@@ -330,7 +331,7 @@ export default function AddClothForm() {
                                 <FormItem>
                                     <FormLabel className='text-sm'>Pattern</FormLabel>
                                     <FormControl>
-                                         <Input type="text" {...field}/>
+                                        <Input type="text" {...field}/>
                                     </FormControl>
                                     <FormMessage/>
                                 </FormItem>
@@ -435,84 +436,10 @@ export default function AddClothForm() {
                             }
                             Add Product
                         </Button>
-                    </div>         
+                    </div>
                 </div>
             </div>
-                <Card className="h-fit border-none bg-muted/50" >
-                    <h2 className="m-5">{"Product"} Images</h2>
-                    <CardContent>
-                    <div className="grid gap-2">
-                        <img
-                        alt={"Product"+"image"}
-                        className="aspect-square w-full rounded-md object-cover"
-                        height="300"
-                        src={imageUrl[0] ? imageUrl[0]:"https://ui.shadcn.com/placeholder.svg"}
-                        width="300"
-                        />
-                        <div className="grid grid-cols-3 gap-2">
-                        {imageUrl.filter(image=>image!==imageUrl[0]).map((img)=>(
-                            
-                        <button key={img}>
-                            <img
-                            alt=" image"
-                            className="border aspect-square w-full rounded-md object-cover"
-                            height="84"
-                            src={img??"https://ui.shadcn.com/placeholder.svg"}
-                            width="84"
-                            />
-                        </button>
-                        ))}
-                        {!images &&
-                        (<>
-                            <button>
-                                <img
-                                alt=" image"
-                                className=" aspect-square w-full rounded-md object-cover"
-                                height="84"
-                                src={"https://ui.shadcn.com/placeholder.svg"}
-                                width="84"
-                                />
-                            </button>
-                        </>)
-                        }
-                            <FormField
-                        name="images"
-                        control={form.control}
-                        render={({ field: { value, onChange, ...fieldProps } }) => (
-                            <FormItem>
-                              <FormLabel  className="cursor-pointer hover:bg-foreground/10 ease-in duration-100 flex aspect-square w-full items-center justify-center rounded-md border border-dashed">
-                                <Upload className="h-4 w-4 text-muted-foreground" />
-                                <span className="sr-only">Upload</span>
-                              </FormLabel>
-                              <FormControl>
-                                <Input
-                                  {...fieldProps}
-                                  type="file"
-                                  className='hidden'
-                                  multiple
-                                  accept='image/*'
-                                  onChange={async(event) =>{
-                                    onFileSelect(event)
-                                    console.log(event.target.files)
-                                    console.log("BLOB instance of",images[0] instanceof File );
-                                    
-                                    console.log("event file",event.target.files);
-                                    
-                                    return onChange(images)
-                                  }}
-                                />
-                              </FormControl>
-                              <FormDescription />
-                              <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-                        
-                            
-                        </div>
-                    </div>
-                    </CardContent>
-                </Card>
+            <UploadMultipleImage name="images" label='Product' form={form} description='Brand Image' />
         </div>
     </form>
 </Form>

@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/table"
 import { CategoryArray } from "app/lib/consts"
 import { getProducts } from "../_actions/productAction"
+import ErrorComponent from "../_components/errorComponent"
 
 export default async function Products() {
   const data=await getProducts();
@@ -156,7 +157,7 @@ export default async function Products() {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {data && data.map(product=>(
+                      {data.success && data.product.map(product=>(
 
                       <TableRow key={product.name}>
                         <TableCell className="hidden sm:table-cell">
@@ -204,9 +205,11 @@ export default async function Products() {
                         </TableCell>
                       </TableRow>
                       ))}
-                      
                     </TableBody>
                   </Table>
+                      {data.error && (
+                         <ErrorComponent error={data.error}/>
+                      )}
                 </CardContent>
                 <CardFooter>
                   <div className="text-xs text-muted-foreground">

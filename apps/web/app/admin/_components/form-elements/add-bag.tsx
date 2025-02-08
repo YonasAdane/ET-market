@@ -4,13 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createProduct } from 'app/admin/_actions/productAction';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import { bagsSchema } from 'app/lib/types/product';
 import { Check } from 'lucide-react';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { Spinner } from '../spinnerLoader';
@@ -21,9 +21,8 @@ import ToogleElement from './toggle-element';
 
 
 export default function AddBagForm() {
-    const [images, setImages] = useState<File[]>([]);
-    const [imageUrl,setImageUrl]=useState<string[]>([])
-   
+    const { toast } = useToast()
+
     type bagType=z.infer<typeof bagsSchema >;
     const form=useForm<bagType>({
         resolver:zodResolver(bagsSchema),
@@ -33,7 +32,7 @@ export default function AddBagForm() {
             price: 1,
             prevprice: 1,
             colour: "",
-            size: "",
+            size: [],
             gender:"",
             material: "",
             purpose: "",
@@ -41,26 +40,10 @@ export default function AddBagForm() {
             categoryId: [],
             categoryType:"BAG",
             stock: 1,
-            images
+            images:[]
         }
     });
-    function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
-        const files = event.target.files;
-        console.log("onFileSelect files: ",files );
-        
-        if (!files || files==null || !files.length || files===undefined) {
-            return;
-        }
-        if (event.target.files) {
-            const fileArray = Array.from(event.target.files); // Convert FileList to an array
-            setImages((prevImages) => [...prevImages, ...fileArray]);
-          }
-        for (let i = 0; i < files.length; i++) {
-            if(files[i]){
-                setImageUrl((prevUrls)=>[...prevUrls,URL.createObjectURL(files[i]!)])
-            }
-        }
-    }
+    
     function addProduct(data:bagType){
         console.log(data);
 
@@ -69,8 +52,25 @@ export default function AddBagForm() {
     
   return (
 <Form {...form}>
-    <form onSubmit={form.handleSubmit(async data=>await createProduct(data))}>
-        <div className='w-full grid grid-cols-3 gap-5 h-full '>
+<form onSubmit={form.handleSubmit(async data=>{
+        console.log("Sending this data: ",data)
+        const response=await createProduct(data)
+        if(response.error){
+            toast({
+                variant:'destructive',
+                title: "Error: something went wrong",
+                description: response.error,
+                })
+        }
+        if(response.success){
+            toast({
+                title: "Data sent successfully ",
+                description: "product added successfully",
+                })
+            form.reset()
+        }
+        })}>
+            <div className='w-full grid grid-cols-3 gap-5 h-full '>
             <div className="col-span-2 bg-muted/50 rounded-lg p-5">
                 <h2>General Information</h2>
                 <FormField
