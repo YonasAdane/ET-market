@@ -5,7 +5,7 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "deploy":"turbo run build --scope=app --includeDependencies --no-deps",
+    "deploy": "turbo run build --scope=app --includeDependencies --no-deps",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {

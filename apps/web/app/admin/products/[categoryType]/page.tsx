@@ -127,7 +127,7 @@ export default function ProductDetailsPage({ params }: ProductPageProps) {
             <div className="flex items-center mb-5">
               {
               CategoryArray.map(categoryName=>(
-                <Button asChild size="sm" variant="ghost" key={categoryName} className="h-8 mr-3 capitalize">
+                <Button asChild size="sm" variant={categoryName.toLowerCase()===params.categoryType.toLowerCase()?"secondary":"ghost"} key={categoryName} className="h-8 mr-3 capitalize">
                   <Link href={`/admin/products/${categoryName.toLowerCase()}`}>
                     {categoryName.toLowerCase()}
                   </Link>
