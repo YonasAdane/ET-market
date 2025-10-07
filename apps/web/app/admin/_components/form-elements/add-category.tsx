@@ -1,7 +1,6 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 
@@ -9,177 +8,262 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { CategoryType, CategoryType as PrismaCategoryType } from '@repo/database/index';
+import { useToast } from '@/hooks/use-toast';
+import { CategoryType as PrismaCategoryType } from '@repo/database/index';
 import { createCategory } from 'app/admin/_actions/categoryAction';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from 'app/components/form';
-import { UploadSingleImage } from '../uploadImages';
-const MAX_FILE_SIZE = 10000000;
+import { Spinner } from '../spinnerLoader';
+import { SortableImageUpload, UploadMultipleImage, UploadSingleImage } from '../uploadImages';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Check } from 'lucide-react';
+
+// Validation schema
+const MAX_FILE_SIZE = 5_000_000; // 5MB
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-const categoryTypes:PrismaCategoryType[]=[
+
+const fileSchema = z
+  .instanceof(File)
+  .refine((file) => file.size <= MAX_FILE_SIZE, `Max image size is ${MAX_FILE_SIZE / 1024 / 1024}MB.`)
+  .refine(
+    (file) => ACCEPTED_IMAGE_TYPES.includes(file.type),
+    "Only .jpg, .jpeg, .png and .webp formats are supported."
+  );
+
+export const categorySchema = z.object({
+  name: z.string().min(2, { message: 'Category name must be at least 2 characters.' }),
+  description: z.string().min(1, { message: 'Description is required.' }),
+  categoryType: z.string().min(1, { message: 'Category type is required.' }),
+  bannerImage: fileSchema.refine((file) => file !== undefined, "Banner image is required"),
+  sampleImages: z.array(fileSchema).min(1, { message: 'At least one sample image is required.' })
+});
+
+const categoryTypes: PrismaCategoryType[] = [
   'CLOTHING',
   'FOOTWEAR',
   'ACCESSORY',
   'BAG',
   'OUTERWEAR',
-  'JEWELLERY',
   'WATCH',
   'UNDERWEAR'
-]
-const categorySchema = z.object({
-  name: z.string().min(2, { message: 'Category name must be at least 2 characters.' }),
-  description: z.string(),
-  categoryType:z.string(),
-  bannerImage:  z.any()
-  .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-  .refine(
-    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-    "Only .jpg, .jpeg, .png and .webp formats are supported."
-  ),
-  sampleImages: z.array(
-    z.any()
-    .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 5MB.`)
-    .refine(
-      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-      "Only .jpg, .jpeg, .png and .webp formats are supported."
-    )
-  )
+];
 
-  // z.array(z.instanceof(File).refine(file => file.size > 0, { message: 'Please upload valid sample images.' })).min(1, { message: 'At least one sample image is required.' }),
-})
+type CategoryFormType = z.infer<typeof categorySchema>;
 
 export default function AddCategoryForm() {
-  const [images, setImages] = useState<File[]>([]);
-  const [imageUrl,setImageUrl]=useState<string[]>([])
- 
-    type categoryType= z.infer<typeof categorySchema>;
-      const form = useForm<categoryType>({
-        resolver: zodResolver(categorySchema),
-        defaultValues:{
-          name:"",
-          description:"",
-          categoryType:"CLOTHING",
-          bannerImage:null,
-          sampleImages:[]
-        }
-      })
-      
-    function onFileSelect(event: React.ChangeEvent<HTMLInputElement>) {
-      const files = event.target.files;
-      console.log("onFileSelect files: ",files );
-      
-      if (!files || files==null || !files.length || files===undefined) {
-          return;
-      }
-      if (event.target.files) {
-          const fileArray = Array.from(event.target.files); // Convert FileList to an array
-          setImages((prevImages) => [...prevImages, ...fileArray]);
-        }
-      for (let i = 0; i < files.length; i++) {
-          if(files[i]){
-              setImageUrl((prevUrls)=>[...prevUrls,URL.createObjectURL(files[i]!)])
-          }
-      }
-  }
-  return (
-    <div>
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(
-              async data=>await createCategory(
-                data.categoryType as CategoryType,
-                data.name,
-                data.description,
-                data.bannerImage,
-                data.sampleImages))} className="">
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Category Name</FormLabel>
-                        <FormControl>
-                        <Input placeholder="Enter category name" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                    <FormItem>
-                        <FormLabel>Description</FormLabel>
-                        <FormControl>
-                        <Textarea placeholder="Enter category description" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                    </FormItem>
-                    )}
-                />
-                {JSON.stringify(form.formState.errors)}
-                <FormField
-                    name="categoryType"
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm">Category Type</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange} value={field.value}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select Category" />
-                            </SelectTrigger>
-                            <SelectContent className="mb-5">
-                              <SelectGroup>
-                                <SelectLabel>Categories of Products</SelectLabel>
-                                {categoryTypes.map((Category) => (
-                                  <SelectItem key={Category} value={Category} className="uppercase">
-                                    {Category}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+  const { toast } = useToast();
 
-                <UploadSingleImage name="bannerImage" description="Banner Picture" form={form}/>
+  const form = useForm<CategoryFormType>({
+    resolver: zodResolver(categorySchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      categoryType: "CLOTHING",
+      sampleImages: []
+    },
+    mode: "onChange"
+  });
+
+  const { isSubmitting, isDirty, isValid } = form.formState;
+
+  const onSubmit = async (values: CategoryFormType) => {
+    try {
+      console.log('Form values:', values);
+      
+      const formData = new FormData();
+      
+      // Append text fields
+      formData.append('name', values.name);
+      formData.append('description', values.description);
+      formData.append('categoryType', values.categoryType);
+  
+      // Append banner image
+      if (values.bannerImage) {
+        formData.append('bannerImage', values.bannerImage);
+      }
+
+      // Append sample images
+      values.sampleImages.forEach((file) => {
+        formData.append('sampleImages', file);
+      });
+
+      // Log FormData contents for debugging
+      console.log('FormData contents:');
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value instanceof File ? `${value.name} (${value.size} bytes)` : value);
+      }
+
+      const result = await createCategory(formData);
+      
+      if (!result.success) {
+        throw new Error(result.error);
+      }
+  
+      toast({ 
+        title: 'Success', 
+        description: 'Category created successfully' 
+      });
+      
+      // Reset form
+      form.reset();
+      
+    } catch (error: any) {
+      console.error('Error creating category:', error);
+      toast({ 
+        title: 'Error', 
+        variant: 'destructive', 
+        description: error.message || 'Failed to create category' 
+      });
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Add New Category</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Left Column - Basic Info */}
+              <div className="space-y-4">
                 <FormField
-                        control={form.control}
-                        name="sampleImages"
-                        render={({ field: { value, onChange, ...fieldProps } }) => (
-                          <FormItem>
-                                <FormLabel>Sample Images</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        type="file"
-                                        multiple
-                                        accept="image/*"
-                                        onChange={async(event) =>{
-                                          onFileSelect(event)
-                                          return onChange(images)
-                                        }}
-                                        {...fieldProps}
-                                    />
-                                </FormControl>
-                                <FormDescription>Upload one or more sample images</FormDescription>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                <Button type="submit">Add Category</Button>
-            </form>
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category Name *</FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder="Enter category name" 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="categoryType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category Type *</FormLabel>
+                      <FormControl>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Category Type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>Product Categories</SelectLabel>
+                              {categoryTypes.map((category) => (
+                                <SelectItem key={category} value={category} className="uppercase">
+                                  {category.toLowerCase().replace(/_/g, ' ')}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Right Column - Description */}
+              <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="h-full">
+                      <FormLabel>Description *</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          placeholder="Enter category description" 
+                          className="h-32 resize-none"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Image Upload Sections */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <UploadSingleImage
+                // form={form}
+                name="bannerImage"
+                title="Banner Image"
+                description="Upload category banner image (required)"
+              />
+
+              <SortableImageUpload
+                form={form}
+                name="sampleImages"
+                label="Sample Images"
+                description="Upload sample product images (at least one required)"
+              />
+            </div>
+
+            {/* Debug Information - Remove in production */}
+            <Card className="bg-muted/50">
+              <CardContent className="pt-6">
+                <h4 className="text-sm font-medium mb-2">Form State:</h4>
+                <div className="text-xs space-y-1">
+                  <div>Valid: {isValid ? 'Yes' : 'No'}</div>
+                  <div>Dirty: {isDirty ? 'Yes' : 'No'}</div>
+                  <div>Submitting: {isSubmitting ? 'Yes' : 'No'}</div>
+                  <div>Errors: {JSON.stringify(form.formState.errors)}</div>
+                  <div className="mt-2">
+                    Values: {JSON.stringify({
+                      name: form.watch('name'),
+                      description: form.watch('description'),
+                      categoryType: form.watch('categoryType'),
+                      bannerImage: form.watch('bannerImage') ? 'File selected' : 'No file',
+                      sampleImages: form.watch('sampleImages')?.length || 0 + ' files'
+                    })}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Submit Button */}
+            <Button 
+              type="submit" 
+              disabled={isSubmitting || !isValid || !isDirty}
+              className="w-full"
+              size="lg"
+            >
+              {isSubmitting ? (
+                <>
+                  <Spinner className="mr-2 h-4 w-4 animate-spin" />
+                  Creating Category...
+                </>
+              ) : (
+                <>
+                  <Check className="mr-2 h-4 w-4" />
+                  Create Category
+                </>
+              )}
+            </Button>
+          </form>
         </Form>
-    </div>
-  )
+      </CardContent>
+    </Card>
+  );
 }

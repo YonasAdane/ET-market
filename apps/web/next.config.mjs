@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-   
+    experimental: {
+      serverActions: {
+        bodySizeLimit: '2mb',
+      },
+    },
     images: {
         domains: ['images.pexels.com',
           "g-iff6oyrytat.vusercontent.net",

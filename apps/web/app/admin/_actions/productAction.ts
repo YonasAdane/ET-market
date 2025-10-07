@@ -89,27 +89,250 @@ export async function createProduct(ParsedData: any) {
 
 }
 
-export async function getProducts(){
+interface ProductQueryParams {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  categoryType?: CategoryType;
+  brandId?: number;
+  sortBy?: 'name' | 'price' | 'createdAt';
+  sortOrder?: 'asc' | 'desc';
+  minPrice?: number;
+  maxPrice?: number;
+}
+
+export async function getProducts(params: ProductQueryParams = {}) {
   try {
-    const product=await db.product.findMany({include: { brand: true,images:true }});
-    return {success:true,product};
-    
-  } catch (error:any) {
-    if (error?.message?.includes("Can't reach database") || error.code === "ECONNREFUSED") {
-      return { type: "network", error: "⚠️ Unable to connect to the database. Please check your network." };
+    const {
+      page = 1,
+      pageSize = 10,
+      search = '',
+      categoryType,
+      brandId,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+      minPrice,
+      maxPrice
+    } = params;
+
+    const skip = (page - 1) * pageSize;
+    const where: any = {};
+
+    // Search functionality
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+        { brand: { name: { contains: search, mode: 'insensitive' } } }
+      ];
     }
 
-    return { type: "other", error: "❌ Something went wrong. Please try again later." };
+    // Category filter
+    if (categoryType) {
+      where.categoryType = categoryType;
+    }
+
+    // Brand filter
+    if (brandId) {
+      where.brandId = brandId;
+    }
+
+    // Price range filter
+    if (minPrice !== undefined || maxPrice !== undefined) {
+      where.price = {};
+      if (minPrice !== undefined) where.price.gte = minPrice;
+      if (maxPrice !== undefined) where.price.lte = maxPrice;
+    }
+
+    // Build orderBy
+    const orderBy: any = {};
+    orderBy[sortBy] = sortOrder;
+
+    // Execute queries in parallel
+    const [products, totalCount] = await Promise.all([
+      db.product.findMany({
+        where,
+        include: { 
+          brand: true, 
+          images: true,
+          category: true 
+        },
+        orderBy,
+        skip,
+        take: pageSize,
+      }),
+      db.product.count({ where })
+    ]);
+
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    return {
+      success: true,
+      data: products,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalCount,
+        pageSize,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1
+      }
+    };
+
+  } catch (error: any) {
+    console.error("Error fetching products:", error);
+    
+    if (error?.message?.includes("Can't reach database") || error.code === "ECONNREFUSED") {
+      return { 
+        success: false,
+        type: "network", 
+        error: "Unable to connect to the database. Please check your network connection." 
+      };
+    }
+
+    return { 
+      success: false,
+      type: "other", 
+      error: "Something went wrong while fetching products. Please try again later." 
+    };
   }
-  
 }
-export async function getProductById(id:number){
-  const product=await db.product.findUnique({where:{id},include: { brand: true,images:true }});
-  return product;
+export async function getProductById(id: number) {
+  try {
+    const product = await db.product.findUnique({
+      where: { id },
+      include: { 
+        brand: true, 
+        images: true,
+        category: true 
+      }
+    });
+    
+    if (!product) {
+      return { success: false, error: "Product not found" };
+    }
+    
+    return { success: true, data: product };
+  } catch (error: any) {
+    console.error("Error fetching product:", error);
+    return { success: false, error: "Failed to fetch product" };
+  }
 }
-export async function deleteProduct(id:number){
-  const product=await db.product.delete({where:{id}});
-  return product;
+
+export async function updateProduct(id: number, updateData: any) {
+  try {
+    // Validate using Zod if needed
+    const schema = schemas[updateData.categoryType as CategoryType];
+    if (schema) {
+      await schema.parse(updateData);
+    }
+
+    // Handle image updates if provided
+    let formattedImages = undefined;
+    if (updateData.images && updateData.images.length > 0) {
+      const uploadedFiles = await Promise.all(
+        updateData.images.map((file: any) => uploadToCloudinary(file, "product-pictures"))
+      );
+      
+      formattedImages = uploadedFiles.map(result => ({
+        publicId: result.public_id,
+        url: result.secure_url,
+      }));
+    }
+
+    // Prepare update data
+    const updatePayload: any = {
+      name: updateData.name,
+      description: updateData.description,
+      size: updateData.size,
+      gender: updateData.gender,
+      material: updateData.material || updateData.strapMaterial,
+      price: updateData.price,
+      colour: updateData.colour,
+      prevprice: updateData.prevprice,
+      stock: updateData.stock,
+      pattern: updateData.pattern,
+      fit: updateData.fit,
+      occasion: updateData.occasion,
+      season: updateData.season,
+      brandId: updateData.brandId,
+      dialShape: updateData.dialShape,
+      waterResistance: updateData.waterResistance,
+      categoryType: updateData.categoryType as CategoryType,
+    };
+
+    // Add category connection if provided
+    if (updateData.categoryId) {
+      updatePayload.category = {
+        set: Array.isArray(updateData.categoryId)
+          ? updateData.categoryId.map((id: number) => ({ id }))
+          : [{ id: updateData.categoryId }],
+      };
+    }
+
+    // Add images if provided
+    if (formattedImages) {
+      updatePayload.images = {
+        create: formattedImages,
+      };
+    }
+
+    const updatedProduct = await db.product.update({
+      where: { id },
+      data: updatePayload,
+      include: { 
+        brand: true, 
+        images: true,
+        category: true 
+      }
+    });
+
+    revalidatePath("/admin/products");
+    return { success: true, data: updatedProduct };
+
+  } catch (error: any) {
+    console.error("Error updating product:", error);
+    
+    if (error instanceof ZodError) {
+      return { success: false, error: "Invalid product data" };
+    }
+
+    return { success: false, error: "Failed to update product. Please try again." };
+  }
+}
+export async function deleteProduct(id: number) {
+  try {
+    // First, get the product with images to clean up cloudinary
+    const product = await db.product.findUnique({
+      where: { id },
+      include: { images: true }
+    });
+
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    // Delete associated images from cloudinary and database
+    if (product.images.length > 0) {
+      // Note: You might want to add a cloudinary delete function here
+      await db.image.deleteMany({
+        where: { id: { in: product.images.map(img => img.id) } }
+      });
+    }
+
+    // Delete the product
+    const deletedProduct = await db.product.delete({ where: { id } });
+    
+    revalidatePath("/admin/products");
+    return { success: true, product: deletedProduct };
+
+  } catch (error: any) {
+    console.error("Error deleting product:", error);
+    return { 
+      success: false, 
+      error: "Failed to delete product. Please try again." 
+    };
+  }
 }
 
 

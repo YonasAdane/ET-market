@@ -43,6 +43,8 @@ model Category {
   categoryType  CategoryType
   // bannerSampleId Int
   // sampleImagesId   Int[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
   @@map("categories")
 }
 
@@ -57,7 +59,8 @@ model Brand {
   products    Product[] @relation("BrandProducts")
   // brandImageId       Int?  @unique
   brandLogoId Int?      @unique
-
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
   @@map("brands")
 }
 
@@ -111,7 +114,7 @@ model Image {
   url              String
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
-  brandId          Int?      @unique
+  brandId          Int?     
 
   @@map("product_images")
 }
@@ -139,6 +142,7 @@ model OrderItem {
   quantity  Int
   price     Float
   createdAt DateTime @default(now())
+  updatedAt    DateTime  @updatedAt
   order     Order    @relation("OrderItems", fields: [orderId], references: [id])
   product   Product  @relation("ProductOrderItems", fields: [productId], references: [id])
 
@@ -153,7 +157,8 @@ model Payment {
   status      PaymentStatus @default(PENDING)
   paymentDate DateTime      @default(now())
   order       Order         @relation(fields: [orderId], references: [id])
-
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
   @@map("payments")
 }
 
@@ -164,6 +169,7 @@ model Review {
   rating    Int
   comment   String?
   createdAt DateTime @default(now())
+  updatedAt    DateTime  @updatedAt
   product   Product  @relation("ProductReviews", fields: [productId], references: [id])
   user      User     @relation("UserReviews", fields: [userId], references: [id])
 
@@ -177,7 +183,7 @@ model Wishlist {
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
-
+  updatedAt    DateTime  @updatedAt
   @@map("wishlist")
 }
 
@@ -186,10 +192,10 @@ model ShoppingCart {
   userId    String
   productId Int
   quantity  Int
-  createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
-
+  createdAt DateTime @default(now())
+  updatedAt    DateTime  @updatedAt
   @@map("shopping_cart")
 }
 
@@ -204,6 +210,7 @@ model Shipping {
   status       ShippingStatus @default(PENDING)
   shippingDate DateTime?
   createdAt    DateTime       @default(now())
+  updatedAt    DateTime  @updatedAt
   order        Order          @relation("OrderShipping", fields: [orderId], references: [id])
 
   @@map("shipping")

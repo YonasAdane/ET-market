@@ -1,158 +1,100 @@
-/**
- * eslint-disable @next/next/no-img-element
- *
- * @format
- */
+import React, { Suspense } from "react";
+import { Plus, UserCheck, UserX } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { getUsers } from "../_actions/userAction";
+import AdminTable from "@repo/ui/components/admin/AdminTable";
+import AdminPagination from "@repo/ui/components/admin/AdminPagination";
+import AdminSearchBar from "@repo/ui/components/admin/AdminSearchBar";
+import AdminActionButton from "@repo/ui/components/admin/AdminActionButton";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import TryAgainButton from "app/components/try-again-button";
+import { Prisma } from "@repo/database/index";
+import UsersTableClient from "./UsersTableClient";
 
-/** @format */
-"use client";
-
-import { DataTable } from "@/widgets/adminComponents/DataTable";
-import PageTitle from "@/widgets/adminComponents/PageTitle";
-// import { DataTable } from "@/components/DataTable";
-import { ColumnDef } from "@tanstack/react-table";
-import React from "react";
-// import PageTitle from "@/components/PageTitle";
-
-type Props = {};
-type Payment = {
-  name: string;
-  email: string;
-  lastOrder: string;
-  method: string;
-};
-
-const columns: ColumnDef<Payment>[] = [
-  {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => {
-      return (
-        <div className="flex gap-2 items-center">
-          <img
-            className="h-10 w-10"
-            src={`https://api.dicebear.com/7.x/lorelei/svg?seed=${row.getValue(
-              "name"
-            )}`}
-            alt="user-image"
-          />
-          <p>{row.getValue("name")} </p>
-        </div>
-      );
-    }
-  },
-  {
-    accessorKey: "email",
-    header: "Email"
-  },
-  {
-    accessorKey: "lastOrder",
-    header: "Last Order"
-  },
-  {
-    accessorKey: "method",
-    header: "Method"
-  }
-];
-
-const data: Payment[] = [
-  {
-    name: "John Doe",
-    email: "john@example.com",
-    lastOrder: "2023-01-01",
-    method: "Credit Card"
-  },
-  {
-    name: "Alice Smith",
-    email: "alice@example.com",
-    lastOrder: "2023-02-15",
-    method: "PayPal"
-  },
-  {
-    name: "Bob Johnson",
-    email: "bob@example.com",
-    lastOrder: "2023-03-20",
-    method: "Stripe"
-  },
-  {
-    name: "Emma Brown",
-    email: "emma@example.com",
-    lastOrder: "2023-04-10",
-    method: "Venmo"
-  },
-  {
-    name: "Michael Davis",
-    email: "michael@example.com",
-    lastOrder: "2023-05-05",
-    method: "Cash"
-  },
-  {
-    name: "Sophia Wilson",
-    email: "sophia@example.com",
-    lastOrder: "2023-06-18",
-    method: "Bank Transfer"
-  },
-  {
-    name: "Liam Garcia",
-    email: "liam@example.com",
-    lastOrder: "2023-07-22",
-    method: "Payoneer"
-  },
-  {
-    name: "Olivia Martinez",
-    email: "olivia@example.com",
-    lastOrder: "2023-08-30",
-    method: "Apple Pay"
-  },
-  {
-    name: "Noah Rodriguez",
-    email: "noah@example.com",
-    lastOrder: "2023-09-12",
-    method: "Google Pay"
-  },
-  {
-    name: "Ava Lopez",
-    email: "ava@example.com",
-    lastOrder: "2023-10-25",
-    method: "Cryptocurrency"
-  },
-  {
-    name: "Elijah Hernandez",
-    email: "elijah@example.com",
-    lastOrder: "2023-11-05",
-    method: "Alipay"
-  },
-  {
-    name: "Mia Gonzalez",
-    email: "mia@example.com",
-    lastOrder: "2023-12-08",
-    method: "WeChat Pay"
-  },
-  {
-    name: "James Perez",
-    email: "james@example.com",
-    lastOrder: "2024-01-18",
-    method: "Square Cash"
-  },
-  {
-    name: "Charlotte Carter",
-    email: "charlotte@example.com",
-    lastOrder: "2024-02-22",
-    method: "Zelle"
-  },
-  {
-    name: "Benjamin Taylor",
-    email: "benjamin@example.com",
-    lastOrder: "2024-03-30",
-    method: "Stripe"
-  }
-];
-
-export default function UsersPage({}: Props) {
+// Loading skeleton component
+function UsersLoadingSkeleton() {
   return (
-    <div className="flex flex-col gap-5 p-5 w-full">
-      <PageTitle title="Users" />
-      <DataTable columns={columns} data={data} />
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-96" />
+        </div>
+        <Skeleton className="h-10 w-32" />
+      </div>
+      
+      <div className="space-y-4">
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    </div>
+  );
+}
+
+export default async function UsersPage() {
+  return (
+    <Suspense fallback={<UsersLoadingSkeleton />}>
+      <UsersContent />
+    </Suspense>
+  );
+}
+
+async function UsersContent() {
+  const result = await getUsers();
+  type UserWithCount = Prisma.UserGetPayload<{
+    include: {
+      _count: {
+        select: { 
+          orders: true,
+          reviews: true,
+          cartItems: true,
+          wishlist: true
+        }
+      }
+    }
+  }>;
+  
+  if (!result.success) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 space-y-4">
+        <div className="text-center space-y-2">
+          <h3 className="text-lg font-semibold">Failed to load users</h3>
+          <p className="text-muted-foreground max-w-md">{result.error}</p>
+        </div>
+        <TryAgainButton/>
+      </div>
+    );
+  }
+
+  const { data: users } = result;
+
+  // Define table columns
+
+
+  // Filter options
+  const filterOptions = [
+    {
+      key: "role",
+      label: "Role",
+      options: [
+        { value: "CUSTOMER", label: "Customer" },
+        { value: "ADMIN", label: "Admin" },
+        { value: "SUPPORT", label: "Support" }
+      ]
+    }
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Users Table */}
+      <div className="p-6">
+      <UsersTableClient users={result.data || []} />
+    </div>
+    
+      {/* TODO: Add pagination when needed */}
     </div>
   );
 }

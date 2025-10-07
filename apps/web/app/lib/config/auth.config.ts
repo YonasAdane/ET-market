@@ -37,7 +37,7 @@ const AuthConfiguration: Omit<NextAuthConfig, "Adapter"> = {
     ],
     callbacks: {
         session: ({ session, token }) => {
-            console.log("session callback: ", { session, token });
+            // console.log("session callback: ", { session, token });
 
             return {
                 ...session,
@@ -53,8 +53,8 @@ const AuthConfiguration: Omit<NextAuthConfig, "Adapter"> = {
             if (user) {
                 token.role = u.role;
             }
-            console.log("JWT callback token: ", token);
-            console.log("JWT callback user: ", user);
+            // console.log("JWT callback token: ", token);
+            // console.log("JWT callback user: ", user);
 
             return token;
         },
