@@ -1,41 +1,9 @@
-import {
-  ListFilter,
-  MoreHorizontal,
-  PlusCircle,
-  Search,
-} from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import TryAgainButton from "app/components/try-again-button"
 import { CategoryArray } from "app/lib/consts"
+import { getProducts } from "../../_actions/productAction"
+import { ProductsClientContent } from "../ProductsContent"
+import { CategoryType } from "@repo/database/index";
 
 // export default async function AdminProductsPage({categoryType}:{categoryType:string}) {
 
@@ -47,12 +15,27 @@ interface ProductPageProps {
 export function generateStaticParams(){
   return CategoryArray.map(item=>item.toLowerCase())
 }
-export default function ProductDetailsPage({ params }: ProductPageProps) {
-  // const data=await findProducts(collectionName);
-  console.log(params.categoryType);
-  
-  // const brandsNcategory=await findProductsBrand(collectionName);
 
+<<<<<<< HEAD
+
+export default async function ProductsCategoryPage({ params }: { params: Promise<{ categoryType: string }> }) {
+  const categoryType = (await params).categoryType
+  const result = await getProducts({
+      page :1,
+      pageSize : 10,
+      search : '',
+      categoryType: categoryType.toUpperCase() as CategoryType,
+    })
+  
+  if (!result.success) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 space-y-4 p-6">
+        <div className="text-center space-y-2">
+          <h3 className="text-lg font-semibold">Failed to load products</h3>
+          <p className="text-muted-foreground max-w-md">{result.error}</p>
+        </div>
+        <TryAgainButton />
+=======
   return (
       <div className="flex min-h-screen w-full  bg-muted/40 flex-col sm:gap-4 sm:py-4">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -449,6 +432,20 @@ export default function ProductDetailsPage({ params }: ProductPageProps) {
               </Card>
           </div>
         </main>
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
       </div>
+    )
+  }
+
+  const products = result.data || []
+  console.log(JSON.stringify(products, null, 2))
+  return (
+    <ProductsClientContent products={products} />
   )
 }
+
+export { ProductsCategoryPage }
+
+
+
+

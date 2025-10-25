@@ -30,11 +30,11 @@ export default function RootLayout({
       <HolyLoader />
         <ReduxProvider>
           <ThemeProvider
-                attribute="class"
-                defaultTheme="light"
-                enableSystem
-                disableTransitionOnChange
-              >
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
             {children}
             <Toaster />
           </ThemeProvider> 

@@ -60,7 +60,11 @@ export default function CategoriesTableClient({
 }: CategoriesTableClientProps) {
   const router = useRouter();
   const { toast } = useToast();
+<<<<<<< HEAD
+  console.log({categories})
+=======
 
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   // ✅ Memoize callbacks
   const handleEdit = useCallback((id: number) => {
     router.push(`/admin/categories/edit/${id}`);

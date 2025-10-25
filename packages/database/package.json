@@ -5,28 +5,34 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "prisma db seed",
+    "format": "prisma format",
+    "generate": "prisma generate",
+    "prebuild": "npm run generate",
+    "predev": "npm run generate",
+    "studio": "prisma studio",
     "build": "tsc",
     "db:generate": "prisma generate",
-    "postinstall": "prisma generate",
-    "db:push": "prisma db push --skip-generate"
+    "postinstall": "prisma generate"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "prisma": "^5.18.0",
+    "dotenv": "^16.4.5",
+    "prisma": "^6.17.1",
     "typescript": "^5.5.4"
   },
   "exports": {
-    "./index": {
-      "types": "./src/index.ts",
-      "default": "./dist/index.js"
-    },
+    ".": "./src/index.ts",
     "./src/index": {
       "types": "./src/index.ts",
       "default": "./src/index.ts"
     }
   },
   "dependencies": {
-    "@prisma/client": "^5.18.0",
+    "@prisma/client": "^6.17.1",
     "@tanstack/react-table": "^8.20.6"
   }
 }

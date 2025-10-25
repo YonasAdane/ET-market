@@ -139,12 +139,13 @@ export const productSchema = z.object({
     price: z.coerce.number().positive(),
     prevprice: z.coerce.number().positive(),
     material: z.string().optional(),      // e.g., Leather, Suede
-    // closureType: z.string().optional(),   // e.g., Laces, Velcro
+    closureType: z.string().optional(),   // e.g., Laces, Velcro
     brandId: z.coerce.number().optional(),       // Foreign key reference to Brand
     categoryId: z.coerce.number().array(),               // Foreign key reference to Category
     categoryType:CategoryType,
     stock: z.coerce.number().int().nonnegative(),
-    images: z.any().array()
+    images: z.any().array(),
+    soleType: z.string().optional(), 
 
   });
   
@@ -192,6 +193,9 @@ export const productSchema = z.object({
     brandId: z.coerce.number().optional(),       // Foreign key reference to Brand
     categoryId: z.coerce.number().array(),               // Foreign key reference to Category
     categoryType:CategoryType,
+    size:z.array(z.string()),
+    gender:z.string().optional(),
+    colour:z.string().optional(), 
     stock: z.coerce.number().int().nonnegative(),
     images: z.any().array()
   });
@@ -221,13 +225,17 @@ export const productSchema = z.object({
     prevprice: z.coerce.number().positive(),
     description: z.string().optional(), 
     size:z.array(z.string()),
+<<<<<<< HEAD
+    colour:z.string().optional(), 
+=======
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
     gender:z.string(), 
     material: z.string().optional(),      // e.g., Cotton, Polyester
     style: z.string().optional(),         // e.g., Briefs, Boxers
     brandId: z.coerce.number().optional(),       // Foreign key reference to Brand
     categoryId: z.coerce.number().array(),               // Foreign key reference to Category
     categoryType:CategoryType,
-    // imageUrl:z.string(),
+    images:z.any().array(),
     stock: z.coerce.number().int().nonnegative()
   
   });

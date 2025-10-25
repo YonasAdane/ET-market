@@ -113,12 +113,19 @@ export async function getUserById(id: string) {
           take: 5,
           orderBy: { createdAt: 'desc' },
           include: {
+<<<<<<< HEAD
+            items: {
+              include: {
+                product: {
+                  include: { images: true },
+=======
             orderItems: {
               include: {
                 product: {
                   include: {
                     images: true
                   }
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
                 }
               }
             }

@@ -6,8 +6,13 @@ import { NavigationBar } from "app/components/navigationBar"
 import { CategoryArray } from "app/lib/consts"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
+interface Props{
+  params:Promise<{collectionName:string}>
+}
+export default async function Collection({params}:Props) {
+  const {collectionName}=await params;
 
-export default async function Component() {
+
   const navItems = ["Brands", "Men", "Women", "Jewelry", "Luxury", "Stores", "Sale", "Blog"]
   const trendingNow = [
     {
@@ -71,6 +76,7 @@ console.log("categories : ",categories);
                 <div className="mb-2 h-12 w-12 rounded-full bg-primary/10" />
                 <p className="text-sm">{feature.text}</p>
               </div>
+              
             ))}
           </div>
         </section>

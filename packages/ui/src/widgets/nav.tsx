@@ -27,7 +27,14 @@ interface NavProps {
 }
 
 export function Nav({ links, isCollapsed }: NavProps) {
-  const pathName = usePathname();
+  let pathName;
+  
+  try {
+    pathName = usePathname();
+  } catch (error) {
+    // Fallback if usePathname fails (SSR context)
+    pathName = "";
+  }
   return (
     <TooltipProvider>
       <div

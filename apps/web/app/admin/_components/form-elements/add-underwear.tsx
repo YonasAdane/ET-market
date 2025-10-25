@@ -4,6 +4,10 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+<<<<<<< HEAD
+import { cn } from '@/lib/utils';
+=======
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getBrands } from 'app/admin/_actions/brandAction';
 import { getCategories } from 'app/admin/_actions/categoryAction';
@@ -14,11 +18,19 @@ import { Check } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
+import { Spinner } from '../spinnerLoader';
 import { UploadMultipleImage } from '../uploadImages';
 import Gender from './gender';
-import ToogleElement from './toggle-element';
+import ToggleElement from './toggle-element';
+import { MultiSelect } from '@/components/multi-select';
 
 export default function AddUnderwearForm() {
+<<<<<<< HEAD
+    const [categoryArray, setCategoryArray] = useState<{label: string, value: string}[]>([]);
+    const [brandArray, setBrandArray] = useState<{label: string, value: string}[]>([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { toast } = useToast();
+=======
     const [categoryArray,setCategoryArray]=useState<{label:string,value:string}[] >([]);
     const [brandArray,setBrandArray]=useState<{label:string,value:string}[] >([]);
     const { toast } = useToast()
@@ -52,85 +64,134 @@ export default function AddUnderwearForm() {
     });
     function addProduct(data:underwearType){
         console.log(data);
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
 
-        alert(JSON.stringify(data))
-    }
-    const productCategories = [
-        {
-            name: "Sneakers",
-            description: "Casual shoes designed for comfort and athletic activities.",
-            image: "path/to/sneakers.jpg"
-        },
-        {
-            name: "Boots",
-            description: "Footwear that covers the ankle, suitable for various occasions.",
-            image: "path/to/boots.jpg"
-        },
-        {
-            name: "Slippers",
-            description: "Soft, comfortable shoes typically worn indoors.",
-            image: "https://s.alicdn.com/@sc04/kf/Ha2a27c48869047eba4b10e01dce63294k.jpg_720x720q50.jpg"
-        },
-        {
-            name: "Sandals",
-            description: "Open-toed footwear ideal for warm weather.",
-            image: "path/to/sandals.jpg"
-        },
-        {
-            name: "Loafers",
-            description: "Slip-on shoes suitable for casual or semi-formal wear.",
-            image: "path/to/loafers.jpg"
-        },
-        {
-            name: "Oxfords",
-            description: "Classic lace-up shoes commonly worn in formal settings.",
-            image: "path/to/oxfords.jpg"
-        },
-        {
-            name: "Brogues",
-            description: "Lace-up shoes featuring decorative perforations.",
-            image: "path/to/brogues.jpg"
-        },
-        {
-            name: "Moccasins",
-            description: "Soft, flexible shoes with a simple slip-on design.",
-            image: "path/to/moccasins.jpg"
-        },
-        {
-            name: "Flip-Flops",
-            description: "Casual sandals with a Y-shaped strap, perfect for summer.",
-            image: "path/to/flipflops.jpg"
-        },
-        {
-            name: "Clogs",
-            description: "Backless shoes with a thick sole, often made of wood.",
-            image: "path/to/clogs.jpg"
-        },
-        {
-            name: "Espadrilles",
-            description: "Casual shoes with a jute rope sole, popular in summer.",
-            image: "path/to/espadrilles.jpg"
-        },
-        {
-            name: "High-tops",
-            description: "Sneakers that extend above the ankle for added support.",
-            image: "path/to/high-tops.jpg"
-        },
-        {
-            name: "Platforms",
-            description: "Shoes with thick soles for added height and style.",
-            image: "path/to/platforms.jpg"
-        },
-        {
-            name: "Wedges",
-            description: "Shoes with wedge-shaped heels, combining height and stability.",
-            image: "path/to/wedges.jpg"
-        },
-        {
-            name: "Court Shoes",
-            description: "Women’s shoes with a low-cut front and a high heel.",
-            image: "path/to/court-shoes.jpg"
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [categories, brands] = await Promise.all([getCategories(), getBrands()]);
+                setCategoryArray(
+                    categories.success && categories.data 
+                        ? categories.data.map((category) => ({
+                            label: category.name,
+                            value: `${category.id}`
+                        }))
+                        : []
+                );
+                setBrandArray(
+                    brands.success && brands.data 
+                        ? brands.data.map((brand) => ({
+                            label: brand.name,
+                            value: `${brand.id}`
+                        }))
+                        : []
+                );
+            } catch (error) {
+                console.log("Error fetching data", error);
+                toast({
+                    variant: 'destructive',
+                    title: "Error fetching data",
+                    description: "Failed to load categories and brands",
+                });
+            }
+        };
+        fetchData();
+    }, [toast]);
+
+    type underwearType = z.infer<typeof underwearSchema>;
+    const form = useForm<underwearType>({
+        resolver: zodResolver(underwearSchema),
+        defaultValues: {
+            name: "",
+            description: "",
+            price: 1,
+            prevprice: 1,
+            colour: "",
+            size: [],
+            gender: "",
+            material: "",
+            brandId: undefined,
+            categoryId: [],
+            categoryType: "UNDERWEAR",
+            stock: 1,
+            images: []
         }
+<<<<<<< HEAD
+    });
+
+    const onSubmit = async (data: underwearType) => {
+        setIsSubmitting(true);
+        
+        try {
+            // Create FormData object
+            const formData = new FormData();
+            
+            // Append all form fields
+            formData.append('name', data.name);
+            formData.append('price', data.price.toString());
+            formData.append('prevprice', data.prevprice.toString());
+            formData.append('description', data.description || '');
+            formData.append('material', data.material || '');
+            formData.append('brandId', data.brandId?.toString() || '');
+            formData.append('colour', data.colour || '');
+            formData.append('categoryType', data.categoryType);
+            formData.append('gender', data.gender || '');
+            formData.append('stock', data.stock.toString());
+            
+            // Append arrays as JSON strings
+            formData.append('categoryId', JSON.stringify(data.categoryId));
+            formData.append('size', JSON.stringify(data.size));
+            
+            // Append images
+            data.images.forEach((image, index) => {
+                if (image instanceof File) {
+                    formData.append(`images`, image);
+                } else if (image.file) {
+                    formData.append(`images`, image.file);
+                }
+            });
+
+            console.log("Submitting FormData with:", {
+                name: data.name,
+                price: data.price,
+                categoryId: data.categoryId,
+                imagesCount: data.images.length
+            });
+
+            const response = await createProduct(formData);
+
+            if (response.error) {
+                toast({
+                    variant: 'destructive',
+                    title: "Error submitting product",
+                    description: response.error,
+                });
+            } else if (response.success) {
+                toast({
+                    title: "Success!",
+                    description: "Underwear added successfully",
+                });
+                form.reset();
+            }
+        } catch (error) {
+            console.error("Submission error:", error);
+            toast({
+                variant: 'destructive',
+                title: "Submission failed",
+                description: "An unexpected error occurred",
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    return (
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className='w-full grid grid-cols-3 gap-5 h-full'>
+                    <div className="col-span-2 bg-muted/50 rounded-lg p-5">
+                        <h2>General Information</h2>
+=======
     ];
     
     
@@ -234,8 +295,282 @@ export default function AddUnderwearForm() {
                                 <FormMessage/>
                             </FormItem>
                         )}/>
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
                         <FormField
+                            name="name"
                             control={form.control}
+<<<<<<< HEAD
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className='text-sm'>Product Name</FormLabel>
+                                    <FormControl>
+                                        <Input 
+                                            {...field} 
+                                            className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none" 
+                                            type="text"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            name="description"
+                            control={form.control}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className='text-sm'>Product Description</FormLabel>
+                                    <FormControl>
+                                        <Textarea 
+                                            {...field} 
+                                            className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none h-32" 
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <div className="flex justify-between gap-5">
+                            <div className="w-full">
+                                <ToggleElement
+                                    control={form.control} 
+                                    description='select size' 
+                                    select='multiple'
+                                    label='Size'  
+                                    values={["S", "M", "L", "XL", "XXL"]} 
+                                    name="size"
+                                />
+                            </div>
+                            <div className="w-full">
+                                <Gender name='gender' control={form.control} />
+                            </div>
+                        </div>
+                        <div className="w-full bg-muted/50 mt-5 rounded-lg p-5">
+                            <h2>Properties</h2>
+                            <div className="grid grid-cols-2 gap-5">
+                                <FormField
+                                    name="material"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-sm">Material</FormLabel>
+                                            <FormControl>
+                                                <Input 
+                                                    {...field} 
+                                                    className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none" 
+                                                    type="text"
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    name="brandId"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className='text-sm'>Brand</FormLabel>
+                                            <FormControl>
+                                                <Select onValueChange={field.onChange} value={String(field.value || '')}>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select Brand" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectGroup>
+                                                            <SelectLabel>Brands of Products</SelectLabel>
+                                                            {brandArray.length > 0 ? (
+                                                                brandArray.map(brand => (
+                                                                    <SelectItem key={brand.label} value={brand.value}>
+                                                                        {brand.label}
+                                                                    </SelectItem>
+                                                                ))
+                                                            ) : (
+                                                                <SelectItem value="1">Loading brands...</SelectItem>
+                                                            )}
+                                                        </SelectGroup>
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="colour"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Colour</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} type='text' />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                {/* <FormField
+                                    name="categoryId"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Category Type</FormLabel>
+                                            <FormControl>
+                                                <Select onValueChange={(value)=>field.onChange(Number(value))} value={String(field.value || '')}>
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select category" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {categoryArray.length > 0 ? (
+                                                            categoryArray.map(category => (
+                                                                <SelectItem key={category.value} value={category.value}>
+                                                                    {category.label}
+                                                                </SelectItem>
+                                                            ))
+                                                        ) : (
+                                                            <SelectItem value="1">Loading categories...</SelectItem>
+                                                        )}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                /> */}
+                                <FormField
+                                    name="categoryId"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Category Type</FormLabel>
+                                            <FormControl>
+                                                <MultiSelect
+                                                    options={
+                                                        categoryArray.length > 0 
+                                                            ? categoryArray 
+                                                            : [
+                                                                {label: 'clothing', value: "1"},
+                                                                {label: 'footwear', value: "2"},
+                                                                {label: 'accessory', value: "3"},
+                                                                {label: 'jewellery', value: "4"},
+                                                                {label: 'bag', value: "5"},
+                                                                {label: 'outerwear', value: "6"},
+                                                                {label: 'watches', value: "7"},
+                                                                {label: 'underwear', value: "8"},
+                                                            ]
+                                                    }
+                                                    onValueChange={field.onChange}
+                                                    placeholder="Select options"
+                                                    variant="inverted"
+                                                    maxCount={3}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    name="categoryType"
+                                    control={form.control}
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <Input type='hidden' {...field} value="UNDERWEAR" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
+                        <div className="w-full bg-muted/50 mt-5 rounded-lg p-5">
+                            <h2>Pricing And Stock</h2>
+                            <div className="flex justify-between gap-5">
+                                <div className="w-full">
+                                    <FormField
+                                        name="prevprice"
+                                        control={form.control}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-sm">Base Pricing</FormLabel>
+                                                <FormControl>
+                                                    <Input 
+                                                        {...field} 
+                                                        className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none" 
+                                                        type="number" 
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        name="price"
+                                        control={form.control}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="text-sm">Current Price</FormLabel>
+                                                <FormControl>
+                                                    <Input 
+                                                        {...field} 
+                                                        className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none" 
+                                                        type="number" 
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                                <div className="w-full">
+                                    <FormField
+                                        name="stock"
+                                        control={form.control}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className='text-sm'>Stock</FormLabel>
+                                                <FormControl>
+                                                    <Input 
+                                                        {...field} 
+                                                        className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none" 
+                                                        type="number" 
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row-span-1">
+                            <div className="w-fit ml-auto mt-3">
+                                <Button 
+                                    type='submit' 
+                                    disabled={isSubmitting || !form.formState.isValid}
+                                    className={cn(
+                                        (isSubmitting || !form.formState.isValid) && "cursor-not-allowed bg-muted-foreground/100",
+                                        "p-3 rounded-full mr-0"
+                                    )} 
+                                    variant="default"
+                                >
+                                    {!isSubmitting ? 
+                                        <Check size={18} className="mr-1" /> 
+                                        : 
+                                        <Spinner className="mr-1 size-5" />
+                                    }
+                                    Add Underwear
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-span-1 flex flex-col gap-5 justify-start">
+                        <UploadMultipleImage 
+                            name="images" 
+                            label='Underwear Images' 
+                            form={form} 
+                            description='Upload underwear images' 
+=======
                             name="categoryId"
                             render={({ field }) => (
                             <FormItem>
@@ -275,10 +610,16 @@ export default function AddUnderwearForm() {
                             <FormMessage />
                             </FormItem>
                         )}
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
                         />
-
                     </div>
                 </div>
+<<<<<<< HEAD
+            </form>
+        </Form>
+    );
+}
+=======
                 <div className="w-full bg-muted/50 mt-5 rounded-lg p-5">
                     <h2>Pricing And Stock</h2>
                     
@@ -340,3 +681,4 @@ export default function AddUnderwearForm() {
   )
 }
 
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7

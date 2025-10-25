@@ -1,9 +1,9 @@
-import type { CategoryType as PrismaCategoryType } from "@prisma/client";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from './generated/client/client'
 
-// Export the CategoryType enum type
-export type CategoryType = PrismaCategoryType;
+export function getDb(): PrismaClient {
+  const prisma = new PrismaClient()
 
-// Export PrismaClient for use in other files
-export { Prisma, PrismaClient };
+  return prisma
+}
 
+export type { PrismaClient } from './generated/client/client'

@@ -8,6 +8,10 @@ import { revalidatePath } from "next/cache";
 import { z, ZodError } from "zod";
 // import {  ProductType, ProductQueryType } from '@/types/';
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
 const schemas: Record<CategoryType, z.ZodSchema> = {
   CLOTHING: clothingSchema,
   FOOTWEAR: footwearSchema,
@@ -18,6 +22,283 @@ const schemas: Record<CategoryType, z.ZodSchema> = {
   UNDERWEAR: underwearSchema,
 };
 
+<<<<<<< HEAD
+export async function createProduct(formData: FormData) {
+  console.log("Received FormData entries:");
+  
+  // Log all FormData entries for debugging
+  for (const [key, value] of formData.entries()) {
+    console.log(`${key}:`, value);
+  }
+
+  try {
+    // Parse FormData into a structured object
+    const parsedData: any = {
+      name: formData.get('name') as string,
+      price: parseFloat(formData.get('price') as string),
+      prevprice: parseFloat(formData.get('prevprice') as string),
+      description: formData.get('description') as string,
+      strapMaterial: formData.get('strapMaterial') as string,
+      dialShape: formData.get('dialShape') as string,
+      waterResistance: formData.get('waterResistance') as string,
+      brandId: formData.get('brandId') ? parseInt(formData.get('brandId') as string) : undefined,
+      colour: formData.get('colour') as string,
+      categoryType: formData.get('categoryType') as CategoryType,
+      gender: formData.get('gender') as string,
+      stock: parseInt(formData.get('stock') as string),
+    };
+
+    // Parse arrays from JSON strings
+    try {
+      parsedData.categoryId = JSON.parse(formData.get('categoryId') as string);
+      parsedData.size = JSON.parse(formData.get('size') as string);
+    } catch (error) {
+      console.error("Error parsing JSON arrays:", error);
+      return { 
+        error: "Invalid data format for arrays",
+        success: false 
+      };
+    }
+
+    // Get image files
+    const imageFiles = formData.getAll('images') as File[];
+    parsedData.images = imageFiles;
+
+    console.log("Parsed product data:", parsedData);
+
+    // Validate using Zod
+    const schema = schemas[parsedData.categoryType as CategoryType];
+    if (!schema) {
+      return { 
+        error: "Invalid category type",
+        success: false 
+      };
+    }
+
+    const validatedData = await schema.parseAsync(parsedData);
+
+    // Validate that we have images
+    if (!imageFiles || imageFiles.length === 0) {
+      return { 
+        error: "At least one image is required",
+        success: false 
+      };
+    }
+
+    // Upload images to Cloudinary
+    let uploadedFiles;
+    try {
+      uploadedFiles = await Promise.all(
+        imageFiles.map((file) => uploadToCloudinary(file, "product-pictures"))
+      );
+    } catch (uploadError) {
+      console.error("Image upload failed:", uploadError);
+      return { 
+        error: "Failed to upload images. Please try again.",
+        success: false 
+      };
+    }
+
+    // Format images for Prisma
+    const formattedImages = uploadedFiles.map(result => ({
+      publicId: result.public_id,
+      url: result.secure_url,
+    }));
+
+    // Use transaction for database operations
+    let AddedProduct;
+    try {
+      AddedProduct = await db.$transaction(async (prisma) => {
+        return prisma.product.create({
+          data: {
+            name: validatedData.name,
+            description: validatedData.description,
+            size: validatedData.size,
+            gender: validatedData.gender,
+            material: validatedData.strapMaterial,
+            price: validatedData.price,
+            colour: validatedData.colour,
+            prevprice: validatedData.prevprice,
+            stock: validatedData.stock,
+            brandId: validatedData.brandId,
+            dialShape: validatedData.dialShape,
+            waterResistance: validatedData.waterResistance,
+            category: {
+              connect: validatedData.categoryId.map((id: number) => ({ id })),
+            },
+            categoryType: validatedData.categoryType as CategoryType,
+            images: {
+              create: formattedImages,
+            },
+          },
+          include: {
+            images: true,
+            category: true,
+            brand: true,
+          },
+        });
+      });
+    } catch (dbError: any) {
+      console.error("Database error:", dbError);
+      
+      if (dbError?.code === 'P2002') {
+        return { 
+          error: "A product with similar details already exists",
+          success: false 
+        };
+      }
+      
+      if (dbError?.message?.includes("Can't reach database") || dbError.code === "ECONNREFUSED") {
+        return { 
+          error: "Unable to connect to the database. Please check your network.",
+          success: false 
+        };
+      }
+      
+      throw dbError;
+    }
+
+    revalidatePath("/category/clothing");
+    
+    return {
+      success: true,
+      product: AddedProduct,
+      message: "Product created successfully"
+    };
+
+  } catch (error: any) {
+    console.error("Product creation error:", error);
+
+    if (error instanceof ZodError) {
+      const errorMessages = error.errors.map(err => `${err.path.join('.')}: ${err.message}`).join(', ');
+      return { 
+        error: `Validation failed: ${errorMessages}`,
+        success: false 
+      };
+    }
+
+    return { 
+      error: "Something went wrong. Please try again later.",
+      success: false 
+    };
+  }
+}
+interface ProductQueryParams {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  categoryType?: CategoryType;
+  brandId?: number;
+  sortBy?: 'name' | 'price' | 'createdAt';
+  sortOrder?: 'asc' | 'desc';
+  minPrice?: number;
+  maxPrice?: number;
+}
+
+export async function getProducts(params: ProductQueryParams = {}) {
+  try {
+    const {
+      page = 1,
+      pageSize = 10,
+      search = '',
+      categoryType,
+      brandId,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+      minPrice,
+      maxPrice
+    } = params;
+
+    const skip = (page - 1) * pageSize;
+    const where: any = {};
+
+    // Search functionality
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+        { brand: { name: { contains: search, mode: 'insensitive' } } }
+      ];
+    }
+
+    // Category filter
+    if (categoryType) {
+      where.categoryType = categoryType;
+    }
+
+    // Brand filter
+    if (brandId) {
+      where.brandId = brandId;
+    }
+
+    // Price range filter
+    if (minPrice !== undefined || maxPrice !== undefined) {
+      where.price = {};
+      if (minPrice !== undefined) where.price.gte = minPrice;
+      if (maxPrice !== undefined) where.price.lte = maxPrice;
+    }
+
+    // Build orderBy
+    const orderBy: any = {};
+    orderBy[sortBy] = sortOrder;
+
+    // Execute queries in parallel
+    const [products, totalCount] = await Promise.all([
+      db.product.findMany({
+        where,
+        include: { 
+          brand: true, 
+          images: true,
+          category: true 
+        },
+        orderBy,
+        skip,
+        take: pageSize,
+      }),
+      db.product.count({ where })
+    ]);
+
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const data=products.map(product => ({
+        ...product,
+        createdAt: product.createdAt.toISOString(), // if it's a Date
+        updatedAt:product.updatedAt.toISOString()
+      }))
+
+      console.log(JSON.stringify(data, null, 2))
+    return {
+      success: true,
+      // data: [...products,createdAt:],
+      data,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalCount,
+        pageSize,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1
+      }
+    };
+
+  } catch (error: any) {
+    console.error("Error fetching products:", error);
+    
+    if (error?.message?.includes("Can't reach database") || error.code === "ECONNREFUSED") {
+      return { 
+        success: false,
+        type: "network", 
+        error: "Unable to connect to the database. Please check your network connection." 
+      };
+    }
+
+    return { 
+      success: false,
+      type: "other", 
+      error: "Something went wrong while fetching products. Please try again later." 
+    };
+  }
+}
+=======
 export async function createProduct(ParsedData: any) {
   console.log("Received product data:", ParsedData);
   try {
@@ -197,6 +478,7 @@ export async function getProducts(params: ProductQueryParams = {}) {
     };
   }
 }
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
 export async function getProductById(id: number) {
   try {
     const product = await db.product.findUnique({
@@ -379,19 +661,17 @@ export async function findProducts(categoryType: CategoryType, queryParams: any)
   }
 
   if (queryParams.brandId) {
-    filters.brandId = {
-      has: Array.isArray(queryParams.brandId)
-        ? queryParams.brandId.map((id:any) => parseInt(id as string))
-        : [parseInt(queryParams.brandId as string)],
-    };
+    filters.brandId = Array.isArray(queryParams.brandId)?
+      {hasSome: queryParams.brandId.map((id:any) => parseInt(id as string))}
+        : {hasSome:[parseInt(queryParams.brandId as string)]};
   }
 
   if (queryParams.size) {
-    filters.size = Array.isArray(queryParams.size) ? { has: queryParams.size } : { has: [queryParams.size] };
+    filters.size = Array.isArray(queryParams.size) ? { hasSome: queryParams.size } : { hasSome: [queryParams.size] };
   }
 
   if (queryParams.material) {
-    filters.material = Array.isArray(queryParams.material) ? { has: queryParams.material } : { has: [queryParams.material] };
+    filters.material = Array.isArray(queryParams.material) ? { in: queryParams.material } : { in: [queryParams.material] };
   }
 
   if (queryParams.price) {

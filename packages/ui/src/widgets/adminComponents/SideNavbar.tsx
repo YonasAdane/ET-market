@@ -13,15 +13,25 @@ export default function SideNavbar() {
   const mobileWidth = onlyWidth < 768;
 
   useEffect(() => {
-    setIsClient(true);  
+    setIsClient(true);
   }, []);
 
   function toggleSidebar() {
     setIsCollapsed(!isCollapsed);
   }
 
+  // Prevent rendering on server-side to avoid usePathname issues
   if (!isClient) {
-    return null;  
+    return (
+      <div className="min-w-[200px] h-screen border-r px-3 pb-10 pt-14 animate-pulse">
+        <div className="h-6 bg-muted rounded mb-5 mx-4"></div>
+        <div className="space-y-2">
+          {Array.from({ length: 7 }).map((_, i) => (
+            <div key={i} className="h-10 bg-muted rounded mx-2"></div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (

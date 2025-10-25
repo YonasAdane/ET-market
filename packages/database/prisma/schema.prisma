@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/client"
 }
 
 datasource db {
@@ -8,43 +9,50 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
-  name    String?
-  email       String         @unique
+  id            String         @id @default(uuid())
+  name          String?
+  email         String         @unique
   emailVerified DateTime?
   image         String?
-  password    String?
-  role        Role           @default(CUSTOMER)
-  firstName   String?
-  lastName    String?
-  phoneNumber String?
-  address     String?
-  avatar      String?
-  googleId    String?        @unique
-  createdAt   DateTime       @default(now())
-  orders      Order[]        @relation("UserOrders")
-  reviews     Review[]       @relation("UserReviews")
-  wishlist    Wishlist[]
-  cartItems   ShoppingCart[]
+  password      String?
+  role          Role           @default(CUSTOMER)
+  firstName     String?
+  lastName      String?
+  phoneNumber   String?
+  address       String?
+  avatar        String?
+  googleId      String?        @unique
+  createdAt     DateTime       @default(now())
+  orders        Order[]        @relation("UserOrders")
+  reviews       Review[]       @relation("UserReviews")
+  wishlist      Wishlist[]
+  cartItems     ShoppingCart[]
   accounts      Account[]
   sessions      Session[]
-  updatedAt DateTime @updatedAt
+  updatedAt     DateTime       @updatedAt
+
   @@map("users")
 }
 
-model Category {
-  id            Int       @id @default(autoincrement())
-  name          String    @unique
+model Collection {
+  id            Int          @id @default(autoincrement())
+  name          String       @unique
   description   String?
-  bannerImage   Image?    @relation(fields: [bannerImageId], references: [id])
-  sampleImages  Image[]   @relation("categorySampleImage")
-  products      Product[] @relation("CategoryProducts")
-  bannerImageId Int?      @unique
+  bannerImage   Image?       @relation(fields: [bannerImageId], references: [id])
+  sampleImages  Image[]      @relation("collectionSampleImage")
+  products      Product[]    @relation("CollectionProducts")
+  bannerImageId Int?         @unique
   categoryType  CategoryType
   // bannerSampleId Int
   // sampleImagesId   Int[]
+<<<<<<< HEAD
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+=======
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   @@map("categories")
 }
 
@@ -59,8 +67,14 @@ model Brand {
   products    Product[] @relation("BrandProducts")
   // brandImageId       Int?  @unique
   brandLogoId Int?      @unique
+<<<<<<< HEAD
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+=======
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   @@map("brands")
 }
 
@@ -89,7 +103,7 @@ model Product {
   updatedAt       DateTime       @updatedAt
   createdAt       DateTime       @default(now())
   categoryType    CategoryType
-  category        Category[]     @relation("CategoryProducts")
+  category        Collection[]   @relation("CollectionProducts")
   brand           Brand?         @relation("BrandProducts", fields: [brandId], references: [id])
   orderItems      OrderItem[]    @relation("ProductOrderItems")
   reviews         Review[]       @relation("ProductReviews")
@@ -100,21 +114,27 @@ model Product {
 }
 
 model Image {
-  id               Int       @id @default(autoincrement())
+  id               Int         @id @default(autoincrement())
   productId        Int?
-  product          Product?  @relation(fields: [productId], references: [id])
-  brandImage       Brand?    @relation("BrandBrandImage", fields: [brandId], references: [id])
-  bannerImage      Brand?    @relation("BrandBannerImage", fields: [bannerImageId], references: [id])
+  product          Product?    @relation(fields: [productId], references: [id])
+  brandImage       Brand?      @relation("BrandBrandImage", fields: [brandId], references: [id])
+  bannerImage      Brand?      @relation("BrandBannerImage", fields: [bannerImageId], references: [id])
   bannerImageId    Int?
-  brandLogoUrl     Brand?    @relation("BrandLogoImage")
-  category         Category?
-  categorySample   Category?  @relation("categorySampleImage", fields: [categorySampleId], references: [id])
+  brandLogoUrl     Brand?      @relation("BrandLogoImage")
+  category         Collection?
+  categorySample   Collection? @relation("collectionSampleImage", fields: [categorySampleId], references: [id])
   categorySampleId Int?
   publicId         String
   url              String
+<<<<<<< HEAD
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  brandId          Int?
+=======
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
   brandId          Int?     
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
 
   @@map("product_images")
 }
@@ -142,7 +162,11 @@ model OrderItem {
   quantity  Int
   price     Float
   createdAt DateTime @default(now())
+<<<<<<< HEAD
+  updatedAt DateTime @updatedAt
+=======
   updatedAt    DateTime  @updatedAt
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   order     Order    @relation("OrderItems", fields: [orderId], references: [id])
   product   Product  @relation("ProductOrderItems", fields: [productId], references: [id])
 
@@ -157,8 +181,14 @@ model Payment {
   status      PaymentStatus @default(PENDING)
   paymentDate DateTime      @default(now())
   order       Order         @relation(fields: [orderId], references: [id])
+<<<<<<< HEAD
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+=======
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   @@map("payments")
 }
 
@@ -169,7 +199,11 @@ model Review {
   rating    Int
   comment   String?
   createdAt DateTime @default(now())
+<<<<<<< HEAD
+  updatedAt DateTime @updatedAt
+=======
   updatedAt    DateTime  @updatedAt
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   product   Product  @relation("ProductReviews", fields: [productId], references: [id])
   user      User     @relation("UserReviews", fields: [userId], references: [id])
 
@@ -183,7 +217,12 @@ model Wishlist {
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
+<<<<<<< HEAD
+  updatedAt DateTime @updatedAt
+
+=======
   updatedAt    DateTime  @updatedAt
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   @@map("wishlist")
 }
 
@@ -195,7 +234,12 @@ model ShoppingCart {
   user      User     @relation(fields: [userId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
+<<<<<<< HEAD
+  updatedAt DateTime @updatedAt
+
+=======
   updatedAt    DateTime  @updatedAt
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   @@map("shopping_cart")
 }
 
@@ -210,11 +254,16 @@ model Shipping {
   status       ShippingStatus @default(PENDING)
   shippingDate DateTime?
   createdAt    DateTime       @default(now())
+<<<<<<< HEAD
+  updatedAt    DateTime       @updatedAt
+=======
   updatedAt    DateTime  @updatedAt
+>>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   order        Order          @relation("OrderShipping", fields: [orderId], references: [id])
 
   @@map("shipping")
 }
+
 model Account {
   userId            String
   type              String
@@ -307,5 +356,3 @@ enum CategoryType {
   // MATERNITY // For maternity wear
   // LEATHER_GOODS // For wallets, belts, and other leather accessories
 }
-
-
