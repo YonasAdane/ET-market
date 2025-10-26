@@ -1,8 +1,8 @@
 "use client"
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Button } from "@repo/ui/components/ui/button";
+import { Card, CardContent } from "@repo/ui/components/ui/card";
+import { Input } from "@repo/ui/components/ui/input";
 import { useFileUpload } from "@repo/ui/hooks/use-file-upload.ts";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "app/components/form";
 import { AlertCircleIcon, CheckCircle2Icon, ImageIcon, Upload, UploadIcon, XIcon } from "lucide-react";
@@ -12,12 +12,12 @@ import type { Path } from "react-hook-form";
 import { FieldValues, useFormContext } from "react-hook-form";
 
 
-// import { <Alert, AlertContent, AlertDescription, AlertIcon, AlertTitle } from '@/components/ui/alert';
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Progress } from '@/components/ui/progress';
-import { Sortable, SortableItem, SortableItemHandle } from '@/components/ui/sortable';
-import { useToast } from "@/hooks/use-toast";
-import { cn } from '@/lib/utils';
+// import { <Alert, AlertContent, AlertDescription, AlertIcon, AlertTitle } from '@repo/ui/components/ui/alert';
+import { Alert, AlertDescription, AlertTitle } from "@repo/ui/components/ui/alert";
+import { Progress } from '@repo/ui/components/ui/progress';
+import { Sortable, SortableItem, SortableItemHandle } from '@repo/ui/components/ui/sortable';
+import { useToast } from "@repo/ui/hooks/use-toast";
+import { cn } from '@repo/ui/lib/utils';
 import { CircleX, CloudUpload, GripVertical } from 'lucide-react';
 import { useCallback } from 'react';
 // import { toast

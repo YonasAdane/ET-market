@@ -1,16 +1,16 @@
 "use client";
-import { MultiSelect } from '@/components/multi-select';
-import { Button } from '@/components/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { MultiSelect } from '@repo/ui/components/multi-select';
+import { Button } from '@repo/ui/components/ui/button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@repo/ui/components/ui/command";
 import {
     FormDescription
-} from "@/components/ui/form";
-import { Input } from '@/components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger, } from "@/components/ui/popover";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
-import { cn } from "@/lib/utils";
+} from "@repo/ui/components/ui/form";
+import { Input } from '@repo/ui/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger, } from "@repo/ui/components/ui/popover";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@repo/ui/components/ui/select';
+import { Textarea } from '@repo/ui/components/ui/textarea';
+import { useToast } from '@repo/ui/hooks/use-toast';
+import { cn } from "@repo/ui/lib/utils";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getBrands } from 'app/admin/_actions/brandAction';
 import { getCategories } from 'app/admin/_actions/categoryAction';
@@ -26,7 +26,7 @@ import { Spinner } from '../spinnerLoader';
 import { UploadMultipleImage } from '../uploadImages';
 import Gender from './gender';
 import Size from './size';
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@repo/ui/components/ui/badge";
 import { X } from "lucide-react";
 
 export default function AddClothForm() {

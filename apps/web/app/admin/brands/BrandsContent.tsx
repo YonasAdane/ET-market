@@ -3,17 +3,17 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@repo/ui/components/ui/button";
+import { Badge } from "@repo/ui/components/ui/badge";
 import TryAgainButton from "app/components/try-again-button";
 import CreateBrandForm from "../_components/form-elements/add-brand";
 import AdminTable, { AdminColumnDef } from "@repo/ui/components/admin/AdminTable";
 import AdminActionButton from "@repo/ui/components/admin/AdminActionButton";
 import { Prisma } from "@repo/database/index";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@repo/ui/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { deleteBrand } from "../_actions/brandAction";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@repo/ui/hooks/use-toast";
 import { getErrorMessage } from "app/lib/get-error-message";
 
 interface BrandsContentProps {

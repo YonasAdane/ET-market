@@ -15,8 +15,8 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import React from "react";
-import PageTitle from "@/widgets/adminComponents/PageTitle";
-import { DataTable } from "@/widgets/adminComponents/DataTable";
+import PageTitle from "@repo/ui/widgets/adminComponents/PageTitle";
+import { DataTable } from "@repo/ui/widgets/adminComponents/DataTable";
 
 type Props = {};
 

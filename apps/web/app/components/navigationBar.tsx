@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
-import { ModeToggle } from "@/widgets/modeToggle"
+import { Button } from "@repo/ui/components/ui/button"
+import { ModeToggle } from "@repo/ui/widgets/modeToggle"
 import { auth, signIn, signOut } from "app/lib/auth"
 import { Search, ShoppingCart } from "lucide-react"
 import Link from "next/link"

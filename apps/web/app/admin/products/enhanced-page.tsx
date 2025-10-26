@@ -1,6 +1,6 @@
 'use client';
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@repo/ui/components/ui/badge";
+import { Button } from "@repo/ui/components/ui/button";
 import AdminActionButton from "@repo/ui/components/admin/AdminActionButton";
 import AdminPagination from "@repo/ui/components/admin/AdminPagination";
 import AdminSearchBar from "@repo/ui/components/admin/AdminSearchBar";

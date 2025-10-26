@@ -4,11 +4,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
+import { Button } from '@repo/ui/components/ui/button';
+import { Input } from '@repo/ui/components/ui/input';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@repo/ui/components/ui/select';
+import { Textarea } from '@repo/ui/components/ui/textarea';
+import { useToast } from '@repo/ui/hooks/use-toast';
 import { CategoryType as PrismaCategoryType } from '@repo/database/index';
 import { createCategory } from 'app/admin/_actions/categoryAction';
 import {
@@ -22,7 +22,7 @@ import {
 import { Spinner } from '../spinnerLoader';
 import { SortableImageUpload, UploadMultipleImage, UploadSingleImage } from '../uploadImages';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@repo/ui/components/ui/card';
 import { Check } from 'lucide-react';
 
 // Validation schema

@@ -2,14 +2,14 @@
 
 import React from 'react';
 import { Plus, UserCheck, UserX } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Badge } from '@repo/ui/components/ui/badge';
+import { Button } from '@repo/ui/components/ui/button';
 import Link from 'next/link';
 import AdminTable from '@repo/ui/components/admin/AdminTable';
 import AdminSearchBar from '@repo/ui/components/admin/AdminSearchBar';
 import AdminActionButton from '@repo/ui/components/admin/AdminActionButton';
 import { Prisma } from '@repo/database/index';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/ui/avatar';
 
 type UserWithCount = Prisma.UserGetPayload<{
   include: {

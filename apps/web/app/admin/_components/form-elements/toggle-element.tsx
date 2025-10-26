@@ -3,7 +3,7 @@
 import {
     ToggleGroup,
     ToggleGroupItem,
-} from "@/components/ui/toggle-group";
+} from "@repo/ui/components/ui/toggle-group";
 import {
     FormControl,
     FormDescription,

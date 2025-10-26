@@ -1,5 +1,5 @@
 "use client";
-import { ToggleGroupItem ,ToggleGroup} from '@/components/ui/toggle-group'
+import { ToggleGroupItem ,ToggleGroup} from '@repo/ui/components/ui/toggle-group'
 import React from 'react'
 
 type Props = {

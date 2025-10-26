@@ -1,11 +1,11 @@
-import PageTitle from "@/widgets/adminComponents/PageTitle";
+import PageTitle from "@repo/ui/widgets/adminComponents/PageTitle";
 
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/ui/tabs"
+} from "@repo/ui/components/ui/tabs"
 import AddClothForm from "../_components/form-elements/add-clothes";
 import AddWatchForm from "../_components/form-elements/add-watches";
 import AddBagForm from "../_components/form-elements/add-bag";

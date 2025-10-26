@@ -4,13 +4,13 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Slider } from "@/components/ui/slider";
-import { filterProduct } from "@/lib/constants";
-import { CategoryType } from "@/lib/types";
-import { cn } from "@/lib/utils";
+} from "@repo/ui/components/ui/accordion";
+import { Button } from "@repo/ui/components/ui/button";
+import { Card } from "@repo/ui/components/ui/card";
+import { Slider } from "@repo/ui/components/ui/slider";
+import { filterProduct } from "@repo/ui/lib/constants";
+import { CategoryType } from "@repo/ui/lib/types";
+import { cn } from "@repo/ui/lib/utils";
 import { useAppSelector } from "@repo/redux-utils/libs/redux/store";
 import CheckboxByStar from "@repo/ui/widgets/subComponents/CheckboxByStar.tsx";
 import CheckboxByText from "@repo/ui/widgets/subComponents/CheckboxByText.tsx";

@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { Card } from "@repo/ui/components/ui/card";
 import RegisterForm from "app/components/authForm";
 
 export default function Login() {

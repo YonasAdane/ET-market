@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@/widgets/theme-provider";
+import { ThemeProvider } from "@repo/ui/widgets/theme-provider";
 import { ReduxProvider } from "@repo/redux-utils/libs/provider";
 import { Toaster } from "@repo/ui/components/ui/toaster";
 import type { Metadata } from "next";

@@ -1,10 +1,10 @@
 /** @format */
 
 import { DollarSign, Users, CreditCard, Activity } from "lucide-react";
-import SalesCard, { SalesProps } from "@/widgets/adminComponents/SalesCard";
-import PageTitle from "@/widgets/adminComponents/PageTitle";
-import Card, { CardContent, CardProps } from "@/widgets/adminComponents/Card";
-import BarChart from "@/widgets/adminComponents/BarChart";
+import SalesCard, { SalesProps } from "@repo/ui/widgets/adminComponents/SalesCard";
+import PageTitle from "@repo/ui/widgets/adminComponents/PageTitle";
+import Card, { CardContent, CardProps } from "@repo/ui/widgets/adminComponents/Card";
+import BarChart from "@repo/ui/widgets/adminComponents/BarChart";
 
 const cardData: CardProps[] = [
   {

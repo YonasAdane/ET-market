@@ -4,12 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@repo/ui/hooks/use-toast";
 import { updateBrand, getBrandById } from "app/admin/_actions/brandAction";
 import { UploadSingleImage,UploadMultipleImage, SortableImageUpload } from "app/admin/_components/uploadImages"; 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@repo/ui/components/ui/button";
+import { Input } from "@repo/ui/components/ui/input";
+import { Textarea } from "@repo/ui/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -23,10 +23,10 @@ import { Check, ArrowLeft } from "lucide-react";
 import { Spinner } from "app/admin/_components/spinnerLoader"; 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/ui/card";
+import { Badge } from "@repo/ui/components/ui/badge";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn } from "@repo/ui/lib/utils";
 
 /* -------------------------------------------------
    Schema for editing (similar to create but all fields optional except name)

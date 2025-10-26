@@ -1,6 +1,6 @@
 // import { ModeToggle } from "./components/modeTheme";
-import Footer from "@/widgets/footer";
-import HeroSection from "@/widgets/herosection";
+import Footer from "@repo/ui/widgets/footer";
+import HeroSection from "@repo/ui/widgets/herosection";
 import PorductCard from "@repo/ui/widgets/card.tsx";
 import Controls from "@repo/ui/widgets/controls.tsx";
 import Display from "@repo/ui/widgets/display.tsx";

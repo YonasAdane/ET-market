@@ -1,7 +1,7 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@repo/ui/components/ui/badge';
+import { useToast } from '@repo/ui/hooks/use-toast';
 import AdminActionButton from '@repo/ui/components/admin/AdminActionButton';
 import AdminPagination from '@repo/ui/components/admin/AdminPagination';
 import AdminSearchBar from '@repo/ui/components/admin/AdminSearchBar';

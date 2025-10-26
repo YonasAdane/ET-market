@@ -1,9 +1,9 @@
 /** @format */
-import { ThemeProvider } from "@/widgets/theme-provider";
+import { ThemeProvider } from "@repo/ui/widgets/theme-provider";
 import dynamic from "next/dynamic";
 
 // Dynamically import SideNavbar to avoid SSR issues with usePathname
-const SideNavbar = dynamic(() => import("@/widgets/adminComponents/SideNavbar"), {
+const SideNavbar = dynamic(() => import("@repo/ui/widgets/adminComponents/SideNavbar"), {
   ssr: false,
   loading: () => (
     <div className="min-w-[200px] h-screen border-r px-3 pb-10 pt-14 animate-pulse">

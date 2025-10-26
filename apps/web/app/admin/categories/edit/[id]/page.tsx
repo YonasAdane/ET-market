@@ -1,8 +1,8 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import { getCategoryById } from "../../../_actions/categoryAction";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/components/ui/card";
+import { Button } from "@repo/ui/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import EditCategoryForm from "./EditCategoryForm";

@@ -13,7 +13,7 @@ import {
     Avatar,
     AvatarFallback,
     AvatarImage,
-} from "@/components/ui/avatar"
+} from "@repo/ui/components/ui/avatar"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -22,12 +22,12 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@repo/ui/components/ui/dropdown-menu"
 // import {
 //     SidebarMenu,
 //     SidebarMenuButton,
 // } from 
-// "@/components/ui/sidebar"
+// "@repo/ui/components/ui/sidebar"
 
 export function NavUser({
     user,

@@ -1,11 +1,11 @@
 "use client";
-import { MultiSelect } from '@/components/multi-select';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
+import { MultiSelect } from '@repo/ui/components/multi-select';
+import { Button } from '@repo/ui/components/ui/button';
+import { Input } from '@repo/ui/components/ui/input';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@repo/ui/components/ui/select';
+import { Textarea } from '@repo/ui/components/ui/textarea';
+import { useToast } from '@repo/ui/hooks/use-toast';
+import { cn } from '@repo/ui/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getBrands } from 'app/admin/_actions/brandAction';
 import { getCategories } from 'app/admin/_actions/categoryAction';

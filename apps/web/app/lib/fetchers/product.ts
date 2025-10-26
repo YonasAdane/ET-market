@@ -33,8 +33,8 @@ export async function findProductsBrand(categoryType:string){
 /**
  * 'use server';
 
-import { db } from '@/lib/db';
-import { CategoryType, ProductType, ProductQueryType } from '@/types';
+import { db } from '@repo/ui/lib/db';
+import { CategoryType, ProductType, ProductQueryType } from '@repo/ui/types';
 
 export async function findProducts(categoryType: string, queryParams: ProductQueryType) {
   const category = categoryType.toUpperCase();

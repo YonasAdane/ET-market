@@ -3,7 +3,7 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@repo/ui/lib/utils';
 
 export function Gallery({ images }: { images: { src: string; altText: string }[] }) {
   const [currentIndex,setCurrentIndex]=useState(0);

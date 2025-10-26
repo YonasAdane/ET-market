@@ -1,11 +1,11 @@
 "use client";
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
-import { cn } from "@/lib/utils";
+import { Badge } from '@repo/ui/components/ui/badge';
+import { Button } from '@repo/ui/components/ui/button';
+import { Input } from '@repo/ui/components/ui/input';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@repo/ui/components/ui/select';
+import { Textarea } from '@repo/ui/components/ui/textarea';
+import { useToast } from '@repo/ui/hooks/use-toast';
+import { cn } from "@repo/ui/lib/utils";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getBrands } from 'app/admin/_actions/brandAction';
 import { getCategories } from 'app/admin/_actions/categoryAction';
@@ -19,11 +19,11 @@ import { Spinner } from '../spinnerLoader';
 import { UploadMultipleImage } from '../uploadImages';
 import Gender from './gender';
  
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import { Avatar, AvatarFallback, AvatarImage } from '@repo/ui/components/ui/avatar';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@repo/ui/components/ui/hover-card';
 import { footwearSchema } from 'app/lib/types/product';
 import ToogleElement from './toggle-element';
-import { MultiSelect } from '@/components/multi-select';
+import { MultiSelect } from '@repo/ui/components/multi-select';
 
 export default function AddFootwearForm() {
     const [categoryArray, setCategoryArray] = useState<{label: string, value: string}[]>([]);

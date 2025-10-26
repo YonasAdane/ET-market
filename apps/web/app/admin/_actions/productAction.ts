@@ -6,7 +6,7 @@ import { uploadToCloudinary } from "app/lib/config/uploadtoCloud";
 import { accessoriesSchema, bagsSchema, clothingSchema, footwearSchema, outerwearSchema, underwearSchema, watchesSchema, CategoryType as ZcategoryType } from "app/lib/types/product";
 import { revalidatePath } from "next/cache";
 import { z, ZodError } from "zod";
-// import {  ProductType, ProductQueryType } from '@/types/';
+// import {  ProductType, ProductQueryType } from '@repo/ui/types/';
 
 const schemas: Record<CategoryType, z.ZodSchema> = {
   CLOTHING: clothingSchema,

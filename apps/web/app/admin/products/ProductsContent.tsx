@@ -1,5 +1,5 @@
 "use client"
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@repo/ui/components/ui/badge"
 import AdminActionButton from "@repo/ui/components/admin/AdminActionButton"
 import AdminSearchBar from "@repo/ui/components/admin/AdminSearchBar"
 import AdminTable from "@repo/ui/components/admin/AdminTable"
@@ -7,7 +7,7 @@ import { CategoryArray } from "app/lib/consts"
 import Image from "next/image"
 import { useMemo } from "react"
 import { deleteProduct } from "../_actions/productAction"
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@repo/ui/hooks/use-toast"
 import { getErrorMessage } from "app/lib/get-error-message"
 
 function ProductsClientContent({products}: {products?: any}) {

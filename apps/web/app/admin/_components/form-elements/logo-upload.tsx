@@ -1,5 +1,5 @@
 "use client";
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent } from '@repo/ui/components/ui/card';
 import { useRef, useState } from 'react';
 
 interface ImageFile {

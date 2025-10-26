@@ -1,5 +1,5 @@
-import { AccordionContent } from '@/components/ui/accordion';
-import CheckboxByText from '@/widgets/subComponents/CheckboxByText';
+import { AccordionContent } from '@repo/ui/components/ui/accordion';
+import CheckboxByText from '@repo/ui/widgets/subComponents/CheckboxByText';
 import { getBrandsByCategory } from 'app/admin/_actions/brandAction';
 import { CategoryType } from 'app/lib/types';
 

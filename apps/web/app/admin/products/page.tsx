@@ -1,6 +1,6 @@
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from "@repo/ui/components/ui/skeleton"
 import { Suspense } from "react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@repo/ui/components/ui/button"
 import TryAgainButton from "app/components/try-again-button"
 import { CategoryArray } from "app/lib/consts"
 import { Plus } from "lucide-react"

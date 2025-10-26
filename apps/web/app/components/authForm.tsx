@@ -1,6 +1,6 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@repo/ui/components/ui/button";
+import { Input } from "@repo/ui/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, loginSchemaType, registerSchema, registerSchemaType } from "app/lib/consts";
 import { useForm } from "react-hook-form";

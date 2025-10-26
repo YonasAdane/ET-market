@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "@repo/ui/components/ui/button"
+import { Input } from "@repo/ui/components/ui/input"
 import { CreateUser } from "app/lib/auth/action"
 import Link from "next/link"
 import GoogleButton from "./googleButton"

@@ -13,9 +13,9 @@
 /** @format */
 "use client";
 
-import { cn } from "@/lib/utils";
-import { DataTable } from "@/widgets/adminComponents/DataTable";
-import PageTitle from "@/widgets/adminComponents/PageTitle";
+import { cn } from "@repo/ui/lib/utils";
+import { DataTable } from "@repo/ui/widgets/adminComponents/DataTable";
+import PageTitle from "@repo/ui/widgets/adminComponents/PageTitle";
 import { ColumnDef } from "@tanstack/react-table";
 
 type Props = {};

@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@repo/ui/components/ui/button"
 import { CategoryArray } from "app/lib/consts"
 import { Plus } from "lucide-react"
 

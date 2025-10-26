@@ -1,4 +1,4 @@
-import Footer from '@/widgets/footer';
+import Footer from '@repo/ui/widgets/footer';
 import { Skeleton } from "@repo/ui/components/ui/skeleton";
 import PorductCard from '@repo/ui/widgets/card.tsx';
 import { CollectionHeader } from '@repo/ui/widgets/collection-header.tsx';

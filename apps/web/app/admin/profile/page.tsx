@@ -1,5 +1,5 @@
-import PageTitle from '@/widgets/adminComponents/PageTitle'
-import { ProfileForm } from '@/widgets/adminComponents/profile-form'
+import PageTitle from '@repo/ui/widgets/adminComponents/PageTitle'
+import { ProfileForm } from '@repo/ui/widgets/adminComponents/profile-form'
 import React from 'react'
 
 export default function Profile() {
