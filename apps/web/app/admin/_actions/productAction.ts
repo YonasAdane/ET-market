@@ -1,6 +1,6 @@
 "use server";
 
-import { CategoryType } from "@repo/database/index";
+import { CategoryType } from "app/lib/types";
 import { db } from "app/lib/config/prisma-config";
 import { uploadToCloudinary } from "app/lib/config/uploadtoCloud";
 import { accessoriesSchema, bagsSchema, clothingSchema, footwearSchema, outerwearSchema, underwearSchema, watchesSchema, CategoryType as ZcategoryType } from "app/lib/types/product";
@@ -8,10 +8,6 @@ import { revalidatePath } from "next/cache";
 import { z, ZodError } from "zod";
 // import {  ProductType, ProductQueryType } from '@/types/';
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
 const schemas: Record<CategoryType, z.ZodSchema> = {
   CLOTHING: clothingSchema,
   FOOTWEAR: footwearSchema,
@@ -22,7 +18,6 @@ const schemas: Record<CategoryType, z.ZodSchema> = {
   UNDERWEAR: underwearSchema,
 };
 
-<<<<<<< HEAD
 export async function createProduct(formData: FormData) {
   console.log("Received FormData entries:");
   
@@ -298,187 +293,6 @@ export async function getProducts(params: ProductQueryParams = {}) {
     };
   }
 }
-=======
-export async function createProduct(ParsedData: any) {
-  console.log("Received product data:", ParsedData);
-  try {
-    
-    // Validate using Zod
-    const schema = schemas[ParsedData.categoryType as CategoryType];
-    if (!schema) throw new Error("Invalid categoryType");
-  
-    const parsedResult = await schema.parse(ParsedData);
-  
-    // Parallelize image uploads
-    const uploadedFiles = await Promise.all(
-      ParsedData.images.map((file: any) => uploadToCloudinary(file, "product-pictures"))
-    );
-  
-    // Format images for Prisma
-    const formattedImages = uploadedFiles.map(result => ({
-      publicId: result.public_id,
-      url: result.secure_url,
-    }));
-  
-    // Use a transaction for better reliability
-    const AddedProduct = await db.$transaction(async (prisma) => {
-      return prisma.product.create({
-        data: {
-          name: ParsedData.name,
-          description: ParsedData.description,
-          size: ParsedData.size,
-          gender: ParsedData.gender,
-          material: ParsedData.material || ParsedData.strapMaterial,
-          price: ParsedData.price,
-          colour: ParsedData.colour,
-          prevprice: ParsedData.prevprice,
-          stock: ParsedData.stock,
-          pattern: ParsedData.pattern,
-          fit: ParsedData.fit,
-          occasion: ParsedData.occasion,
-          season: ParsedData.season,
-          brandId: ParsedData.brandId,
-          dialShape:ParsedData.dialShape,
-          waterResistance:ParsedData.waterResistance,
-          category: {
-            connect: Array.isArray(ParsedData.categoryId)
-              ? ParsedData.categoryId.map((id: number) => ({ id }))
-              : [{ id: ParsedData.categoryId }],
-          },
-          categoryType: ParsedData.categoryType as CategoryType,
-          images: {
-            create: formattedImages,
-          },
-        },
-      });
-    });
-    revalidatePath("/category/clothing");
-    return {success:true,product:AddedProduct};
-
-  } catch (error:any) {
-    if(error instanceof ZodError){
-      return {
-        error:"Invalid product data"
-      }
-    }
-     if (error?.message?.includes("Can't reach database") || error.code === "ECONNREFUSED") {
-      return { type: "network", error: "⚠️ Unable to connect to the database. Please check your network." };
-    }
-
-    return { type: "other", error: "❌ Something went wrong. Please try again later." };
-  }
-
-}
-
-interface ProductQueryParams {
-  page?: number;
-  pageSize?: number;
-  search?: string;
-  categoryType?: CategoryType;
-  brandId?: number;
-  sortBy?: 'name' | 'price' | 'createdAt';
-  sortOrder?: 'asc' | 'desc';
-  minPrice?: number;
-  maxPrice?: number;
-}
-
-export async function getProducts(params: ProductQueryParams = {}) {
-  try {
-    const {
-      page = 1,
-      pageSize = 10,
-      search = '',
-      categoryType,
-      brandId,
-      sortBy = 'createdAt',
-      sortOrder = 'desc',
-      minPrice,
-      maxPrice
-    } = params;
-
-    const skip = (page - 1) * pageSize;
-    const where: any = {};
-
-    // Search functionality
-    if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
-        { brand: { name: { contains: search, mode: 'insensitive' } } }
-      ];
-    }
-
-    // Category filter
-    if (categoryType) {
-      where.categoryType = categoryType;
-    }
-
-    // Brand filter
-    if (brandId) {
-      where.brandId = brandId;
-    }
-
-    // Price range filter
-    if (minPrice !== undefined || maxPrice !== undefined) {
-      where.price = {};
-      if (minPrice !== undefined) where.price.gte = minPrice;
-      if (maxPrice !== undefined) where.price.lte = maxPrice;
-    }
-
-    // Build orderBy
-    const orderBy: any = {};
-    orderBy[sortBy] = sortOrder;
-
-    // Execute queries in parallel
-    const [products, totalCount] = await Promise.all([
-      db.product.findMany({
-        where,
-        include: { 
-          brand: true, 
-          images: true,
-          category: true 
-        },
-        orderBy,
-        skip,
-        take: pageSize,
-      }),
-      db.product.count({ where })
-    ]);
-
-    const totalPages = Math.ceil(totalCount / pageSize);
-
-    return {
-      success: true,
-      data: products,
-      pagination: {
-        currentPage: page,
-        totalPages,
-        totalCount,
-        pageSize,
-        hasNextPage: page < totalPages,
-        hasPrevPage: page > 1
-      }
-    };
-
-  } catch (error: any) {
-    console.error("Error fetching products:", error);
-    
-    if (error?.message?.includes("Can't reach database") || error.code === "ECONNREFUSED") {
-      return { 
-        success: false,
-        type: "network", 
-        error: "Unable to connect to the database. Please check your network connection." 
-      };
-    }
-
-    return { 
-      success: false,
-      type: "other", 
-      error: "Something went wrong while fetching products. Please try again later." 
-    };
-  }
-}
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
 export async function getProductById(id: number) {
   try {
     const product = await db.product.findUnique({

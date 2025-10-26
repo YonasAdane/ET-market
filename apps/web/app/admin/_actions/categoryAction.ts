@@ -1,5 +1,5 @@
 "use server"
-import { CategoryType } from '@repo/database/index';
+import { CategoryType } from '@/lib/types';
 import { db } from 'app/lib/config/prisma-config';
 import { uploadToCloudinary } from 'app/lib/config/uploadtoCloud';
 import { getErrorMessage } from 'app/lib/get-error-message';

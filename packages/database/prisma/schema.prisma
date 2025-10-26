@@ -34,25 +34,20 @@ model User {
   @@map("users")
 }
 
-model Collection {
+model Category {
   id            Int          @id @default(autoincrement())
   name          String       @unique
   description   String?
   bannerImage   Image?       @relation(fields: [bannerImageId], references: [id])
-  sampleImages  Image[]      @relation("collectionSampleImage")
-  products      Product[]    @relation("CollectionProducts")
+  sampleImages  Image[]      @relation("categorySampleImage")
+  products      Product[]    @relation("CategoryProducts")
   bannerImageId Int?         @unique
   categoryType  CategoryType
   // bannerSampleId Int
   // sampleImagesId   Int[]
-<<<<<<< HEAD
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
-=======
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   @@map("categories")
 }
 
@@ -67,14 +62,9 @@ model Brand {
   products    Product[] @relation("BrandProducts")
   // brandImageId       Int?  @unique
   brandLogoId Int?      @unique
-<<<<<<< HEAD
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-=======
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   @@map("brands")
 }
 
@@ -103,7 +93,7 @@ model Product {
   updatedAt       DateTime       @updatedAt
   createdAt       DateTime       @default(now())
   categoryType    CategoryType
-  category        Collection[]   @relation("CollectionProducts")
+  category        Category[]   @relation("CategoryProducts")
   brand           Brand?         @relation("BrandProducts", fields: [brandId], references: [id])
   orderItems      OrderItem[]    @relation("ProductOrderItems")
   reviews         Review[]       @relation("ProductReviews")
@@ -121,20 +111,14 @@ model Image {
   bannerImage      Brand?      @relation("BrandBannerImage", fields: [bannerImageId], references: [id])
   bannerImageId    Int?
   brandLogoUrl     Brand?      @relation("BrandLogoImage")
-  category         Collection?
-  categorySample   Collection? @relation("collectionSampleImage", fields: [categorySampleId], references: [id])
+  category         Category?
+  categorySample   Category? @relation("categorySampleImage", fields: [categorySampleId], references: [id])
   categorySampleId Int?
   publicId         String
   url              String
-<<<<<<< HEAD
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
   brandId          Int?
-=======
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-  brandId          Int?     
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
 
   @@map("product_images")
 }
@@ -162,11 +146,7 @@ model OrderItem {
   quantity  Int
   price     Float
   createdAt DateTime @default(now())
-<<<<<<< HEAD
   updatedAt DateTime @updatedAt
-=======
-  updatedAt    DateTime  @updatedAt
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   order     Order    @relation("OrderItems", fields: [orderId], references: [id])
   product   Product  @relation("ProductOrderItems", fields: [productId], references: [id])
 
@@ -181,14 +161,9 @@ model Payment {
   status      PaymentStatus @default(PENDING)
   paymentDate DateTime      @default(now())
   order       Order         @relation(fields: [orderId], references: [id])
-<<<<<<< HEAD
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
-=======
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   @@map("payments")
 }
 
@@ -199,11 +174,7 @@ model Review {
   rating    Int
   comment   String?
   createdAt DateTime @default(now())
-<<<<<<< HEAD
   updatedAt DateTime @updatedAt
-=======
-  updatedAt    DateTime  @updatedAt
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   product   Product  @relation("ProductReviews", fields: [productId], references: [id])
   user      User     @relation("UserReviews", fields: [userId], references: [id])
 
@@ -217,12 +188,8 @@ model Wishlist {
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
-<<<<<<< HEAD
   updatedAt DateTime @updatedAt
 
-=======
-  updatedAt    DateTime  @updatedAt
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   @@map("wishlist")
 }
 
@@ -234,12 +201,8 @@ model ShoppingCart {
   user      User     @relation(fields: [userId], references: [id])
   product   Product  @relation(fields: [productId], references: [id])
   createdAt DateTime @default(now())
-<<<<<<< HEAD
   updatedAt DateTime @updatedAt
 
-=======
-  updatedAt    DateTime  @updatedAt
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   @@map("shopping_cart")
 }
 
@@ -254,11 +217,7 @@ model Shipping {
   status       ShippingStatus @default(PENDING)
   shippingDate DateTime?
   createdAt    DateTime       @default(now())
-<<<<<<< HEAD
   updatedAt    DateTime       @updatedAt
-=======
-  updatedAt    DateTime  @updatedAt
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
   order        Order          @relation("OrderShipping", fields: [orderId], references: [id])
 
   @@map("shipping")

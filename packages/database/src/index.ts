@@ -1,6 +1,6 @@
 import { PrismaClient } from './generated/client/client'
 
-export function getDb(): PrismaClient {
+export function getDb() {
   const prisma = new PrismaClient()
 
   return prisma

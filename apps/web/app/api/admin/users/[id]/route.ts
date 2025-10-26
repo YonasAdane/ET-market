@@ -1,10 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-<<<<<<< HEAD
 import { deleteUser } from "app/admin/_actions/userAction";
-=======
-import { deleteUser } from "../../../../_actions/userAction";
-
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }

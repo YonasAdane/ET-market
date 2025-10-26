@@ -2,6 +2,8 @@
 
 # Dependencies
 node_modules
+/src/generated/prisma
+/src/generated/client
 .pnp
 .pnp.js
 

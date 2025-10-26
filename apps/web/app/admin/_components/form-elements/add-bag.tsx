@@ -13,10 +13,7 @@ import { createProduct } from 'app/admin/_actions/productAction';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from 'app/components/form';
 import { bagsSchema } from 'app/lib/types/product';
 import { Check } from 'lucide-react';
-<<<<<<< HEAD
 import { useEffect, useState } from 'react';
-=======
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { Spinner } from '../spinnerLoader';
@@ -26,7 +23,6 @@ import Size from './size';
 import ToggleElement from './toggle-element';
 
 export default function AddBagForm() {
-<<<<<<< HEAD
     const [categoryArray, setCategoryArray] = useState<{label: string, value: string}[]>([]);
     const [brandArray, setBrandArray] = useState<{label: string, value: string}[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,32 +64,19 @@ export default function AddBagForm() {
     const form = useForm<bagType>({
         resolver: zodResolver(bagsSchema),
         defaultValues: {
-=======
-    const { toast } = useToast()
-
-    type bagType=z.infer<typeof bagsSchema >;
-    const form=useForm<bagType>({
-        resolver:zodResolver(bagsSchema),
-        defaultValues:{
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
             name: "",
             description: "",
             price: 1,
             prevprice: 1,
             colour: "",
             size: [],
-<<<<<<< HEAD
             gender: "",
-=======
-            gender:"",
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
             material: "",
             purpose: "",
             brandId: undefined,
             categoryId: [],
             categoryType: "BAG",
             stock: 1,
-<<<<<<< HEAD
             images: []
         }
     });
@@ -171,79 +154,6 @@ export default function AddBagForm() {
                 <div className='w-full grid grid-cols-3 gap-5 h-full'>
                     <div className="col-span-2 bg-muted/50 rounded-lg p-5">
                         <h2>General Information</h2>
-=======
-            images:[]
-        }
-    });
-    
-    function addProduct(data:bagType){
-        console.log(data);
-
-        alert(JSON.stringify(data))
-    }
-    
-  return (
-<Form {...form}>
-<form onSubmit={form.handleSubmit(async data=>{
-        console.log("Sending this data: ",data)
-        const response=await createProduct(data)
-        if(response.error){
-            toast({
-                variant:'destructive',
-                title: "Error: something went wrong",
-                description: response.error,
-                })
-        }
-        if(response.success){
-            toast({
-                title: "Data sent successfully ",
-                description: "product added successfully",
-                })
-            form.reset()
-        }
-        })}>
-            <div className='w-full grid grid-cols-3 gap-5 h-full '>
-            <div className="col-span-2 bg-muted/50 rounded-lg p-5">
-                <h2>General Information</h2>
-                <FormField
-                name="name"
-                control={form.control}
-                render={({field})=>(
-                    <FormItem>
-                        <FormLabel className='text-sm'>Product Name</FormLabel>
-                        <FormControl>
-                            <Input {...field} className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none" type="text"/>
-                        </FormControl>
-                        <FormMessage/>
-                    </FormItem>
-                )}
-                />
-                <FormField
-                    name="description"
-                    control={form.control}
-                    render={({field})=>(
-                        <FormItem>
-                            <FormLabel className='text-sm'>Product Description</FormLabel>
-                            <FormControl>
-                                <Textarea {...field} className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none h-32" />
-                            </FormControl>
-                            <FormMessage/>
-                        </FormItem>
-                    )}
-                />
-                <div className="flex justify-between gap-5">
-                    <div className="w-full ">
-                        <Size control={form.control} values={["Small","Medium","Large"]} name="size"/>
-                    </div>
-                    <div className="w-full ">
-                        <Gender name='gender' control={form.control}/>
-                    </div>
-                </div>
-                <div className="w-full bg-muted/50 mt-5 rounded-lg p-5">
-                    <h2>Properties</h2>
-                    
-                    <div className="grid grid-cols-2 gap-5">
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
                         <FormField
                             name="name"
                             control={form.control}

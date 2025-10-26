@@ -225,10 +225,7 @@ export const productSchema = z.object({
     prevprice: z.coerce.number().positive(),
     description: z.string().optional(), 
     size:z.array(z.string()),
-<<<<<<< HEAD
     colour:z.string().optional(), 
-=======
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
     gender:z.string(), 
     material: z.string().optional(),      // e.g., Cotton, Polyester
     style: z.string().optional(),         // e.g., Briefs, Boxers

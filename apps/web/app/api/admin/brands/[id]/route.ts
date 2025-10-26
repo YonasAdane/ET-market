@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-<<<<<<< HEAD
 import { deleteBrand } from "app/admin/_actions/brandAction";
-=======
-import { deleteBrand } from "../../../../_actions/brandAction";
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
 
 export async function DELETE(
   request: NextRequest,

@@ -21,7 +21,6 @@ import { UploadMultipleImage } from '../uploadImages';
 import Gender from './gender';
 import Size from './size';
 
-<<<<<<< HEAD
 export default function AddAccessoryForm() {
     const [categoryArray, setCategoryArray] = useState<{label: string, value: string}[]>([]);
     const [brandArray, setBrandArray] = useState<{label: string, value: string}[]>([]);
@@ -64,46 +63,11 @@ export default function AddAccessoryForm() {
     const form = useForm<accessoryType>({
         resolver: zodResolver(accessoriesSchema),
         defaultValues: {
-=======
-  export default function AddAccesoryForm() {
-    const [categoryArray,setCategoryArray]=useState<{label:string,value:string}[] >([]);
-    const [brandArray,setBrandArray]=useState<{label:string,value:string}[] >([]);
-
-    const { toast } = useToast()
-    useEffect(()=>{
-        const fetchData = async () => {
-            try {
-                const [categories,brands]=await Promise.all([ getCategories(),getBrands()])
-        
-        setCategoryArray(categories.map((category)=>({
-            label:category.name,
-            value:`${category.id}`})
-        ));
-        setBrandArray(brands.map((brand)=>({
-            label:brand.name,
-            value:`${brand.id}`})
-        ));
-        console.log(categoryArray,brandArray);
-        
-            } catch (error) {
-                console.log("error fetching data",error);
-                
-            }
-
-        }
-        fetchData();
-    },[]);
-    type accessoryType=z.infer<typeof accessoriesSchema >;
-    const form=useForm<accessoryType>({
-        resolver:zodResolver(accessoriesSchema),
-        defaultValues:{
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
             name: "",
             description: "",
             colour: "",
             material: "",
             size: [],
-<<<<<<< HEAD
             gender: "",
             price: 1,
             prevprice: 1,
@@ -114,23 +78,10 @@ export default function AddAccessoryForm() {
             images: []
         }
     });
-=======
-            gender:"",
-            price: 1,
-            prevprice: 1,
-            brandId: 1,
-            categoryId: [],
-            categoryType:"ACCESSORY",
-            stock: 0
-        }
-    });
-    
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
 
     const onSubmit = async (data: accessoryType) => {
         setIsSubmitting(true);
         
-<<<<<<< HEAD
         try {
             // Create FormData object
             const formData = new FormData();
@@ -200,153 +151,10 @@ export default function AddAccessoryForm() {
                 <div className='w-full grid grid-cols-3 gap-5 h-full'>
                     <div className="col-span-2 bg-muted/50 rounded-lg p-5">
                         <h2>General Information</h2>
-=======
-       }
-    }
-    
-  return (
-<Form {...form}>
-    <form onSubmit={form.handleSubmit(async data=>{
-        console.log("Sending this data: ",data)
-        const response=await createProduct(data)
-        if(response.error){
-            toast({
-                variant:'destructive',
-                title: "Error: something went wrong",
-                description: response.error,
-                })
-        }
-        if(response.success){
-            toast({
-                title: "Data sent successfully ",
-                description: "product added successfully",
-                })
-            form.reset()
-        }
-        })}>
-        <div className='w-full grid grid-cols-3 gap-5 h-full '>
-            <div className="col-span-2 bg-muted/50 rounded-lg p-5">
-                <h2>General Information</h2>
-                <FormField
-                name="name"
-                control={form.control}
-                render={({field})=>(
-                    <FormItem>
-                        <FormLabel className='text-sm'>Product Name</FormLabel>
-                        <FormControl>
-                            <Input {...field} className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none" type="text"/>
-                        </FormControl>
-                        <FormMessage/>
-                    </FormItem>
-                )}
-                />
-                <FormField
-                    name="description"
-                    control={form.control}
-                    render={({field})=>(
-                        <FormItem>
-                            <FormLabel className='text-sm'>Product Description</FormLabel>
-                            <FormControl>
-                                <Textarea {...field} className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none h-32" />
-                            </FormControl>
-                            <FormMessage/>
-                        </FormItem>
-                    )}
-                />
-                <div className="flex justify-between gap-5">
-                    <div className="w-full ">
-                        <Size control={form.control} values={["Small","Medium","Large"]} name="size"/>
-                    </div>
-                    <div className="w-full ">
-                        <Gender name='gender' control={form.control}/>
-                    </div>
-                </div>
-                <div className="w-full bg-muted/50 mt-5 rounded-lg p-5">
-                    <h2>Properties</h2>
-                    
-                    <div className="grid grid-cols-2 gap-5">
-                        <FormField
-                        name="material"
-                        control={form.control}
-                        render={({field})=>(
-                            <FormItem>
-                                <FormLabel className="text-sm">Material</FormLabel>
-                                <FormControl>
-                                    <Input {...field} className="bg-slate-200 dark:bg-slate-600 focus:outline-transparent my-2 focus:shadow-outline focus:border-none appearance-none" type="text"/>
-                                </FormControl>
-                                <FormMessage/>
-                            </FormItem>
-                        )}
-                        />
-                        <FormField
-                        name="brandId"
-                        control={form.control}
-                        render={({field})=>(
-                            <FormItem>
-                                <FormLabel className='text-sm'>Brand</FormLabel>
-                                <FormControl>
-                                    <Select >
-                                        <SelectTrigger {...field}>
-                                            <SelectValue placeholder="Select Brand"/>
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                <SelectLabel>Brands of Products</SelectLabel>
-                                                {
-                                                    brandArray.length>0 && brandArray.map(brand=>(
-                                                        <SelectItem key={brand.label} value={`${brand.value}`}>{brand.label}</SelectItem>
-                                                    ))
-                                                }
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
-                                <FormMessage/>
-                            </FormItem>
-                        )}/>
-                        <FormField
-                        control={form.control}
-                        name="colour"
-                        render={({field})=>(
-                            <FormItem>
-                                <FormLabel>Colour</FormLabel>
-                                <FormControl>
-                                    <Input {...field} type='text'/>
-                                </FormControl>
-                                <FormMessage/>
-                            </FormItem>
-                        )}
-                        />
-                        
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
                         <FormField
                             name="name"
                             control={form.control}
                             render={({ field }) => (
-<<<<<<< HEAD
-=======
-                            <FormItem>
-                            <FormLabel>Category Type</FormLabel>
-                            <FormControl>
-                                <MultiSelect
-                                options={categoryArray}
-                                onValueChange={field.onChange}
-                                //   defaultValue={field.value}
-                                placeholder="Select options"
-                                variant="inverted"
-                                //   animation={2}
-                                maxCount={3}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                            </FormItem>
-                        )}
-                        />
-                        <FormField
-                            name="categoryType"
-                            control={form.control}
-                            render={({field})=>(
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
                                 <FormItem>
                                     <FormLabel className='text-sm'>Product Name</FormLabel>
                                     <FormControl>
@@ -584,28 +392,7 @@ export default function AddAccessoryForm() {
                         />
                     </div>
                 </div>
-<<<<<<< HEAD
             </form>
         </Form>
     );
-=======
-                <div className="row-span-1 ">
-                <div className="w-fit ml-auto mt-3">
-                    <Button type='submit' disabled={form.formState.isSubmitting} className={cn(form.formState.isSubmitting && "cursor-not-allowed bg-muted-foreground/100"," p-3 rounded-full mr-0")} variant="default">
-                        {!form.formState.isSubmitting ? 
-                        <Check size={18} className="mr-1"/> 
-                        :
-                        <Spinner className="mr-1 size-5" />
-                        }
-                        Add Product
-                    </Button>
-                </div>
-            </div>
-            </div>
-            <UploadMultipleImage name="images" label='picture' form={form} description='product image' />
-        </div>
-    </form>
-</Form>
-  )
->>>>>>> 352d9d8e773d213e19842bf445d5e00ccc67a7e7
 }
