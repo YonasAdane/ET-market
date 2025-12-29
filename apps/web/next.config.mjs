@@ -6,12 +6,15 @@ const nextConfig = {
       },
     },
     images: {
-        domains: ['images.pexels.com',
-          "g-iff6oyrytat.vusercontent.net",
-          "justwatches.com",
-          "www.justwatches.com",
-          "https://res.cloudinary.com",
-          "res.cloudinary.com"
+        domains: ['*',
+          "img.lazcdn.com",
+          "www.img.lazcdn.com"
+          // 'images.pexels.com',
+          // "g-iff6oyrytat.vusercontent.net",
+          // "justwatches.com",
+          // "www.justwatches.com",
+          // "https://res.cloudinary.com",
+          // "res.cloudinary.com"
         ],
       },
       transpilePackages: [

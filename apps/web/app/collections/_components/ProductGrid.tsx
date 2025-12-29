@@ -6,18 +6,20 @@ import { Skeleton } from "@repo/ui/components/ui/skeleton";
 import { Button } from "@repo/ui/components/ui/button";
 import Image from "next/image";
 import { addToCart } from "../_actions/productActions";
+import { Prisma } from "node_modules/@repo/database/src/generated/client/client";
 
-interface Product {
+export interface Product {
   id: number;
   name: string;
   price: number;
   prevprice?: number;
-  brand: {
+   brand: {
     id: number;
     name: string;
-    createdAt: string;
+    description: string | null;
     updatedAt: string;
-  } | null;
+    createdAt: string;
+} | null;
   images: {
     id: number;
     url: string;
@@ -29,7 +31,17 @@ interface Product {
 }
 
 interface ProductGridProps {
-  products: Product[];
+  products: Prisma.ProductGetPayload<{include: {
+        images: {
+          select: {
+            url: true,
+            altText: true,
+          },
+        },
+        brand:true;
+        category:true;
+        productItems:true;
+      }}>[];
   userId?: string;
 }
 
@@ -104,10 +116,10 @@ export function ProductGrid({ products, userId }: ProductGridProps) {
             )}
             <h3 className="text-lg font-medium mt-1">{product.name}</h3>
             <div className="flex items-center mt-2">
-              <p className="text-lg font-bold">${product.price.toFixed(2)}</p>
-              {product.prevprice && product.prevprice > product.price && (
+              <p className="text-lg font-bold">${product.productItems[0]?.price.toFixed(2)}</p>
+              {product.productItems[0]?.prevPrice && product.productItems[0]?.prevPrice > product.productItems[0]?.price && (
                 <p className="ml-2 text-sm text-muted-foreground line-through">
-                  ${product.prevprice.toFixed(2)}
+                  ${product.productItems[0]?.prevPrice.toFixed(2)}
                 </p>
               )}
             </div>
